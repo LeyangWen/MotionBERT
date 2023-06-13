@@ -40,8 +40,23 @@ python infer_wild_mesh.py \
 --ref_3d_motion_path <3d-pose-results.npy> # Optional, use the estimated 3D motion for root trajectory.
 ```
 
-
-
+### Vicon DeskTop Inference
+#### sample project
+```bash
+python infer_wild_mesh.py --vid_path C:\Users\Public\Documents\Vicon\vicon_coding_projects\MotionBERT\experiment\sample\AlphaPose_4.mp4 --json_path C:\Users\Public\Documents\Vicon\vicon_coding_projects\MotionBERT\experiment\sample\alphapose-results.json --out_path C:\Users\Public\Documents\Vicon\vicon_coding_projects\MotionBERT\experiment\sample\output
+```
+#### gunwoo test
+```bash
+python infer_wild_mesh.py --vid_path C:\Users\Public\Documents\Vicon\vicon_coding_projects\MotionBERT\experiment\Vicon_Gunwoo_Test\clip.mp4 --json_path "C:\Users\Public\Documents\Vicon\vicon_coding_projects\MotionBERT\experiment\Vicon_Gunwoo_Test\Gunwoo movement 03.66920731.json" --out_path C:\Users\Public\Documents\Vicon\vicon_coding_projects\MotionBERT\experiment\Vicon_Gunwoo_Test\output
+```
+```bash
+python infer_wild_mesh.py --vid_path "C:\Users\Public\Documents\Vicon\vicon_coding_projects\MotionBERT\experiment\Vicon_Gunwoo_Test_movement02\Gunwoo movement 02.66920731.20230224152348.avi" --json_path "C:\Users\Public\Documents\Vicon\vicon_coding_projects\MotionBERT\experiment\Vicon_Gunwoo_Test_movement02\Gunwoo movement 02.66920731.json" --out_path "C:\Users\Public\Documents\Vicon\vicon_coding_projects\MotionBERT\experiment\Vicon_Gunwoo_Test_movement02\output\Gunwoo movement 02.66920731"
+```
+```bash
+python infer_wild_mesh.py --vid_path "C:\Users\Public\Documents\Vicon\vicon_coding_projects\MotionBERT\experiment\Vicon_Gunwoo_Test_movement02\Gunwoo movement 02.66920758.20230224152348.avi" --json_path "C:\Users\Public\Documents\Vicon\vicon_coding_projects\MotionBERT\experiment\Vicon_Gunwoo_Test_movement02\Gunwoo movement 02.66920758.json" --out_path "C:\Users\Public\Documents\Vicon\vicon_coding_projects\MotionBERT\experiment\Vicon_Gunwoo_Test_movement02\output\Gunwoo movement 02.66920758"
+```
+```bash
+```
 
 
 

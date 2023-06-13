@@ -16,7 +16,7 @@ This is the official PyTorch implementation of the paper *"[Learning Human Motio
 conda create -n motionbert python=3.7 anaconda
 conda activate motionbert
 # Please install PyTorch according to your CUDA version.
-conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvidia
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 pip install -r requirements.txt
 ```
 
