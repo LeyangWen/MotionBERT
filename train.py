@@ -167,7 +167,7 @@ def train_epoch(args, model_pos, train_loader, losses, optimizer, has_3d, has_gt
             if args.rootrel:
                 batch_gt = batch_gt - batch_gt[:,:,0:1,:]
             else:
-                batch_gt[:,:,:,2] = batch_gt[:,:,:,2] - batch_gt[:,0:1,0:1,2] # Place the depth of first frame root to 0.
+                batch_gt[:,:,:,2] = batch_gt[:,:,:,2] - batch_gt[:,0:1,0:1,2]  # Place the depth of first frame root to 0.
             if args.mask or args.noise:
                 batch_input = args.aug.augment2D(batch_input, noise=(args.noise and has_gt), mask=args.mask)
         # Predict 3D poses
@@ -219,7 +219,7 @@ def train_with_config(args, opts):
     trainloader_params = {
           'batch_size': args.batch_size,
           'shuffle': True,
-          'num_workers': 12,
+          'num_workers': 4,
           'pin_memory': True,
           'prefetch_factor': 4,
           'persistent_workers': True
@@ -228,7 +228,7 @@ def train_with_config(args, opts):
     testloader_params = {
           'batch_size': args.batch_size,
           'shuffle': False,
-          'num_workers': 12,
+          'num_workers': 4,
           'pin_memory': True,
           'prefetch_factor': 4,
           'persistent_workers': True
@@ -268,8 +268,12 @@ def train_with_config(args, opts):
             chk_filename = os.path.join(opts.pretrained, opts.selection)
             print('Loading checkpoint', chk_filename)
             checkpoint = torch.load(chk_filename, map_location=lambda storage, loc: storage)
-            model_backbone.load_state_dict(checkpoint['model_pos'], strict=True)
-            model_pos = model_backbone            
+            if args.num_joints != 17:  # 6D pose
+                # for key, value in checkpoint['model_pos'].items():
+                #     print(key, value.shape)
+                del checkpoint['model_pos']['module.pos_embed']  # deleting the last layer
+            model_backbone.load_state_dict(checkpoint['model_pos'], strict=False)
+            model_pos = model_backbone
     else:
         chk_filename = os.path.join(opts.checkpoint, "latest_epoch.bin")
         if os.path.exists(chk_filename):

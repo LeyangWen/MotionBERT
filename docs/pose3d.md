@@ -39,8 +39,59 @@ python train.py \
 --evaluate checkpoint/pose3d/MB_train_h36m/best_epoch.bin         
 ```
 
+# Leyang-VEHS-R3
+
+## Data
+
+1. Process using Vicon-Read/caculateSkeleton.py
+2. Slice the motion clips (len=243, stride=81)
+
+   ```bash
+   python tools/convert_VEHSR3.py `
+   --dt_root 'W:\VEHS\VEHS data collection round 3\processed' `
+   --dt_file 'VEHS_3D_downsample_4.pkl' `
+   --root_path 'data/motion3d/MB3D_VEHS_R3/3DPose'
+   
+   # 3D Pose
+   ```
+   ```bash
+   python tools/convert_VEHSR3.py `
+   --dt_root 'W:\VEHS\VEHS data collection round 3\processed' `
+   --dt_file 'VEHS_6D_downsample_4.pkl_segment9.pkl' `
+   --root_path 'data/motion3d/MB3D_VEHS_R3/6DPose'
+   # 6D Pose
+   ```
+3. copy pkl file to data/motion3d/MB3D_VEHS_R3/3DPose
+
+## Running
 
 
+
+**Finetune from pretrained MotionBERT:**
+
+```bash
+python train.py `
+--config configs/pose3d/MB_ft_VEHSR3_3DPose.yaml `
+--pretrained checkpoint/pose3d/FT_MB_release_MB_ft_h36m `
+--checkpoint checkpoint/pose3d/3DPose_VEHSR3 #--resume checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin `
+--selection 'best_epoch.bin' 
+```
+
+```bash
+python train.py `
+--config configs/pose3d/MB_ft_VEHSR3_6DPose.yaml `
+--pretrained checkpoint/pose3d/FT_MB_release_MB_ft_h36m `
+--checkpoint checkpoint/pose3d/6DPose_VEHSR3 `
+--selection 'best_epoch.bin' 
+```
+
+**Evaluate:**
+
+```bash
+#python train.py \
+#--config configs/pose3d/MB_train_h36m.yaml \
+#--evaluate checkpoint/pose3d/MB_train_h36m/best_epoch.bin      
+```
 
 
 

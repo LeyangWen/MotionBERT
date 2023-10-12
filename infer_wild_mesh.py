@@ -162,7 +162,7 @@ if __name__ == '__main__':
 
     # store results in csv
     # np.savetxt(osp.join(opts.out_path, 'verts.csv'), verts_all.reshape(-1, 6890*3), delimiter=',')
-    # np.savetxt(osp.join(opts.out_path, 'reg3d.csv'), reg3d_all.reshape(-1, 17*3), delimiter=',')
+    np.savetxt(osp.join(opts.out_path, 'reg3d.csv'), reg3d_all.reshape(-1, 17*3), delimiter=',')
     np.savetxt(osp.join(opts.out_path, 'smpl_pose.csv'), smpl_pose_all.reshape(-1, 72), delimiter=',')
 
 
