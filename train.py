@@ -154,7 +154,9 @@ def evaluate(args, model_pos, test_loader, datareader):
         
 def train_epoch(args, model_pos, train_loader, losses, optimizer, has_3d, has_gt):
     model_pos.train()
-    for idx, (batch_input, batch_gt) in tqdm(enumerate(train_loader)):    
+    total_len = len(train_loader)
+    for idx, (batch_input, batch_gt) in tqdm(enumerate(train_loader)):
+        print(f'INFO: Training batch {idx+1}/{total_len} @ {100*(idx+1)/total_len:.2f}%.', end='\r')
         batch_size = len(batch_input)        
         if torch.cuda.is_available():
             batch_input = batch_input.cuda()
@@ -272,6 +274,7 @@ def train_with_config(args, opts):
                 # for key, value in checkpoint['model_pos'].items():
                 #     print(key, value.shape)
                 del checkpoint['model_pos']['module.pos_embed']  # deleting the last layer
+                print('INFO: 6D pose, deleting the last layer')
             model_backbone.load_state_dict(checkpoint['model_pos'], strict=False)
             model_pos = model_backbone
     else:
