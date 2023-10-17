@@ -89,6 +89,15 @@ def resample(ori_len, target_len, replay=False, randomness=True):
         return result
 
 def split_clips(vid_list, n_frames, data_stride):
+    '''
+    Args:
+        vid_list: source name list
+        n_frames: default 243
+        data_stride: default 81
+
+    Returns:
+
+    '''
     result = []
     n_clips = 0
     st = 0
@@ -96,14 +105,14 @@ def split_clips(vid_list, n_frames, data_stride):
     saved = set()
     while i<len(vid_list):
         i += 1
-        if i-st == n_frames:
+        if i-st == n_frames:  # if clip is long enough, save it and move forward by stride
             result.append(range(st,i))
             saved.add(vid_list[i-1])
             st = st + data_stride
             n_clips += 1
-        if i==len(vid_list):
+        if i==len(vid_list):  # last clip
             break
-        if vid_list[i]!=vid_list[i-1]: 
+        if vid_list[i]!=vid_list[i-1]:  # if source name changes, start a new clip
             if not (vid_list[i-1] in saved):
                 resampled = resample(i-st, n_frames) + st
                 result.append(resampled)

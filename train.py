@@ -23,7 +23,8 @@ from lib.utils.utils_data import flip_data
 from lib.data.dataset_motion_2d import PoseTrackDataset2D, InstaVDataset2D
 from lib.data.dataset_motion_3d import MotionDataset3D
 from lib.data.augmentation import Augmenter2D
-from lib.data.datareader_h36m import DataReaderH36M  
+from lib.data.datareader_h36m import DataReaderH36M
+from lib.data.datareader_VEHSR3 import DataReaderVEHSR3
 from lib.model.loss import *
 
 def parse_args():
@@ -35,6 +36,7 @@ def parse_args():
     parser.add_argument('-e', '--evaluate', default='', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
+    parser.add_argument('--dataset', default='VEHSR3', type=str, help='dataset name')
     opts = parser.parse_args()
     return opts
 
@@ -81,7 +83,8 @@ def evaluate(args, model_pos, test_loader, datareader):
                 predicted_3d_pos[...,:2] = batch_input[...,:2]
             results_all.append(predicted_3d_pos.cpu().numpy())
     results_all = np.concatenate(results_all)
-    results_all = datareader.denormalize(results_all)
+    num_joints = args.num_joints
+    results_all = datareader.denormalize(results_all, num_joints=num_joints)
     _, split_id_test = datareader.get_split_id()
     actions = np.array(datareader.dt_dataset['test']['action'])
     factors = np.array(datareader.dt_dataset['test']['2.5d_factor'])
@@ -246,8 +249,11 @@ def train_with_config(args, opts):
         posetrack_loader_2d = DataLoader(posetrack, **trainloader_params)
         instav = InstaVDataset2D()
         instav_loader_2d = DataLoader(instav, **trainloader_params)
-        
-    datareader = DataReaderH36M(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = 'data/motion3d', dt_file=args.dt_file)
+    if opts.dataset == 'VEHSR3':
+        datareader = DataReaderVEHSR3(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = 'data/motion3d', dt_file=args.dt_file)
+    else:  # H36M
+        datareader = DataReaderH36M(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root='data/motion3d',
+                                    dt_file=args.dt_file)
     min_loss = 100000
     model_backbone = load_backbone(args)
     model_params = 0
@@ -274,7 +280,7 @@ def train_with_config(args, opts):
                 # for key, value in checkpoint['model_pos'].items():
                 #     print(key, value.shape)
                 del checkpoint['model_pos']['module.pos_embed']  # deleting the last layer
-                print('INFO: 6D pose, deleting the last layer')
+                print('INFO: Starting new 6D pose using a 3D pose checkpoint, deleting the last layer')
             model_backbone.load_state_dict(checkpoint['model_pos'], strict=False)
             model_pos = model_backbone
     else:

@@ -6,10 +6,8 @@ import random
 sys.path.insert(0, os.getcwd())
 from lib.utils.tools import read_pkl
 from lib.data.datareader_h36m import DataReaderH36M
-from lib.data.datareader_VEHSR3 import DataReaderVEHSR3
 from tqdm import tqdm
-import argparse
-import datetime
+
 
 def save_clips(subset_name, root_path, train_data, train_labels):
     len_train = len(train_data)
@@ -24,21 +22,14 @@ def save_clips(subset_name, root_path, train_data, train_labels):
         }
         with open(os.path.join(save_path, "%08d.pkl" % i), "wb") as myprofile:  
             pickle.dump(data_dict, myprofile)
-
-parser = argparse.ArgumentParser()
-parser.add_argument('--dt_root', type=str, default='data/motion3d/')
-parser.add_argument('--dt_file', type=str, default='h36m_sh_conf_cam_source_final.pkl')
-parser.add_argument('--root_path', type=str, default='data/motion3d/MB3D_f243s81/H36M-SH"')
-args = parser.parse_args()
-datareader = DataReaderVEHSR3(n_frames=243, sample_stride=1, data_stride_train=81, data_stride_test=243, dt_file=args.dt_file, dt_root=args.dt_root)
+            
+datareader = DataReaderH36M(n_frames=243, sample_stride=1, data_stride_train=81, data_stride_test=243, dt_file = 'h36m_sh_conf_cam_source_final.pkl', dt_root='data/motion3d/')
 train_data, test_data, train_labels, test_labels = datareader.get_sliced_data()
 print(train_data.shape, test_data.shape)
-iteration_time = 1  #s
-print(f'Estimated training time per epoch @ {iteration_time} it/s: {datetime.timedelta(seconds=iteration_time*len(train_data))}')
 assert len(train_data) == len(train_labels)
 assert len(test_data) == len(test_labels)
 
-root_path = args.root_path
+root_path = "data/motion3d/MB3D_f243s81/H36M-SH"
 if not os.path.exists(root_path):
     os.makedirs(root_path)
 

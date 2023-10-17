@@ -49,7 +49,7 @@ python train.py \
    ```bash
    python tools/convert_VEHSR3.py `
    --dt_root 'W:\VEHS\VEHS data collection round 3\processed' `
-   --dt_file 'VEHS_3D_downsample_4.pkl_small.pkl' `
+   --dt_file 'VEHS_3D_downsample5_keep1.pkl' `
    --root_path 'data/motion3d/MB3D_VEHS_R3/3DPose'
    
    # 3D Pose
@@ -57,7 +57,7 @@ python train.py \
    ```bash
    python tools/convert_VEHSR3.py `
    --dt_root 'W:\VEHS\VEHS data collection round 3\processed' `
-   --dt_file 'VEHS_6D_downsample_4.pkl_small.pkl' `
+   --dt_file 'VEHS_6D_downsample5_keep1.pkl' `
    --root_path 'data/motion3d/MB3D_VEHS_R3/6DPose'
    # 6D Pose
    ```
@@ -76,6 +76,7 @@ python train.py `
 --checkpoint checkpoint/pose3d/3DPose_VEHSR3 `
 --selection 'best_epoch.bin' 
 #--resume checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin `
+# 3D Pose
 ```
 
 ```bash
@@ -84,6 +85,12 @@ python train.py `
 --pretrained checkpoint/pose3d/FT_MB_release_MB_ft_h36m `
 --checkpoint checkpoint/pose3d/6DPose_VEHSR3 `
 --selection 'best_epoch.bin' 
+# 6D Pose
+```
+
+Visualize the training process:
+```bash
+tensorboard --logdir  checkpoint/pose3d/6DPose_VEHSR3/logs
 ```
 
 **Evaluate:**
