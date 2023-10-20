@@ -84,7 +84,12 @@ python train.py `
 --config configs/pose3d/MB_ft_VEHSR3_6DPose.yaml `
 --pretrained checkpoint/pose3d/FT_MB_release_MB_ft_h36m `
 --checkpoint checkpoint/pose3d/6DPose_VEHSR3 `
+--resume checkpoint/pose3d/6DPose_VEHSR3/epoch_1.bin `
 --selection 'best_epoch.bin' 
+
+python train.py --config configs/pose3d/MB_ft_VEHSR3_6DPose.yaml --pretrained checkpoint/pose3d/FT_MB_release_MB_ft_h36m --checkpoint checkpoint/pose3d/6DPose_VEHSR3 --resume checkpoint/pose3d/6DPose_VEHSR3/epoch_1.bin --selection 'best_epoch.bin'
+
+ 
 # 6D Pose
 ```
 
