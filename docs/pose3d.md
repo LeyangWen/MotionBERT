@@ -62,7 +62,10 @@ python train.py \
    # 6D Pose
    ```
 3. copy pkl file to data/motion3d/MB3D_VEHS_R3/3DPose
-
+   ```bash
+   copy-item -path "W:\VEHS\VEHS data collection round 3\processed\VEHS_3D_downsample5_keep1.pkl" -destination "data/motion3d/MB3D_VEHS_R3/3DPose"
+   copy-item -path "W:\VEHS\VEHS data collection round 3\processed\VEHS_6D_downsample5_keep1.pkl" -destination "data/motion3d/MB3D_VEHS_R3/6DPose"
+   ```
 ## Running
 
 
@@ -70,11 +73,11 @@ python train.py \
 **Finetune from pretrained MotionBERT:**
 
 ```bash
-python train.py `
---config configs/pose3d/MB_ft_VEHSR3_3DPose.yaml `
---pretrained checkpoint/pose3d/FT_MB_release_MB_ft_h36m `
---checkpoint checkpoint/pose3d/3DPose_VEHSR3 `
---selection 'best_epoch.bin' 
+python train.py ^
+--config configs/pose3d/MB_ft_VEHSR3_3DPose.yaml ^
+--pretrained checkpoint/pose3d/FT_MB_release_MB_ft_h36m ^
+--checkpoint checkpoint/pose3d/3DPose_VEHSR3 ^
+--selection best_epoch.bin
 #--resume checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin `
 # 3D Pose
 ```
@@ -84,12 +87,8 @@ python train.py `
 --config configs/pose3d/MB_ft_VEHSR3_6DPose.yaml `
 --pretrained checkpoint/pose3d/FT_MB_release_MB_ft_h36m `
 --checkpoint checkpoint/pose3d/6DPose_VEHSR3 `
---resume checkpoint/pose3d/6DPose_VEHSR3/epoch_1.bin `
---selection 'best_epoch.bin' 
-
-python train.py --config configs/pose3d/MB_ft_VEHSR3_6DPose.yaml --pretrained checkpoint/pose3d/FT_MB_release_MB_ft_h36m --checkpoint checkpoint/pose3d/6DPose_VEHSR3 --resume checkpoint/pose3d/6DPose_VEHSR3/epoch_1.bin --selection 'best_epoch.bin'
-
- 
+--selection best_epoch.bin
+#--resume checkpoint/pose3d/6DPose_VEHSR3/epoch_1.bin `
 # 6D Pose
 ```
 
