@@ -77,8 +77,8 @@ python train.py ^
 --config configs/pose3d/MB_ft_VEHSR3_3DPose.yaml ^
 --pretrained checkpoint/pose3d/FT_MB_release_MB_ft_h36m ^
 --checkpoint checkpoint/pose3d/3DPose_VEHSR3 ^
---selection best_epoch.bin
-#--resume checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin `
+--selection best_epoch.bin ^
+--resume checkpoint/pose3d/3DPose_VEHSR3/epoch_7.bin
 # 3D Pose
 ```
 
