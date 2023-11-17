@@ -10,7 +10,7 @@ from lib.data.datareader_h36m import DataReaderH36M
 random.seed(0)
     
 class DataReaderVEHSR3(DataReaderH36M):
-    def __init__(self, n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence=True, dt_root = 'data/motion3d', dt_file = 'h36m_cpn_cam_source.pkl'):
+    def __init__(self, n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence=True, dt_root = 'data/motion3d', dt_file = 'h36m_cpn_cam_source.pkl', test_set_keyword='test'):
         '''
         Args:
             n_frames: frames in each clip
@@ -20,8 +20,10 @@ class DataReaderVEHSR3(DataReaderH36M):
             read_confidence:
             dt_root:
             dt_file:
+            test_set_keyword: dictionary key for the dataset pickle, set to 'test' or 'validate'
         '''
         super().__init__(n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence, dt_root, dt_file)
+        self.dt_dataset['test'] = self.dt_dataset[test_set_keyword]
         self.res_w = 1920
         self.res_h = 1200
         
