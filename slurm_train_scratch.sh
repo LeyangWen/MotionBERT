@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=test
+#SBATCH --job-name=MotionBert_train_scratch_VEHS
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
@@ -22,12 +22,12 @@ module load pytorch/2.0.1
 module list
 
 conda activate motionbert
-python tools/convert_VEHSR3.py \
---dt_root 'data/motion3d/MB3D_VEHS_R3_small/3DPose' \
---dt_file 'VEHS_3D_downsample_4.pkl_small.pkl' \
---root_path 'data/motion3d/MB3D_VEHS_R3_small/3DPose'
+#python tools/convert_VEHSR3.py \
+#--dt_root 'data/motion3d/MB3D_VEHS_R3_small/3DPose' \
+#--dt_file 'VEHS_3D_downsample_4.pkl_small.pkl' \
+#--root_path 'data/motion3d/MB3D_VEHS_R3_small/3DPose'
 
 
-python train.py \
---config configs/pose3d/MB_train_h36m.yaml \
---checkpoint checkpoint/pose3d/MB_train_h36m
+python -u train.py \
+--config configs/pose3d/MB_train_VEHSR3.yaml \
+--checkpoint checkpoint/pose3d/MB_train_VEHSR3_3DPose > train_log.out
