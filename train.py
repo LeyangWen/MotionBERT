@@ -37,6 +37,7 @@ def parse_args():
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
     parser.add_argument('--dataset', default='VEHSR3', type=str, help='dataset name')
+    parser.add_argument('--test_set_keyword', default='test', type=str, help='eval set name, either test or validate, only for VEHS')
     opts = parser.parse_args()
     return opts
 
@@ -250,7 +251,8 @@ def train_with_config(args, opts):
         instav = InstaVDataset2D()
         instav_loader_2d = DataLoader(instav, **trainloader_params)
     if opts.dataset == 'VEHSR3':
-        datareader = DataReaderVEHSR3(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = 'data/motion3d', dt_file=args.dt_file)
+        test_set_keyword = opts.test_set_keyword
+        datareader = DataReaderVEHSR3(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = 'data/motion3d', dt_file=args.dt_file, test_set_keyword=test_set_keyword)
     else:  # H36M
         datareader = DataReaderH36M(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root='data/motion3d',
                                     dt_file=args.dt_file)
