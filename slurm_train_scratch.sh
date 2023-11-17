@@ -3,10 +3,10 @@
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=1g
-#SBATCH --gres=gpu:1
-#SBATCH --time=00:00:20
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=20g
+#SBATCH --gres=gpu:4
+#SBATCH --time=04:00:00
 #SBATCH --account=engin1
 #SBATCH --partition=gpu
 ##### END preamble
