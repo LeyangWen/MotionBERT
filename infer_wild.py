@@ -102,7 +102,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-    np_file = r"C:\Users\Public\Documents\Vicon\vicon_coding_projects\MotionBERT\experiment\Vicon_Gunwoo_Test\output\X3D.npy"
-    with open(np_file, 'rb') as f:
-        + = np.load(f)

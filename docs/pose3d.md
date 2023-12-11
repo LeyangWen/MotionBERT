@@ -100,12 +100,18 @@ tensorboard --logdir  checkpoint/pose3d/6DPose_VEHSR3/logs
 **Evaluate:**
 
 ```bash
-#python train.py \
-#--config configs/pose3d/MB_train_h36m.yaml \
-#--evaluate checkpoint/pose3d/MB_train_h36m/best_epoch.bin      
+python train.py --config configs/pose3d/MB_train_VEHSR3.yaml --evaluate checkpoint/pose3d/MB_train_VEHSR3_3DPose/best_epoch.bin      
 ```
 
 
+# Note about 2.5d factor
+
+* [1]
+* [2]
+* ```data['test']['joints_2.5d_image']/data['test']['joint3d_image'] == 2.5factor```
+
+[1]:https://github.com/Walter0807/MotionBERT/issues/21
+[2]:https://github.com/Walter0807/MotionBERT/issues/65
 
 
 
