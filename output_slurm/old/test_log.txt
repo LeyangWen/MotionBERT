@@ -1,0 +1,29 @@
+
+Job information
+#-------------------------------------------------------------------
+SLURM_SUBMIT_HOST    gl-login1.arc-ts.umich.edu
+SLURM_JOB_ACCOUNT    engin1
+SLURM_JOB_PARTITION  standard
+SLURM_JOB_NAME       Test
+SLURM_JOBID          65121508
+SLURM_NODELIST       gl3183
+SLURM_JOB_NUM_NODES  1
+SLURM_NTASKS         1
+SLURM_TASKS_PER_NODE 1
+SLURM_CPUS_PER_TASK  1
+SLURM_NPROCS         1
+SLURM_MEM_PER_CPU    
+SLURM_SUBMIT_DIR     /home/wenleyan/projects/MotionBERT
+
+scheduling priority             (-e) 0
+pending signals                 (-i) 766406
+max memory size         (kbytes, -m) 1048576
+open files                      (-n) 131072
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+max user processes              (-u) 766406
+
+Running on gl3183.arc-ts.umich.edu at Sat Nov 18 09:31:44 EST 2023
+Your job output begins below the line
+#-------------------------------------------------------------------

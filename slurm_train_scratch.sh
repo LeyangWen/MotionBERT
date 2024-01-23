@@ -1,14 +1,14 @@
 #!/bin/bash
-#SBATCH --job-name=MB_train
-#SBATCH --output=output_slurm/train_log_2.txt
-#SBATCH --error=output_slurm/train_error_2.txt
+#SBATCH --job-name=MB_train_real
+#SBATCH --output=output_slurm/train_log_4.txt
+#SBATCH --error=output_slurm/train_error_4.txt
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=30g
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=20g
 #SBATCH --gres=gpu:2
-#SBATCH --time=00:20:00
+#SBATCH --time=24:00:00
 #SBATCH --account=engin1
 #SBATCH --partition=gpu
 ##### END preamble
@@ -25,8 +25,8 @@ module list
 
 #conda activate motionbert
 
-echo "cpu-8, gpu-2, mem-30"
+echo "cpu-2, gpu-2, mem-20"
 
 python -u train.py \
 --config configs/pose3d/MB_train_VEHSR3.yaml \
---checkpoint checkpoint/pose3d/MB_train_VEHSR3_3DPose > output_slurm/train_2.out
+--checkpoint checkpoint/pose3d/MB_train_VEHSR3_3DPose > output_slurm/train_4.out

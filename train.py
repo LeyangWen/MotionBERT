@@ -37,6 +37,7 @@ def parse_args():
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
     parser.add_argument('--dataset', default='VEHSR3', type=str, help='dataset name')
+    parser.add_argument('--test_set_keyword', default='test', type=str, help='eval set name, either test or validate, only for VEHS')
     opts = parser.parse_args()
     return opts
 
@@ -89,6 +90,8 @@ def evaluate(args, model_pos, test_loader, datareader):
     actions = np.array(datareader.dt_dataset['test']['action'])
     factors = np.array(datareader.dt_dataset['test']['2.5d_factor'])
     gts = np.array(datareader.dt_dataset['test']['joints_2.5d_image'])
+    # factors = np.array(datareader.dt_dataset['test']['2.5d_factor'])*0 +1
+    # gts = np.array(datareader.dt_dataset['test']['joint3d_image'])
     sources = np.array(datareader.dt_dataset['test']['source'])
 
     num_test_frames = len(actions)
@@ -159,7 +162,8 @@ def train_epoch(args, model_pos, train_loader, losses, optimizer, has_3d, has_gt
     model_pos.train()
     total_len = len(train_loader)
     for idx, (batch_input, batch_gt) in tqdm(enumerate(train_loader)):
-        print(f'INFO: Training batch {idx+1}/{total_len} @ {100*(idx+1)/total_len:.2f}%.', end='\r')
+        if idx/1000 == 0:
+            print(f'INFO: Training batch {idx+1}/{total_len} @ {100*(idx+1)/total_len:.2f}%.', end='\r')
         batch_size = len(batch_input)        
         if torch.cuda.is_available():
             batch_input = batch_input.cuda()
@@ -224,7 +228,7 @@ def train_with_config(args, opts):
     trainloader_params = {
           'batch_size': args.batch_size,
           'shuffle': True,
-          'num_workers': 4,
+          'num_workers': 2,
           'pin_memory': True,
           'prefetch_factor': 4,
           'persistent_workers': True
@@ -233,7 +237,7 @@ def train_with_config(args, opts):
     testloader_params = {
           'batch_size': args.batch_size,
           'shuffle': False,
-          'num_workers': 4,
+          'num_workers': 2,
           'pin_memory': True,
           'prefetch_factor': 4,
           'persistent_workers': True
@@ -250,7 +254,8 @@ def train_with_config(args, opts):
         instav = InstaVDataset2D()
         instav_loader_2d = DataLoader(instav, **trainloader_params)
     if opts.dataset == 'VEHSR3':
-        datareader = DataReaderVEHSR3(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = 'data/motion3d', dt_file=args.dt_file)
+        test_set_keyword = opts.test_set_keyword
+        datareader = DataReaderVEHSR3(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = 'data/motion3d', dt_file=args.dt_file, test_set_keyword=test_set_keyword)
     else:  # H36M
         datareader = DataReaderH36M(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root='data/motion3d',
                                     dt_file=args.dt_file)
@@ -320,6 +325,7 @@ def train_with_config(args, opts):
         if args.mask or args.noise:
             args.aug = Augmenter2D(args)
         
+        print("Start training loop")
         # Training
         for epoch in range(st, args.epochs):
             print('Training epoch %d.' % epoch)
