@@ -1,12 +1,14 @@
 #!/bin/bash
-#SBATCH --job-name=MotionBert_train_scratch_VEHS
+#SBATCH --job-name=MB_train_real
+#SBATCH --output=output_slurm/train_log_4.txt
+#SBATCH --error=output_slurm/train_error_4.txt
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=2
 #SBATCH --mem=20g
-#SBATCH --gres=gpu:4
-#SBATCH --time=04:00:00
+#SBATCH --gres=gpu:2
+#SBATCH --time=24:00:00
 #SBATCH --account=engin1
 #SBATCH --partition=gpu
 ##### END preamble
@@ -21,13 +23,10 @@ module load python/3.10.4
 module load pytorch/2.0.1
 module list
 
-conda activate motionbert
-#python tools/convert_VEHSR3.py \
-#--dt_root 'data/motion3d/MB3D_VEHS_R3_small/3DPose' \
-#--dt_file 'VEHS_3D_downsample_4.pkl_small.pkl' \
-#--root_path 'data/motion3d/MB3D_VEHS_R3_small/3DPose'
+#conda activate motionbert
 
+echo "cpu-2, gpu-2, mem-20"
 
 python -u train.py \
 --config configs/pose3d/MB_train_VEHSR3.yaml \
---checkpoint checkpoint/pose3d/MB_train_VEHSR3_3DPose > train_log.out
+--checkpoint checkpoint/pose3d/MB_train_VEHSR3_3DPose > output_slurm/train_4.out

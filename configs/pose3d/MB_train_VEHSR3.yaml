@@ -5,9 +5,9 @@ finetune: False
 partial_train: null
 
 # Traning 
-epochs: 2  #120
-checkpoint_frequency: 1 # 30
-batch_size: 32 
+epochs: 120
+checkpoint_frequency: 10
+batch_size: 8 
 dropout: 0.0
 learning_rate: 0.0002
 weight_decay: 0.01
@@ -23,9 +23,9 @@ num_heads: 8
 att_fuse: True
 
 # Data
-data_root: data/motion3d/MB3D_VEHS_R3_small/
+data_root: data/motion3d/MB3D_VEHS_R3/  #_small/
 subset_list: [3DPose]
-dt_file: MB3D_VEHS_R3_small/3DPose/VEHS_3D_downsample_4.pkl_small.pkl
+dt_file: MB3D_VEHS_R3/3DPose/VEHS_3D_downsample1_keep1.pkl  #_small/3DPose/VEHS_3D_downsample_4.pkl_small.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True

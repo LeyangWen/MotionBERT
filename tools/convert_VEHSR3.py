@@ -1,3 +1,4 @@
+print("running convert VEHS")
 import os
 import sys
 import pickle

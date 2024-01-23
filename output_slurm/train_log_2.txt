@@ -1,0 +1,36 @@
+
+Job information
+#-------------------------------------------------------------------
+SLURM_SUBMIT_HOST    gl-login3.arc-ts.umich.edu
+SLURM_JOB_ACCOUNT    engin1
+SLURM_JOB_PARTITION  gpu
+SLURM_JOB_NAME       MB_train_real
+SLURM_JOBID          65166619
+SLURM_NODELIST       gl1008
+SLURM_JOB_NUM_NODES  1
+SLURM_NTASKS         1
+SLURM_TASKS_PER_NODE 1
+SLURM_CPUS_PER_TASK  2
+SLURM_NPROCS         1
+SLURM_MEM_PER_CPU    
+SLURM_SUBMIT_DIR     /home/wenleyan/projects/MotionBERT
+
+scheduling priority             (-e) 0
+pending signals                 (-i) 766536
+max memory size         (kbytes, -m) 20971520
+open files                      (-n) 131072
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+max user processes              (-u) 766536
+
+Running on gl1008.arc-ts.umich.edu at Sun Nov 19 10:36:48 EST 2023
+
+Currently Loaded Modules:
+  1) python3.10-anaconda/2023.03   4) cupti/11.8.0    7) numpy/1.22.3
+  2) cuda/11.8.0                   5) gcc/10.3.0      8) pytorch/2.0.1
+  3) cudnn/11.8-v8.7.0             6) python/3.10.4
+
+Your job output begins below the line
+#-------------------------------------------------------------------
+cpu-2, gpu-2, mem-20

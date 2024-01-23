@@ -1,0 +1,32 @@
+
+Job information
+#-------------------------------------------------------------------
+SLURM_SUBMIT_HOST    gl-login3.arc-ts.umich.edu
+SLURM_JOB_ACCOUNT    shdpm0
+SLURM_JOB_PARTITION  gpu
+SLURM_JOB_NAME       MB_eval
+SLURM_JOBID          1282004
+SLURM_NODELIST       gl1005
+SLURM_JOB_NUM_NODES  1
+SLURM_NTASKS         1
+SLURM_TASKS_PER_NODE 1
+SLURM_CPUS_PER_TASK  2
+SLURM_NPROCS         1
+SLURM_MEM_PER_CPU    
+SLURM_SUBMIT_DIR     /home/wenleyan/projects/MotionBERT
+
+scheduling priority             (-e) 0
+pending signals                 (-i) 766907
+max memory size         (kbytes, -m) 20971520
+open files                      (-n) 131072
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+max user processes              (-u) 766907
+
+Running on gl1005.arc-ts.umich.edu at Tue Jan 23 13:04:34 EST 2024
+Your job output begins below the line
+#-------------------------------------------------------------------
+cpu-2, gpu-1, mem-20
+config_file: configs/pose3d/MB_train_h36m.yaml
+checkpoint_bin: checkpoint/pose3d/MB_train_h36m/best_epoch.bin
