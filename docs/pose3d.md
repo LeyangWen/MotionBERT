@@ -112,6 +112,16 @@ python train.py --config configs/pose3d/MB_train_h36m.yaml --evaluate checkpoint
 * [1]
 * [2]
 * ```data['test']['joints_2.5d_image']/data['test']['joint3d_image'] == 2.5factor```
+* 
+## Wen Note:
+
+- If gt_2d is set in config, the input 2D use the first two dimensions of the 3D pose [here](lib/data/dataset_motion_3d.py)
+- If MotionBert's prediction is in camera coord / px. Multiply by 2.5d factor to get meters and compare during test time. 
+- Pelvic centered:
+  - joint_2d is detection results in px
+  - joint3d_image = [gt_joint2d, depth] in px
+  - joint_2.5d_image = joint3d_image * 2.5d_factor (normally 4.xx)
+- joint_3d_camera = joint_2.5d_image, but camera is origin center
 
 [1]:https://github.com/Walter0807/MotionBERT/issues/21
 [2]:https://github.com/Walter0807/MotionBERT/issues/65
