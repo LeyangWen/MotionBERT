@@ -103,6 +103,9 @@ tensorboard --logdir  checkpoint/pose3d/6DPose_VEHSR3/logs
 python train.py --config configs/pose3d/MB_train_VEHSR3.yaml --evaluate checkpoint/pose3d/MB_train_VEHSR3_3DPose/best_epoch.bin      
 ```
 
+```bash
+python train.py --config configs/pose3d/MB_train_h36m.yaml --evaluate checkpoint/pose3d/MB_train_h36m/best_epoch.bin      
+```
 
 # Note about 2.5d factor
 
