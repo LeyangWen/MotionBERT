@@ -23,9 +23,9 @@ num_heads: 8
 att_fuse: True
 
 # Data
-data_root: data/motion3d/MB3D_VEHS_R3/  #_small/
+data_root: data/motion3d/MB3D_VEHS_25d/  #_small/
 subset_list: [3DPose]
-dt_file: MB3D_VEHS_R3/3DPose/VEHS_3D_downsample1_keep1.pkl  #_small/3DPose/VEHS_3D_downsample_4.pkl_small.pkl
+dt_file: MB3D_VEHS_25d/3DPose/VEHS_3D_downsample2_keep1.pkl  #_small/3DPose/VEHS_3D_downsample_4.pkl_small.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True

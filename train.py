@@ -88,10 +88,14 @@ def evaluate(args, model_pos, test_loader, datareader):
     results_all = datareader.denormalize(results_all, num_joints=num_joints)
     _, split_id_test = datareader.get_split_id()
     actions = np.array(datareader.dt_dataset['test']['action'])
+
     factors = np.array(datareader.dt_dataset['test']['2.5d_factor'])
     gts = np.array(datareader.dt_dataset['test']['joints_2.5d_image'])
-    # factors = np.array(datareader.dt_dataset['test']['2.5d_factor'])*0 +1
-    # gts = np.array(datareader.dt_dataset['test']['joint3d_image'])
+    
+    # quick fix if you are not using 2.5d factor
+    #factors = np.array(datareader.dt_dataset['test']['2.5d_factor'])*0 +1
+    #gts = np.array(datareader.dt_dataset['test']['joint3d_image'])
+    
     sources = np.array(datareader.dt_dataset['test']['source'])
 
     num_test_frames = len(actions)
@@ -253,12 +257,15 @@ def train_with_config(args, opts):
         posetrack_loader_2d = DataLoader(posetrack, **trainloader_params)
         instav = InstaVDataset2D()
         instav_loader_2d = DataLoader(instav, **trainloader_params)
-    if opts.dataset == 'VEHSR3':
+    if "VEHS" in opts.config:
         test_set_keyword = opts.test_set_keyword
         datareader = DataReaderVEHSR3(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = 'data/motion3d', dt_file=args.dt_file, test_set_keyword=test_set_keyword)
-    else:  # H36M
+    elif "h36m" in opts.config::  # H36M
         datareader = DataReaderH36M(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root='data/motion3d',
                                     dt_file=args.dt_file)
+    else:
+        raise ValueError('make sure dataset name (e.g., h36m, VEHS) is in opts.config')
+     
     min_loss = 100000
     model_backbone = load_backbone(args)
     model_params = 0

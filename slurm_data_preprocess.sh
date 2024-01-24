@@ -26,10 +26,10 @@ module list
 #conda activate motionbert
 
 # H36M
-python -u tools/convert_h36m.py > output_slurm/preprocess_H36M.out
+#python -u tools/convert_h36m.py > output_slurm/preprocess_H36M.out
 
 # VEHSR3
-#python -u tools/convert_VEHSR3.py \
-#--dt_root 'data/motion3d/MB3D_VEHS_R3/3DPose' \
-#--dt_file 'VEHS_3D_downsample1_keep1.pkl' \
-#--root_path 'data/motion3d/MB3D_VEHS_R3/3DPose' > output_slurm/preprocess.out
+python -u tools/convert_VEHSR3.py \
+--dt_root 'data/motion3d/MB3D_VEHS_25d/3DPose' \
+--dt_file 'VEHS_3D_downsample2_keep1.pkl' \
+--root_path 'data/motion3d/MB3D_VEHS_25d/3DPose' > output_slurm/preprocess.out

@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=MB_train_real
-#SBATCH --output=output_slurm/train_log_4.txt
-#SBATCH --error=output_slurm/train_error_4.txt
+#SBATCH --output=output_slurm/train_log_1.txt
+#SBATCH --error=output_slurm/train_error_1.txt
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
@@ -9,7 +9,7 @@
 #SBATCH --mem=20g
 #SBATCH --gres=gpu:2
 #SBATCH --time=24:00:00
-#SBATCH --account=engin1
+#SBATCH --account=shdpm0
 #SBATCH --partition=gpu
 ##### END preamble
 ##### Run in MotionBert dir
@@ -29,4 +29,5 @@ echo "cpu-2, gpu-2, mem-20"
 
 python -u train.py \
 --config configs/pose3d/MB_train_VEHSR3.yaml \
---checkpoint checkpoint/pose3d/MB_train_VEHSR3_3DPose > output_slurm/train_4.out
+--test_set_keyword validate \
+--checkpoint checkpoint/pose3d/MB_train_VEHSR3_3DPose > output_slurm/train_1.out
