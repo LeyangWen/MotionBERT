@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=MB_eval
-#SBATCH --output=output_slurm/eval_log_${SLURM_JOB_ID}.txt
-#SBATCH --error=output_slurm/eval_error_${SLURM_JOB_ID}.txt
+#SBATCH --output=output_slurm/eval_log.txt
+#SBATCH --error=output_slurm/eval_error.txt
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
@@ -29,11 +29,11 @@ module list
 echo "cpu-2, gpu-1, mem-20"
 
 # Dataset
-#config_file="configs/pose3d/MB_train_VEHSR3.yaml"
-config_file="configs/pose3d/MB_train_h36m.yaml"
+config_file="configs/pose3d/MB_train_VEHSR3.yaml"
+#config_file="configs/pose3d/MB_train_h36m.yaml"
 
 # Checkpoint
-#checkpoint_bin="checkpoint/pose3d/MB_train_VEHSR3_3DPose/latest_epoch.bin"
+#checkpoint_bin="checkpoint/pose3d/MB_train_VEHSR3_3DPose_old/best_epoch.bin"
 checkpoint_bin="checkpoint/pose3d/MB_train_h36m/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin"
 

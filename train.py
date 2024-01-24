@@ -10,6 +10,7 @@ from time import time
 import copy
 import random
 import prettytable
+import wandb
 
 import torch
 import torch.nn as nn
@@ -36,8 +37,9 @@ def parse_args():
     parser.add_argument('-e', '--evaluate', default='', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
-    parser.add_argument('--dataset', default='VEHSR3', type=str, help='dataset name')
     parser.add_argument('--test_set_keyword', default='test', type=str, help='eval set name, either test or validate, only for VEHS')
+    parser.add_argument('--wandb_project', default='MotionBert_train', help='wandb project name')
+    parser.add_argument('--wandb_name', default='VEHS_scratch', help='wandb run name')
     opts = parser.parse_args()
     return opts
 
@@ -84,8 +86,7 @@ def evaluate(args, model_pos, test_loader, datareader):
                 predicted_3d_pos[...,:2] = batch_input[...,:2]
             results_all.append(predicted_3d_pos.cpu().numpy())
     results_all = np.concatenate(results_all)
-    num_joints = args.num_joints
-    results_all = datareader.denormalize(results_all, num_joints=num_joints)
+    results_all = datareader.denormalize(results_all)
     _, split_id_test = datareader.get_split_id()
     actions = np.array(datareader.dt_dataset['test']['action'])
 
@@ -226,8 +227,10 @@ def train_with_config(args, opts):
         if e.errno != errno.EEXIST:
             raise RuntimeError('Unable to create checkpoint directory:', opts.checkpoint)
     train_writer = tensorboardX.SummaryWriter(os.path.join(opts.checkpoint, "logs"))
-
-
+    args_all = vars(opts)
+    args_all['yaml_config'] = args
+    this_run = wandb.init(project=opts.wandb_project, name=opts.wandb_name, config=args_all)  # Initialize a new run
+    
     print('Loading dataset...')
     trainloader_params = {
           'batch_size': args.batch_size,
@@ -259,8 +262,8 @@ def train_with_config(args, opts):
         instav_loader_2d = DataLoader(instav, **trainloader_params)
     if "VEHS" in opts.config:
         test_set_keyword = opts.test_set_keyword
-        datareader = DataReaderVEHSR3(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = 'data/motion3d', dt_file=args.dt_file, test_set_keyword=test_set_keyword)
-    elif "h36m" in opts.config::  # H36M
+        datareader = DataReaderVEHSR3(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = 'data/motion3d', dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
+    elif "h36m" in opts.config:  # H36M
         datareader = DataReaderH36M(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root='data/motion3d',
                                     dt_file=args.dt_file)
     else:
@@ -382,6 +385,20 @@ def train_with_config(args, opts):
                 train_writer.add_scalar('loss_av', losses['angle_velocity'].avg, epoch + 1)
                 train_writer.add_scalar('loss_total', losses['total'].avg, epoch + 1)
                 
+                wandb.log({
+                    'Error P1': e1,
+                    'Error P2': e2,
+                    'loss_3d_pos': losses['3d_pos'].avg,
+                    'loss_2d_proj': losses['2d_proj'].avg,
+                    'loss_3d_scale': losses['3d_scale'].avg,
+                    'loss_3d_velocity': losses['3d_velocity'].avg,
+                    'loss_lv': losses['lv'].avg,
+                    'loss_lg': losses['lg'].avg,
+                    'loss_a': losses['angle'].avg,
+                    'loss_av': losses['angle_velocity'].avg,
+                    'loss_total': losses['total'].avg
+                }, step=epoch + 1)
+                
             # Decay learning rate exponentially
             lr *= lr_decay
             for param_group in optimizer.param_groups:
@@ -401,6 +418,11 @@ def train_with_config(args, opts):
                 
     if opts.evaluate:
         e1, e2, results_all = evaluate(args, model_pos, test_loader, datareader)
+        wandb.log({
+            'Error P1': e1,
+            'Error P2': e2})
+        
+    wandb.finish()
 
 if __name__ == "__main__":
     opts = parse_args()

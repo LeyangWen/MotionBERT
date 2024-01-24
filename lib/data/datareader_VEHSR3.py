@@ -10,7 +10,7 @@ from lib.data.datareader_h36m import DataReaderH36M
 random.seed(0)
     
 class DataReaderVEHSR3(DataReaderH36M):
-    def __init__(self, n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence=True, dt_root = 'data/motion3d', dt_file = 'h36m_cpn_cam_source.pkl', test_set_keyword='test'):
+    def __init__(self, n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence=True, dt_root = 'data/motion3d', dt_file = 'h36m_cpn_cam_source.pkl', test_set_keyword='test', num_joints=17):
         '''
         Args:
             n_frames: frames in each clip
@@ -26,6 +26,7 @@ class DataReaderVEHSR3(DataReaderH36M):
         self.dt_dataset['test'] = self.dt_dataset[test_set_keyword]
         self.res_w = 1920
         self.res_h = 1200
+        self.num_joints = num_joints
         
     def read_2d(self):
         trainset = self.dt_dataset['train']['joint_2d'][::self.sample_stride, :, :2].astype(np.float32)  # [N, 17, 2]
@@ -78,11 +79,11 @@ class DataReaderVEHSR3(DataReaderH36M):
         self.test_hw = test_hw
         return test_hw
 
-    def denormalize(self, test_data, num_joints=17):
+    def denormalize(self, test_data):
         #       data: (N, n_frames, 51) or data: (N, n_frames, 17, 3)
         n_clips = test_data.shape[0]
         test_hw = self.get_hw()
-        data = test_data.reshape([n_clips, -1, num_joints, 3])
+        data = test_data.reshape([n_clips, -1, self.num_joints, 3])
         assert len(data) == len(test_hw)
         # denormalize (x,y,z) coordiantes for results
         for idx, item in enumerate(data):
