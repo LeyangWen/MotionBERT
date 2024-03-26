@@ -24,6 +24,7 @@ class DataReaderVEHSR3(DataReaderH36M):
         '''
         super().__init__(n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence, dt_root, dt_file)
         self.dt_dataset['test'] = self.dt_dataset[test_set_keyword]
+        self.dt_dataset['test']['action'] = list(map(str.lower, self.dt_dataset['test']['action']))
         self.res_w = 1920
         self.res_h = 1200
         self.num_joints = num_joints

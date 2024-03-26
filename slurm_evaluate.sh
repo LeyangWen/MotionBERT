@@ -29,16 +29,23 @@ module list
 echo "cpu-2, gpu-1, mem-20"
 
 # Dataset
-config_file="configs/pose3d/MB_train_VEHSR3.yaml"
+#config_file="configs/pose3d/MB_train_VEHSR3.yaml"
 #config_file="configs/pose3d/MB_train_h36m.yaml"
+config_file="configs/pose3d/MB_ft_VEHSR3_6DPose.yaml"
 
 # Checkpoint
-#checkpoint_bin="checkpoint/pose3d/MB_train_VEHSR3_3DPose_old/best_epoch.bin"
-checkpoint_bin="checkpoint/pose3d/MB_train_h36m/best_epoch.bin"
+checkpoint_bin="checkpoint/pose3d/MB_ft_VEHSR3_6DPose/best_epoch.bin"
+#checkpoint_bin="checkpoint/pose3d/MB_train_h36m/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin"
+
 
 echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
 python -u train.py \
 --config "$config_file" \
+--wandb_project "MotionBert_eval" \
+--wandb_name "cpt_VEHS6D_ft_dataset_VEHS6D_onlyH36MJoints" \
+--note "save pose output" \
+--out_path "experiment\VEHS-7M_6D\output" \
+--test_set_keyword test \
 --evaluate "$checkpoint_bin" > "output_slurm/eval_${SLURM_JOB_ID}_output.out"

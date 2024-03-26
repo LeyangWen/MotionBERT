@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument("--config", type=str, default="configs/pose3d/MB_ft_h36m.yaml", help="Path to the config file.")
     parser.add_argument('-e', '--evaluate', default='checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
     parser.add_argument('-j', '--json_path', type=str, help='alphapose detection result json path', default=r"experiment\Vicon_Gunwoo_Test\1.json")
-    parser.add_argument('-v', '--vid_path', type=str, help='video path', default=r"experiment\Vicon_Gunwoo_Test\clip.mp4")
+    parser.add_argument('-v', '--vid_path', type=str, help='video path', default=None)
     parser.add_argument('-o', '--out_path', type=str, help='output path', default=r'experiment\Vicon_Gunwoo_Test\output')
     parser.add_argument('--pixel', action='store_true', help='align with pixle coordinates')
     parser.add_argument('--focus', type=int, default=None, help='target person id')
@@ -50,10 +50,14 @@ def main():
               'persistent_workers': True,
               'drop_last': False
     }
-
-    vid = imageio.get_reader(opts.vid_path,  'ffmpeg')
-    fps_in = vid.get_meta_data()['fps']
-    vid_size = vid.get_meta_data()['size']
+    
+    if opts.vid_path is not None:
+        vid = imageio.get_reader(opts.vid_path,  'ffmpeg')
+        fps_in = vid.get_meta_data()['fps']
+        vid_size = vid.get_meta_data()['size']
+    else:  # temp input for VEHS-7M videos
+        fps_in = 50
+        vid_size = [1920, 1200]
     os.makedirs(opts.out_path, exist_ok=True)
 
     if opts.pixel:

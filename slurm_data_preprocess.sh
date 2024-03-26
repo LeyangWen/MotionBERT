@@ -6,9 +6,9 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=20g
+#SBATCH --mem=40g
 #SBATCH --time=00:30:00
-#SBATCH --account=engin1
+#SBATCH --account=shdpm0
 #SBATCH --partition=standard
 ##### END preamble
 ##### Run in MotionBert dir
@@ -29,7 +29,13 @@ module list
 #python -u tools/convert_h36m.py > output_slurm/preprocess_H36M.out
 
 # VEHSR3
+#python -u tools/convert_VEHSR3.py \
+#--dt_root 'data/motion3d/MB3D_VEHS_25d/3DPose' \
+#--dt_file 'VEHS_3D_downsample2_keep1.pkl' \
+#--root_path 'data/motion3d/MB3D_VEHS_25d/3DPose' > output_slurm/preprocess.out
+
+# VEHSR3 - 6D
 python -u tools/convert_VEHSR3.py \
---dt_root 'data/motion3d/MB3D_VEHS_25d/3DPose' \
---dt_file 'VEHS_3D_downsample2_keep1.pkl' \
---root_path 'data/motion3d/MB3D_VEHS_25d/3DPose' > output_slurm/preprocess.out
+--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/6DPose' \
+--dt_file 'VEHS_6D_downsample2_keep1.pkl' \
+--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/6DPose' > output_slurm/preprocess_6D.out

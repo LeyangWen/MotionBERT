@@ -58,7 +58,7 @@ class MotionDataset3D(MotionDataset):
                     motion_3d = flip_data(motion_3d)
             else:
                 raise ValueError('Training illegal.') 
-        elif self.data_split=="test":                                           
+        elif self.data_split=="test" or self.data_split=="validate":                                           
             motion_2d = motion_file["data_input"]
             if self.gt_2d:
                 motion_2d[:,:,:2] = motion_3d[:,:,:2]

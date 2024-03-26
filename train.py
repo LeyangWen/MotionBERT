@@ -35,11 +35,13 @@ def parse_args():
     parser.add_argument('-p', '--pretrained', default='checkpoint', type=str, metavar='PATH', help='pretrained checkpoint directory')
     parser.add_argument('-r', '--resume', default='', type=str, metavar='FILENAME', help='checkpoint to resume (file name)')
     parser.add_argument('-e', '--evaluate', default='', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
+    parser.add_argument('-o', '--out_path', type=str, help='eval pose output path', default=r'experiment\VEHS-7M_6D\output')
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
     parser.add_argument('--test_set_keyword', default='test', type=str, help='eval set name, either test or validate, only for VEHS')
     parser.add_argument('--wandb_project', default='MotionBert_train', help='wandb project name')
-    parser.add_argument('--wandb_name', default='VEHS_scratch', help='wandb run name')
+    parser.add_argument('--wandb_name', default='VEHS_ft_train', help='wandb run name')
+    parser.add_argument('--note', default='start from FT_MB_release_MB_ft_h36m', help='wandb notes')
     opts = parser.parse_args()
     return opts
 
@@ -132,8 +134,21 @@ def evaluate(args, model_pos, test_loader, datareader):
         pred *= factor
         
         # Root-relative Errors
-        pred = pred - pred[:,0:1,:]
-        gt = gt - gt[:,0:1,:]
+        # pred = pred - pred[:,0:1,:]
+        # gt = gt - gt[:,0:1,:]
+        # todo: use args and opts to decide which segment to use
+        # wen: pelvis center -- VEHS-7M 66 keypoint
+        pred = pred - pred[:,57:58,:]
+        gt = gt - gt[:,57:58,:]
+        
+        # wen: convert to h36m temp fix
+        # h36m_convert_id = [6, 8, 46, 47, 48, 50, 51, 52, 53, 54, 57, 58, 59, 60, 62, 63, 64]
+        # pred = pred[:, h36m_convert_id, :]
+        # gt = gt[:, h36m_convert_id, :]
+        # wen: convert to only cacualted keypoints
+        # pred = pred[:, 50:, :]
+        # gt = gt[:, 50:, :]
+                
         err1 = mpjpe(pred, gt)
         err2 = p_mpjpe(pred, gt)
         e1_all[frame_list] += err1
@@ -251,7 +266,7 @@ def train_with_config(args, opts):
     }
 
     train_dataset = MotionDataset3D(args, args.subset_list, 'train')
-    test_dataset = MotionDataset3D(args, args.subset_list, 'test')
+    test_dataset = MotionDataset3D(args, args.subset_list, opts.test_set_keyword)
     train_loader_3d = DataLoader(train_dataset, **trainloader_params)
     test_loader = DataLoader(test_dataset, **testloader_params)
     
@@ -262,7 +277,9 @@ def train_with_config(args, opts):
         instav_loader_2d = DataLoader(instav, **trainloader_params)
     if "VEHS" in opts.config:
         test_set_keyword = opts.test_set_keyword
-        datareader = DataReaderVEHSR3(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = 'data/motion3d', dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
+        path_components = args.data_root.split('/')
+        this_dt_root = '/'.join(path_components[:-2])  # this_dt_root='data/motion3d'
+        datareader = DataReaderVEHSR3(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
     elif "h36m" in opts.config:  # H36M
         datareader = DataReaderH36M(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root='data/motion3d',
                                     dt_file=args.dt_file)
@@ -415,9 +432,13 @@ def train_with_config(args, opts):
             if e1 < min_loss:
                 min_loss = e1
                 save_checkpoint(chk_path_best, epoch, lr, optimizer, model_pos, min_loss)
-                
+            
     if opts.evaluate:
         e1, e2, results_all = evaluate(args, model_pos, test_loader, datareader)
+        os.makedirs(opts.out_path, exist_ok=True)
+        np.save('%s/X3D.npy' % (opts.out_path), results_all)
+        # render_and_save(results_all, '%s/X3D.mp4' % (opts.out_path), keep_imgs=False, fps=50)
+        
         wandb.log({
             'Error P1': e1,
             'Error P2': e2})

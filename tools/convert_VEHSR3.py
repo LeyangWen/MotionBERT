@@ -30,7 +30,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--dt_root', type=str, default='data/motion3d/')
 parser.add_argument('--dt_file', type=str, default='h36m_sh_conf_cam_source_final.pkl')
 parser.add_argument('--root_path', type=str, default='data/motion3d/MB3D_f243s81/H36M-SH"')
-parser.add_argument('--test_set_keyword', default='validate', type=str, help='eval set name, either test or validate, only for VEHS')
+parser.add_argument('--test_set_keyword', default='test', type=str, help='eval set name, either test or validate, only for VEHS')
 args = parser.parse_args()
 
 datareader = DataReaderVEHSR3(n_frames=243, sample_stride=1, data_stride_train=81, data_stride_test=243, dt_file=args.dt_file, dt_root=args.dt_root, test_set_keyword=args.test_set_keyword)

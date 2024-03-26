@@ -7,7 +7,7 @@ partial_train: null
 # Traning 
 epochs: 120
 checkpoint_frequency: 10
-batch_size: 8 
+batch_size: 16 
 dropout: 0.0
 learning_rate: 0.0002
 weight_decay: 0.01
@@ -23,7 +23,7 @@ num_heads: 8
 att_fuse: True
 
 # Data
-data_root: data/motion3d/MB3D_VEHS_25d/  #_small/
+data_root: data/motion3d/MB3D_VEHS_25d/  #_small/ # root to segmented pkl file
 subset_list: [3DPose]
 dt_file: MB3D_VEHS_25d/3DPose/VEHS_3D_downsample2_keep1.pkl  #_small/3DPose/VEHS_3D_downsample_4.pkl_small.pkl
 clip_len: 243

@@ -5,9 +5,9 @@ finetune: True
 partial_train: null
 
 # Traning 
-epochs: 10
-checkpoint_frequency: 1
-batch_size: 1
+epochs: 60
+checkpoint_frequency: 30
+batch_size: 10
 dropout: 0.0
 learning_rate: 0.0002
 weight_decay: 0.01
@@ -23,10 +23,9 @@ num_heads: 8
 att_fuse: True
 
 # Data
-data_root: data/motion3d/MB3D_VEHS_R3/
+data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
 subset_list: [6DPose]
-dt_file: MB3D_VEHS_R3/6DPose/VEHS_6D_downsample5_keep1.pkl
-dataset: VEHSR3
+dt_file: VEHS_MB/6DPose/VEHS_6D_downsample2_keep1.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True
