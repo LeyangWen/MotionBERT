@@ -80,7 +80,7 @@ def evaluate(args, model_pos, test_loader, datareader):
             else:
                 predicted_3d_pos = model_pos(batch_input)
             if args.rootrel:
-                predicted_3d_pos[:,:,0,:] = 0     # [N,T,17,3]
+                predicted_3d_pos[:,:,args.pelvic_idx,:] = 0     # [N,T,17,3]
             else:
                 batch_gt[:,0,0,2] = 0
 
@@ -134,12 +134,12 @@ def evaluate(args, model_pos, test_loader, datareader):
         pred *= factor
         
         # Root-relative Errors
-        # pred = pred - pred[:,0:1,:]
-        # gt = gt - gt[:,0:1,:]
-        # todo: use args and opts to decide which segment to use
+        pred = pred - pred[:,args.pelvic_idx:args.pelvic_idx+1,:]
+        gt = gt - gt[:,args.pelvic_idx:args.pelvic_idx+1,:]
+
         # wen: pelvis center -- VEHS-7M 66 keypoint
-        pred = pred - pred[:,57:58,:]
-        gt = gt - gt[:,57:58,:]
+        # pred = pred - pred[:,57:58,:]
+        # gt = gt - gt[:,57:58,:]
         
         # wen: convert to h36m temp fix
         # h36m_convert_id = [6, 8, 46, 47, 48, 50, 51, 52, 53, 54, 57, 58, 59, 60, 62, 63, 64]
@@ -194,9 +194,9 @@ def train_epoch(args, model_pos, train_loader, losses, optimizer, has_3d, has_gt
             if not has_3d:
                 conf = copy.deepcopy(batch_input[:,:,:,2:])    # For 2D data, weight/confidence is at the last channel
             if args.rootrel:
-                batch_gt = batch_gt - batch_gt[:,:,0:1,:]
+                batch_gt = batch_gt - batch_gt[:,:,args.pelvic_idx:args.pelvic_idx+1,:]
             else:
-                batch_gt[:,:,:,2] = batch_gt[:,:,:,2] - batch_gt[:,0:1,0:1,2]  # Place the depth of first frame root to 0.
+                batch_gt[:,:,:,2] = batch_gt[:,:,:,2] - batch_gt[:,0:1,args.pelvic_idx:args.pelvic_idx+1,2]  # Place the depth of first frame root to 0.
             if args.mask or args.noise:
                 batch_input = args.aug.augment2D(batch_input, noise=(args.noise and has_gt), mask=args.mask)
         # Predict 3D poses
@@ -235,6 +235,7 @@ def train_epoch(args, model_pos, train_loader, losses, optimizer, has_3d, has_gt
         optimizer.step()
 
 def train_with_config(args, opts):
+    args['pelvic_idx'] = 57  # do id:id+1 to find relative root position
     print(args)
     try:
         os.makedirs(opts.checkpoint)
