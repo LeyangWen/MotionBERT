@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=MB_train_h36m_gt_scratch
+#SBATCH --job-name=MB_train_RTM_VEHS
 #SBATCH --output=output_slurm/train_log_3D.txt
 #SBATCH --error=output_slurm/train_error_3D.txt
 #SBATCH --mail-type=BEGIN,END,FAIL
@@ -27,6 +27,15 @@ module list
 
 echo "spgpu test"
 
+# finetune RTMPose24 - VEHS
+python train.py \
+--config cconfigs/pose3d/RTMPose_exp/MB_ft_VEHS_config6.yaml \
+--pretrained checkpoint/pose3d/MB_train_VEHSR3_3DPose/ \
+--test_set_keyword validate \
+--checkpoint checkpoint/pose3d/FT_RTM_VEHS_config6\
+--selection latest_epoch.bin > output_slurm/train_RTM.out
+
+
 # train scratch - VEHS
 #python -u train.py \
 #--config configs/pose3d/MB_train_VEHSR3.yaml \
@@ -34,14 +43,14 @@ echo "spgpu test"
 #--checkpoint checkpoint/pose3d/MB_train_VEHSR3_3DPose > output_slurm/train_2.out
 
 # train scratch - H36M
-python -u train.py \
---config configs/pose3d/MB_train_h36m.yaml \
---test_set_keyword test \
---wandb_name H36M_scratch_gt2d_train \
---checkpoint checkpoint/pose3d/MB_train_H36M_gt2D_3DPose > output_slurm/train_h36m.out
+#python -u train.py \
+#--config configs/pose3d/MB_train_h36m.yaml \
+#--test_set_keyword test \
+#--wandb_name H36M_scratch_gt2d_train \
+#--checkpoint checkpointpoint/pose3d/MB_train_H36M_gt2D_3DPose > output_slurm/train_h36m.out
 
 
-# fine tune
+# finetune 3D
 #python train.py \
 #--config configs/pose3d/MB_ft_VEHSR3_3DPose.yaml \
 #--pretrained checkpoint/pose3d/FT_MB_release_MB_ft_h36m \

@@ -25,6 +25,13 @@ module list
 #source /home/wenleyan/.conda/envs/motionbert/bin/activate motionbert
 #conda activate motionbert
 
+# VEHS - RTMPose24
+python -u tools/convert_VEHSR3.py \
+--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_VEHS_config6' \
+--dt_file 'VEHS_6D_downsample5_keep1_config6_modified_RTM2D.pkl' \
+--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_VEHS_config6' > output_slurm/preprocess_RTM.out
+
+
 # H36M
 #python -u tools/convert_h36m.py > output_slurm/preprocess_H36M.out
 
@@ -35,7 +42,7 @@ module list
 #--root_path 'data/motion3d/MB3D_VEHS_25d/3DPose' > output_slurm/preprocess.out
 
 # VEHSR3 - 6D
-python -u tools/convert_VEHSR3.py \
---dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/6DPose' \
---dt_file 'VEHS_6D_downsample2_keep1.pkl' \
---root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/6DPose' > output_slurm/preprocess_6D.out
+#python -u tools/convert_VEHSR3.py \
+#--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/6DPose' \
+#--dt_file 'VEHS_6D_downsample2_keep1.pkl' \
+#--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/6DPose' > output_slurm/preprocess_6D.out
