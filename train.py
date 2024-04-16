@@ -38,10 +38,10 @@ def parse_args():
     parser.add_argument('-o', '--out_path', type=str, help='eval pose output path', default=r'experiment\VEHS-7M_6D\output')
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
-    parser.add_argument('--test_set_keyword', default='test', type=str, help='eval set name, either test or validate, only for VEHS')
+    parser.add_argument('--test_set_keyword', default='validate', type=str, help='eval set name, either test or validate, only for VEHS')
     parser.add_argument('--wandb_project', default='MotionBert_train', help='wandb project name')
     parser.add_argument('--wandb_name', default='VEHS_ft_train', help='wandb run name')
-    parser.add_argument('--note', default='start from FT_MB_release_MB_ft_h36m', help='wandb notes')
+    parser.add_argument('--note', default='', help='wandb notes')
     opts = parser.parse_args()
     return opts
 
@@ -80,9 +80,9 @@ def evaluate(args, model_pos, test_loader, datareader):
             else:
                 predicted_3d_pos = model_pos(batch_input)
             if args.rootrel:
-                predicted_3d_pos[:,:,args.pelvic_idx,:] = 0     # [N,T,17,3]
+                predicted_3d_pos[:,:,args.root_idx,:] = 0     # [N,T,17,3]
             else:
-                batch_gt[:,0,0,2] = 0
+                batch_gt[:,0,args.root_idx,2] = 0
 
             if args.gt_2d:
                 predicted_3d_pos[...,:2] = batch_input[...,:2]
@@ -134,13 +134,11 @@ def evaluate(args, model_pos, test_loader, datareader):
         pred *= factor
         
         # Root-relative Errors
-        pred = pred - pred[:,args.pelvic_idx:args.pelvic_idx+1,:]
-        gt = gt - gt[:,args.pelvic_idx:args.pelvic_idx+1,:]
+        # wen: root_idx 57 -- VEHS-7M 66 keypoint
+        # Veeru: root_idx 21 -- RTMPose 24 keypoint
+        pred = pred - pred[:,args.root_idx:args.root_idx+1,:]
+        gt = gt - gt[:,args.root_idx:args.root_idx+1,:]
 
-        # wen: pelvis center -- VEHS-7M 66 keypoint
-        # pred = pred - pred[:,57:58,:]
-        # gt = gt - gt[:,57:58,:]
-        
         # wen: convert to h36m temp fix
         # h36m_convert_id = [6, 8, 46, 47, 48, 50, 51, 52, 53, 54, 57, 58, 59, 60, 62, 63, 64]
         # pred = pred[:, h36m_convert_id, :]
@@ -194,9 +192,9 @@ def train_epoch(args, model_pos, train_loader, losses, optimizer, has_3d, has_gt
             if not has_3d:
                 conf = copy.deepcopy(batch_input[:,:,:,2:])    # For 2D data, weight/confidence is at the last channel
             if args.rootrel:
-                batch_gt = batch_gt - batch_gt[:,:,args.pelvic_idx:args.pelvic_idx+1,:]
+                batch_gt = batch_gt - batch_gt[:,:,args.root_idx:args.root_idx+1,:]
             else:
-                batch_gt[:,:,:,2] = batch_gt[:,:,:,2] - batch_gt[:,0:1,args.pelvic_idx:args.pelvic_idx+1,2]  # Place the depth of first frame root to 0.
+                batch_gt[:,:,:,2] = batch_gt[:,:,:,2] - batch_gt[:,0:1,args.root_idx:args.root_idx+1,2]  # Place the depth of first frame root to 0.
             if args.mask or args.noise:
                 batch_input = args.aug.augment2D(batch_input, noise=(args.noise and has_gt), mask=args.mask)
         # Predict 3D poses
@@ -235,7 +233,7 @@ def train_epoch(args, model_pos, train_loader, losses, optimizer, has_3d, has_gt
         optimizer.step()
 
 def train_with_config(args, opts):
-    args['pelvic_idx'] = 57  # do id:id+1 to find relative root position
+
     print(args)
     try:
         os.makedirs(opts.checkpoint)
@@ -251,7 +249,7 @@ def train_with_config(args, opts):
     trainloader_params = {
           'batch_size': args.batch_size,
           'shuffle': True,
-          'num_workers': 2,
+          'num_workers':12,
           'pin_memory': True,
           'prefetch_factor': 4,
           'persistent_workers': True
@@ -260,7 +258,7 @@ def train_with_config(args, opts):
     testloader_params = {
           'batch_size': args.batch_size,
           'shuffle': False,
-          'num_workers': 2,
+          'num_workers': 12,
           'pin_memory': True,
           'prefetch_factor': 4,
           'persistent_workers': True
@@ -384,6 +382,7 @@ def train_with_config(args, opts):
                     lr,
                    losses['3d_pos'].avg))
             else:
+                e1_train, e2_train, _ = evaluate(args, model_pos, train_loader_3d, datareader)
                 e1, e2, results_all = evaluate(args, model_pos, test_loader, datareader)
                 print('[%d] time %.2f lr %f 3d_train %f e1 %f e2 %f' % (
                     epoch + 1,
@@ -406,6 +405,8 @@ def train_with_config(args, opts):
                 wandb.log({
                     'Error P1': e1,
                     'Error P2': e2,
+                    'Error P1 Train': e1_train,
+                    'Error P2 Train': e2_train,
                     'loss_3d_pos': losses['3d_pos'].avg,
                     'loss_2d_proj': losses['2d_proj'].avg,
                     'loss_3d_scale': losses['3d_scale'].avg,

@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 import torch.nn.functional as F
+import warnings
 
 # Numpy-based errors
 
@@ -100,12 +101,21 @@ def get_limb_lens(x):
         Input: (N, T, 17, 3)
         Output: (N, T, 16)
     '''
+    warnings.warn('WARNING: get_limb_lens is set for RTMPose-24-veeru joint index now, if you are using different joint idx, need to modify in loss.py')
+
     limbs_id = [[0,1], [1,2], [2,3],
          [0,4], [4,5], [5,6],
          [0,7], [7,8], [8,9], [9,10],
          [8,11], [11,12], [12,13],
          [8,14], [14,15], [15,16]
-        ]
+        ]  # wen: idx for h36M
+
+    limbs_id = [[22, 3], [22, 4], [4, 6],
+                [3, 5], [5, 7], [6, 8],
+                [7, 16], [8, 19], [21, 9],
+                [21, 10], [9, 11], [10, 12],
+                [11, 13], [12, 14], [21, 22],
+                [22, 23]]  # wen: idx for RTMPose-24-veeru input
     limbs = x[:,:,limbs_id,:]
     limbs = limbs[:,:,:,0,:]-limbs[:,:,:,1,:]
     limb_lens = torch.norm(limbs, dim=-1)
@@ -150,6 +160,7 @@ def get_angles(x):
         Input: (N, T, 17, 3)
         Output: (N, T, 16)
     '''
+    warnings.warn('WARNING: get_angles is set for H36M joint index now, if you are using different joint idx, need to modify in loss.py')
     limbs_id = [[0,1], [1,2], [2,3],
          [0,4], [4,5], [5,6],
          [0,7], [7,8], [8,9], [9,10],

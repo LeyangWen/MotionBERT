@@ -3,6 +3,7 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 import copy
+import warnings
 
 def crop_scale(motion, scale_range=[1, 1]):
     '''
@@ -58,8 +59,11 @@ def flip_data(data):
     Return
         result: same
     """
-    left_joints = [4, 5, 6, 11, 12, 13]
-    right_joints = [1, 2, 3, 14, 15, 16]
+    # left_joints = [4, 5, 6, 11, 12, 13] # Human 3.6
+    # right_joints = [1, 2, 3, 14, 15, 16]
+    left_joints = [3, 5, 7, 9, 11, 13,16] # Vicon RTMPose dataset
+    right_joints = [4, 6, 8, 10, 12, 14,19]
+    warnings.warn('WARNING: flip_data is set for RTMPose-24-veeru joint index now, if you are using different joint idx, need to modify in utils_data.py')
     flipped_data = copy.deepcopy(data)
     flipped_data[..., 0] *= -1                                               # flip x of all joints
     flipped_data[..., left_joints+right_joints, :] = flipped_data[..., right_joints+left_joints, :]
