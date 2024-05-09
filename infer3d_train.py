@@ -90,92 +90,8 @@ def evaluate(args, model_pos, test_loader, datareader):
             results_all.append(predicted_3d_pos.cpu().numpy())
     results_all = np.concatenate(results_all)
     results_all = datareader.denormalize(results_all)
-    _, split_id_test = datareader.get_split_id()
-    actions = np.array(datareader.dt_dataset['test']['action'])
-
-    factors = np.array(datareader.dt_dataset['test']['2.5d_factor'])
-    gts = np.array(datareader.dt_dataset['test']['joints_2.5d_image'])
     
-    # quick fix if you are not using 2.5d factor
-    #factors = np.array(datareader.dt_dataset['test']['2.5d_factor'])*0 +1
-    #gts = np.array(datareader.dt_dataset['test']['joint3d_image'])
-    
-    sources = np.array(datareader.dt_dataset['test']['source'])
-
-    num_test_frames = len(actions)
-    frames = np.array(range(num_test_frames))
-    action_clips = actions[split_id_test]
-    factor_clips = factors[split_id_test]
-    source_clips = sources[split_id_test]
-    frame_clips = frames[split_id_test]
-    gt_clips = gts[split_id_test]
-    assert len(results_all)==len(action_clips)
-    
-    e1_all = np.zeros(num_test_frames)
-    e2_all = np.zeros(num_test_frames)
-    oc = np.zeros(num_test_frames)
-    results = {}
-    results_procrustes = {}
-    action_names = sorted(set(datareader.dt_dataset['test']['action']))
-    for action in action_names:
-        results[action] = []
-        results_procrustes[action] = []
-    block_list = ['s_09_act_05_subact_02', 
-                  's_09_act_10_subact_02', 
-                  's_09_act_13_subact_01']
-    for idx in range(len(action_clips)):
-        source = source_clips[idx][0][:-6]
-        if source in block_list:
-            continue
-        frame_list = frame_clips[idx]
-        action = action_clips[idx][0]
-        factor = factor_clips[idx][:,None,None]
-        gt = gt_clips[idx]
-        pred = results_all[idx]
-        pred *= factor
-        
-        # Root-relative Errors
-        # wen: root_idx 57 -- VEHS-7M 66 keypoint
-        # Veeru: root_idx 21 -- RTMPose 24 keypoint
-        pred = pred - pred[:,args.root_idx:args.root_idx+1,:]
-        gt = gt - gt[:,args.root_idx:args.root_idx+1,:]
-
-        # wen: convert to h36m temp fix
-        # h36m_convert_id = [6, 8, 46, 47, 48, 50, 51, 52, 53, 54, 57, 58, 59, 60, 62, 63, 64]
-        # pred = pred[:, h36m_convert_id, :]
-        # gt = gt[:, h36m_convert_id, :]
-        # wen: convert to only cacualted keypoints
-        # pred = pred[:, 50:, :]
-        # gt = gt[:, 50:, :]
-                
-        err1 = mpjpe(pred, gt)
-        err2 = p_mpjpe(pred, gt)
-        e1_all[frame_list] += err1
-        e2_all[frame_list] += err2
-        oc[frame_list] += 1
-    for idx in range(num_test_frames):
-        if e1_all[idx] > 0:
-            err1 = e1_all[idx] / oc[idx]
-            err2 = e2_all[idx] / oc[idx]
-            action = actions[idx]
-            results[action].append(err1)
-            results_procrustes[action].append(err2)
-    final_result = []
-    final_result_procrustes = []
-    summary_table = prettytable.PrettyTable()
-    summary_table.field_names = ['test_name'] + action_names
-    for action in action_names:
-        final_result.append(np.mean(results[action]))
-        final_result_procrustes.append(np.mean(results_procrustes[action]))
-    summary_table.add_row(['P1'] + final_result)
-    summary_table.add_row(['P2'] + final_result_procrustes)
-    print(summary_table)
-    e1 = np.mean(np.array(final_result))
-    e2 = np.mean(np.array(final_result_procrustes))
-    print('Protocol #1 Error (MPJPE):', e1, 'mm')
-    print('Protocol #2 Error (P-MPJPE):', e2, 'mm')
-    print('----------')
-    return e1, e2, results_all
+    return results_all
         
 def train_epoch(args, model_pos, train_loader, losses, optimizer, has_3d, has_gt):
     model_pos.train()
@@ -441,14 +357,11 @@ def train_with_config(args, opts):
                 save_checkpoint(chk_path_best, epoch, lr, optimizer, model_pos, min_loss)
             
     if opts.evaluate:
-        e1, e2, results_all = evaluate(args, model_pos, test_loader, datareader)
+        results_all = evaluate(args, model_pos, test_loader, datareader)
         os.makedirs(opts.out_path, exist_ok=True)
         np.save('%s/X3D.npy' % (opts.out_path), results_all)
         # render_and_save(results_all, '%s/X3D.mp4' % (opts.out_path), keep_imgs=False, fps=50)
-        
-        wandb.log({
-            'Error P1': e1,
-            'Error P2': e2})
+
         
     wandb.finish()
 

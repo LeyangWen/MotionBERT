@@ -5,9 +5,9 @@ finetune: True
 partial_train: null
 
 # Traning 
-epochs: 60
+epochs: 120
 checkpoint_frequency: 30
-batch_size: 10
+batch_size: 32
 dropout: 0.0
 learning_rate: 0.0002
 weight_decay: 0.01
@@ -25,7 +25,7 @@ att_fuse: True
 # Data
 data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
 subset_list: [RTM2D_VEHS_config2]
-dt_file: VEHS_6D_downsample5_keep1_config2_modified_RTM2D.pkl
+dt_file: VEHS_MB/RTM2D_VEHS_config2/VEHS_6D_downsample5_keep1_config2_modified_RTM2D.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True

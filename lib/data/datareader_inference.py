@@ -6,11 +6,11 @@ import random
 import copy
 from lib.utils.tools import read_pkl
 from lib.utils.utils_data import split_clips
-from lib.data.datareader_h36m import DataReaderH36M
+from lib.data.datareader_VEHSR3 import DataReaderVEHSR3
 random.seed(0)
     
-class DataReaderVEHSR3(DataReaderH36M):
-    def __init__(self, n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence=True, dt_root = 'data/motion3d', dt_file = 'h36m_cpn_cam_source.pkl', test_set_keyword='test', num_joints=17):
+class DataReaderInference(DataReaderVEHSR3):
+    def __init__(self, n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence=True, dt_root = 'data/motion3d', dt_file = 'h36m_cpn_cam_source.pkl', test_set_keyword='test', num_joints=17, res_w=1920, res_h=1080):
         '''
         Args:
             n_frames: frames in each clip
@@ -25,8 +25,9 @@ class DataReaderVEHSR3(DataReaderH36M):
         super().__init__(n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence, dt_root, dt_file)
         self.dt_dataset['test'] = self.dt_dataset[test_set_keyword]
         self.dt_dataset['test']['action'] = list(map(str.lower, self.dt_dataset['test']['action']))
-        self.res_w = 1920
-        self.res_h = 1200
+        # todo: set res_w and res_h according to video input
+        self.res_w = res_w
+        self.res_h = res_h
         self.num_joints = num_joints
         
     def read_2d(self):

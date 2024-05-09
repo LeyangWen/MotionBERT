@@ -31,21 +31,27 @@ echo "cpu-2, gpu-1, mem-20"
 # Dataset
 #config_file="configs/pose3d/MB_train_VEHSR3.yaml"
 #config_file="configs/pose3d/MB_train_h36m.yaml"
-config_file="configs/pose3d/MB_ft_VEHSR3_6DPose.yaml"
+#config_file="configs/pose3d/MB_ft_VEHSR3_6DPose.yaml"
+#config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_config6.yaml"
+config_file="configs/pose3d/RTMPose_exp/MB_ft_inference.yaml"
 
 # Checkpoint
-checkpoint_bin="checkpoint/pose3d/MB_ft_VEHSR3_6DPose/best_epoch.bin"
+#checkpoint_bin="checkpoint/pose3d/MB_ft_VEHSR3_6DPose/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/MB_train_h36m/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin"
+checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config2/best_epoch.bin"
 
 
 echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
-python -u train.py \
+python -u infer3d_train.py \
 --config "$config_file" \
 --wandb_project "MotionBert_eval" \
---wandb_name "cpt_VEHS6D_ft_dataset_VEHS6D_onlyH36MJoints" \
+--wandb_name "RTM_MB_ft_infer" \
 --note "save pose output" \
---out_path "experiment\VEHS-7M_6D\output" \
---test_set_keyword test \
+--out_path "experiment/RTM2D_ft/inference_config2" \
+--test_set_keyword validate \
 --evaluate "$checkpoint_bin" > "output_slurm/eval_${SLURM_JOB_ID}_output.out"
+
+
+# (config change 4 location)

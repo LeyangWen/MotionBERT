@@ -25,11 +25,21 @@ module list
 #source /home/wenleyan/.conda/envs/motionbert/bin/activate motionbert
 #conda activate motionbert
 
-# VEHS - RTMPose24
-python -u tools/convert_VEHSR3.py \
---dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_VEHS_config6' \
---dt_file 'VEHS_6D_downsample5_keep1_config6_modified_RTM2D.pkl' \
---root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_VEHS_config6' > output_slurm/preprocess_RTM.out
+# VEHS - RTMPose24 - industry inference
+python -u tools/convert_inference.py \
+--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry' \
+--dt_file 'rtmpose_industry_no3d_j24_f20_s1_RTM2D.pkl' \
+--test_set_keyword 'validate' \
+--res_w 1920 \
+--res_h 1080 \
+--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry' > output_slurm/preprocess_RTM6.out
+
+# VEHS - RTMPose24 - VEHSR3
+#python -u tools/convert_VEHSR3.py \
+#--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_VEHS_config6' \
+#--dt_file 'VEHS_6D_downsample5_keep1_config6_modified_RTM2D.pkl' \
+#--test_set_keyword 'validate' \
+#--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_VEHS_config6' > output_slurm/preprocess_RTM6.out
 
 
 # H36M
