@@ -32,7 +32,7 @@ rootrel: True
 sample_stride: 1
 num_joints: 24
 no_conf: False
-gt_2d: False
+gt_2d: True
 root_idx: 21
 
 # Loss

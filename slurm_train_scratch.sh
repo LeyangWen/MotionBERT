@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=10g
 #SBATCH --gres=gpu:3
-#SBATCH --time=24:00:00
+#SBATCH --time=30:00:00
 #SBATCH --account=shdpm0
 #SBATCH --partition=spgpu
 ##### END preamble
@@ -29,14 +29,17 @@ echo "spgpu test"
 
 # finetune RTMPose24 - VEHS  (config change 4 location)
 python train.py \
---config configs/pose3d/RTMPose_exp/MB_ft_VEHS_config2.yaml \
+--config configs/pose3d/RTMPose_exp/MB_ft_VEHS_config6.yaml \
 --pretrained checkpoint/pose3d/MB_train_VEHSR3_3DPose/ \
 --test_set_keyword validate \
---checkpoint checkpoint/pose3d/FT_RTM_VEHS_config2 \
 --wandb_project "MotionBert_train_RTM2D" \
---wandb_name "config2_unprocessed_gt2d_false" \
---resume checkpoint/pose3d/FT_RTM_VEHS_config2/latest_epoch.bin \
+--wandb_name "config6_unprocessed_gt2d_true" \
+--checkpoint checkpoint/pose3d/FT_RTM_VEHS_config6_GT2d_true \
 --selection latest_epoch.bin > output_slurm/train_RTM.out
+
+#--checkpoint checkpoint/pose3d/FT_RTM_VEHS_config6 \
+#--resume checkpoint/pose3d/FT_RTM_VEHS_config6/latest_epoch.bin \
+#--selection latest_epoch.bin > output_slurm/train_RTM.out
 
 
 # train scratch - VEHS
