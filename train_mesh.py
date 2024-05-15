@@ -11,6 +11,7 @@ import numpy as np
 from collections import defaultdict, OrderedDict
 import tensorboardX
 from tqdm import tqdm
+import wandb
 
 import torch
 import torch.nn as nn
@@ -238,6 +239,11 @@ def train_with_config(args, opts):
         if e.errno != errno.EEXIST:
             raise RuntimeError('Unable to create checkpoint directory:', opts.checkpoint)
     train_writer = tensorboardX.SummaryWriter(os.path.join(opts.checkpoint, "logs"))
+
+    args_all = vars(opts)
+    args_all['yaml_config'] = args
+    wandb.init(project=opts.wandb_project, name=opts.wandb_name, config=args_all)  # Initialize a new run
+
     model_backbone = load_backbone(args)
     if args.finetune:
         if opts.resume or opts.evaluate:
@@ -395,6 +401,16 @@ def train_with_config(args, opts):
             train_writer.add_scalar('train_loss', losses_train.avg, epoch + 1)
             train_writer.add_scalar('train_mpjpe', mpjpes.avg, epoch + 1)
             train_writer.add_scalar('train_mpve', mpves.avg, epoch + 1)
+
+            wandb.log({
+                'losses_train.avg': losses_train.avg,
+                'mpjpes.avg': mpjpes.avg,
+                'mpves.avg': mpves.avg,
+                'test_loss': test_loss,
+                'test_mpjpe': test_mpjpe,
+                'test_pa_mpjpe': test_pa_mpjpe,
+                'test_mpve': test_mpve,
+            }, step=epoch + 1)
                 
             # Decay learning rate exponentially
             scheduler.step()
@@ -443,6 +459,7 @@ def train_with_config(args, opts):
             test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, _ = validate(test_loader, model, criterion, 'h36m')
         if hasattr(args, "dt_file_pw3d"):
             test_loss_pw3d, test_mpjpe_pw3d, test_pa_mpjpe_pw3d, test_mpve_pw3d, _ = validate(test_loader_pw3d, model, criterion, 'pw3d')
+    wandb.finish()
 
 if __name__ == "__main__":
     opts = parse_args()
