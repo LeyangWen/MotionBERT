@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=MB_train_RTM_VEHS
+#SBATCH --job-name=MB_train_mesh
 #SBATCH --output=output_slurm/train_log_3D.txt
 #SBATCH --error=output_slurm/train_error_3D.txt
 #SBATCH --mail-type=BEGIN,END,FAIL
