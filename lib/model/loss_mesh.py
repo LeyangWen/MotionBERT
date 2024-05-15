@@ -49,8 +49,9 @@ class MeshLoss(nn.Module):
         loss_dict['loss_3d_pos'] = loss_mpjpe(preds_local, gt_local)
         loss_dict['loss_3d_scale'] = n_mpjpe(preds_local, gt_local)
         loss_dict['loss_3d_velocity'] = loss_velocity(preds_local, gt_local)
-        loss_dict['loss_lv'] = loss_limb_var(preds_local)
-        loss_dict['loss_lg'] = loss_limb_gt(preds_local, gt_local)
+        # todo: since weight is set to 0, temp temp fix
+        loss_dict['loss_lv'] = loss_dict['loss_3d_velocity']  #loss_limb_var(preds_local)
+        loss_dict['loss_lg'] = loss_dict['loss_3d_velocity']  #loss_limb_gt(preds_local, gt_local)
         loss_dict['loss_a'] = loss_angle(preds_local, gt_local)
         loss_dict['loss_av'] = loss_angle_velocity(preds_local, gt_local)
         

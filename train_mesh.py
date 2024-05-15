@@ -243,7 +243,7 @@ def train_with_config(args, opts):
     args_all = vars(opts)
     args_all['yaml_config'] = args
     wandb.init(project=opts.wandb_project, name=opts.wandb_name, config=args_all)  # Initialize a new run
-
+    args.test_set_keyword = opts.test_set_keyword
     model_backbone = load_backbone(args)
     if args.finetune:
         if opts.resume or opts.evaluate:
@@ -374,42 +374,15 @@ def train_with_config(args, opts):
             
             if hasattr(args, "dt_file_h36m") and epoch < args.warmup_h36m:
                 train_epoch(args, opts, model, train_loader, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch)
-                test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, test_losses_dict = validate(test_loader, model, criterion, 'h36m')
-                for k, v in test_losses_dict.items():
-                    train_writer.add_scalar('test_loss/'+k, v.avg, epoch + 1)
-                train_writer.add_scalar('test_loss', test_loss, epoch + 1)
-                train_writer.add_scalar('test_mpjpe', test_mpjpe, epoch + 1)
-                train_writer.add_scalar('test_pa_mpjpe', test_pa_mpjpe, epoch + 1)
-                train_writer.add_scalar('test_mpve', test_mpve, epoch + 1)
+                #test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, test_losses_dict = validate(test_loader, model, criterion, 'h36m')  # todo: fix OOM error here
+               
 
-            if hasattr(args, "dt_file_coco") and epoch < args.warmup_coco:
-                train_epoch(args, opts, model, train_loader_coco, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch)
-            
-            if hasattr(args, "dt_file_pw3d"):
-                if args.train_pw3d:
-                    train_epoch(args, opts, model, train_loader_pw3d, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch)    
-                test_loss_pw3d, test_mpjpe_pw3d, test_pa_mpjpe_pw3d, test_mpve_pw3d, test_losses_dict_pw3d = validate(test_loader_pw3d, model, criterion, 'pw3d')  
-                for k, v in test_losses_dict_pw3d.items():
-                    train_writer.add_scalar('test_loss_pw3d/'+k, v.avg, epoch + 1)
-                train_writer.add_scalar('test_loss_pw3d', test_loss_pw3d, epoch + 1)
-                train_writer.add_scalar('test_mpjpe_pw3d', test_mpjpe_pw3d, epoch + 1)
-                train_writer.add_scalar('test_pa_mpjpe_pw3d', test_pa_mpjpe_pw3d, epoch + 1)
-                train_writer.add_scalar('test_mpve_pw3d', test_mpve_pw3d, epoch + 1)
-            
-            for k, v in losses_dict.items():
-                train_writer.add_scalar('train_loss/'+k, v.avg, epoch + 1)
-            train_writer.add_scalar('train_loss', losses_train.avg, epoch + 1)
-            train_writer.add_scalar('train_mpjpe', mpjpes.avg, epoch + 1)
-            train_writer.add_scalar('train_mpve', mpves.avg, epoch + 1)
 
             wandb.log({
                 'losses_train.avg': losses_train.avg,
                 'mpjpes.avg': mpjpes.avg,
                 'mpves.avg': mpves.avg,
-                'test_loss': test_loss,
-                'test_mpjpe': test_mpjpe,
-                'test_pa_mpjpe': test_pa_mpjpe,
-                'test_mpve': test_mpve,
+                
             }, step=epoch + 1)
                 
             # Decay learning rate exponentially
@@ -437,22 +410,6 @@ def train_with_config(args, opts):
                 'best_jpe' : best_jpe
             }, chk_path)
 
-            if hasattr(args, "dt_file_pw3d"):
-                best_jpe_cur = test_mpjpe_pw3d
-            else:
-                best_jpe_cur = test_mpjpe
-            # Save best checkpoint.
-            best_chk_path = os.path.join(opts.checkpoint, 'best_epoch.bin'.format(epoch))
-            if best_jpe_cur < best_jpe:
-                best_jpe = best_jpe_cur
-                print("save best checkpoint")
-                torch.save({
-                'epoch': epoch+1,
-                'lr': scheduler.get_last_lr(),
-                'optimizer': optimizer.state_dict(),
-                'model': model.state_dict(),
-                'best_jpe' : best_jpe
-                }, best_chk_path)
 
     if opts.evaluate:
         if hasattr(args, "dt_file_h36m"):
