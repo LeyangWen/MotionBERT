@@ -115,7 +115,7 @@ def get_limb_lens(x):
                 [7, 16], [8, 19], [21, 9],
                 [21, 10], [9, 11], [10, 12],
                 [11, 13], [12, 14], [21, 22],
-                [22, 23]]  # wen: idx for RTMPose-24-veeru input
+                [22, 23]]  # todo: temp fix for RTMPose-24-veeru input
     limbs = x[:,:,limbs_id,:]
     limbs = limbs[:,:,:,0,:]-limbs[:,:,:,1,:]
     limb_lens = torch.norm(limbs, dim=-1)

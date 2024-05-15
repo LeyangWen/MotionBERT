@@ -316,6 +316,7 @@ def train_with_config(args, opts):
             print('Loading checkpoint', chk_filename)
             checkpoint = torch.load(chk_filename, map_location=lambda storage, loc: storage)
             if args.num_joints != 17:  # 6D pose
+                # todo: use a args flag or other checks instead, sometimes we dont need to delete the last layer
                 # for key, value in checkpoint['model_pos'].items():
                 #     print(key, value.shape)
                 del checkpoint['model_pos']['module.pos_embed']  # deleting the last layer
