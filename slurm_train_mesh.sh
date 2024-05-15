@@ -31,7 +31,7 @@ echo "test"
 python train_mesh.py \
 --config configs/mesh/MB_train_VEHSR3.yaml \
 --pretrained checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/ \
---selection best_epoch.bin
+--selection best_epoch.bin \
 --checkpoint checkpoint/mesh/MB_train_VEHSR3 \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train_mesh" \
