@@ -40,6 +40,10 @@ def parse_args():
     parser.add_argument('-freq', '--print_freq', default=100)
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
+    parser.add_argument('--test_set_keyword', default='validate', type=str, help='eval set name, either test or validate, only for VEHS')
+    parser.add_argument('--wandb_project', default='MotionBert_train', type=str, help='wandb project name')
+    parser.add_argument('--wandb_name', default='VEHS_ft_train', type=str, help='wandb run name')
+    parser.add_argument('--note', default='', type=str, help='wandb notes')
     opts = parser.parse_args()
     return opts
 
@@ -186,7 +190,17 @@ def train_epoch(args, opts, model, train_loader, losses_train, losses_dict, mpjp
                      args.lambda_av      * loss_dict['loss_av']          + \
                      args.lambda_shape   * loss_dict['loss_shape']       + \
                      args.lambda_pose    * loss_dict['loss_pose']        + \
-                     args.lambda_norm    * loss_dict['loss_norm'] 
+                     args.lambda_norm    * loss_dict['loss_norm']
+        # lambda_3d: 0.5
+        # lambda_scale: 0
+        # lambda_3dv: 10
+        # lambda_lv: 0
+        # lambda_lg: 0
+        # lambda_a: 0
+        # lambda_av: 0
+        # lambda_pose: 1000
+        # lambda_shape: 1
+        # lambda_norm: 20
         losses_train.update(loss_train.item(), batch_size)
         loss_str = ''
         for k, v in loss_dict.items():
@@ -236,7 +250,7 @@ def train_with_config(args, opts):
     if args.partial_train:
         model_backbone = partial_train_layers(model_backbone, args.partial_train)
     model = MeshRegressor(args, backbone=model_backbone, dim_rep=args.dim_rep, hidden_dim=args.hidden_dim, dropout_ratio=args.dropout, num_joints=args.num_joints)
-    criterion = MeshLoss(loss_type = args.loss_type)
+    criterion = MeshLoss(loss_type = args.loss_type, root_idx=args.root_idx)
     best_jpe = 9999.0
     model_params = 0
     for parameter in model.parameters():
@@ -261,7 +275,7 @@ def train_with_config(args, opts):
           'persistent_workers': True
     }
     if hasattr(args, "dt_file_h36m"):
-        mesh_train = MotionSMPL(args, data_split='train', dataset="h36m")
+        mesh_train = MotionSMPL(args, data_split='train', dataset="h36m")  # todo: hyjacking for now, modify later, need to fix all dt_file_h36m
         mesh_val = MotionSMPL(args, data_split='test', dataset="h36m")
         train_loader = DataLoader(mesh_train, **trainloader_params)
         test_loader = DataLoader(mesh_val, **testloader_params)

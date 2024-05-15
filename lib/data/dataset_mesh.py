@@ -13,7 +13,8 @@ from lib.utils.utils_mesh import flip_thetas
 from lib.utils.utils_smpl import SMPL
 from torch.utils.data import Dataset, DataLoader
 from lib.data.datareader_h36m import DataReaderH36M  
-from lib.data.datareader_mesh import DataReaderMesh  
+from lib.data.datareader_mesh import DataReaderMesh
+from lib.data.datareader_VEHSR3 import DataReaderVEHSR3
 from lib.data.dataset_action import random_move  
 
 class SMPLDataset(Dataset):
@@ -22,14 +23,17 @@ class SMPLDataset(Dataset):
         np.random.seed(0)
         self.clip_len = args.clip_len
         self.data_split = data_split
-        if dataset=="h36m":
+        if dataset=="h36m": # "VEHS":        # todo: consider VEHSR3
+            datareader = DataReaderVEHSR3(n_frames=self.clip_len, sample_stride=self.sample_stride, data_stride_train=self.data_stride, data_stride_test=self.clip_len, dt_root=args.data_root,
+                                          dt_file=args.dt_file, test_set_keyword=args.test_set_keyword, num_joints=args.num_joints)
+        elif dataset=="h36mxxxxxx":
             datareader = DataReaderH36M(n_frames=self.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=self.clip_len, dt_root=args.data_root, dt_file=args.dt_file_h36m)
         elif dataset=="coco":
             datareader = DataReaderMesh(n_frames=1, sample_stride=args.sample_stride, data_stride_train=1, data_stride_test=1, dt_root=args.data_root, dt_file=args.dt_file_coco, res=[640, 640])
         elif dataset=="pw3d":
             datareader = DataReaderMesh(n_frames=self.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=self.clip_len, dt_root=args.data_root, dt_file=args.dt_file_pw3d, res=[1920, 1920])
         else:
-            raise Exception("Mesh dataset undefined.")
+                raise Exception("Mesh dataset undefined.")
 
         split_id_train, split_id_test = datareader.get_split_id()                        # Index of clips
         train_data, test_data = datareader.read_2d()

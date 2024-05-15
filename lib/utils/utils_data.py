@@ -59,10 +59,10 @@ def flip_data(data):
     Return
         result: same
     """
-    # left_joints = [4, 5, 6, 11, 12, 13] # Human 3.6
-    # right_joints = [1, 2, 3, 14, 15, 16]
-    left_joints = [3, 5, 7, 9, 11, 13,16] # Vicon RTMPose dataset
-    right_joints = [4, 6, 8, 10, 12, 14,19]
+    left_joints = [4, 5, 6, 11, 12, 13] # Human 3.6
+    right_joints = [1, 2, 3, 14, 15, 16]
+    # left_joints = [3, 5, 7, 9, 11, 13,16] # todo: temp fix for Vicon RTMPose dataset
+    # right_joints = [4, 6, 8, 10, 12, 14,19]
     warnings.warn('WARNING: flip_data is set for RTMPose-24-veeru joint index now, if you are using different joint idx, need to modify in utils_data.py')
     flipped_data = copy.deepcopy(data)
     flipped_data[..., 0] *= -1                                               # flip x of all joints

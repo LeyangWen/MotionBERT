@@ -358,7 +358,7 @@ def compute_error(output, target):
     with torch.no_grad():
         pred_verts = output[0]['verts'].reshape(-1, 6890, 3)
         target_verts = target['verts'].reshape(-1, 6890, 3)
-
+        # todo: fix 17 index
         pred_j3ds = output[0]['kp_3d'].reshape(-1, 17, 3)
         target_j3ds = target['kp_3d'].reshape(-1, 17, 3)
 
@@ -377,7 +377,7 @@ def compute_error_frames(output, target):
     with torch.no_grad():
         pred_verts = output[0]['verts'].reshape(-1, 6890, 3)
         target_verts = target['verts'].reshape(-1, 6890, 3)
-
+        # todo: fix 17 index
         pred_j3ds = output[0]['kp_3d'].reshape(-1, 17, 3)
         target_j3ds = target['kp_3d'].reshape(-1, 17, 3)
 
@@ -395,7 +395,7 @@ def compute_error_frames(output, target):
 def evaluate_mesh(results):
     pred_verts = results['verts'].reshape(-1, 6890, 3)
     target_verts = results['verts_gt'].reshape(-1, 6890, 3)
-
+    # todo: fix 17 index
     pred_j3ds = results['kp_3d'].reshape(-1, 17, 3)
     target_j3ds = results['kp_3d_gt'].reshape(-1, 17, 3)
     num_samples = pred_j3ds.shape[0]
@@ -407,6 +407,7 @@ def evaluate_mesh(results):
 
 
     # mpjpe-17 & mpjpe-14
+    #  todo: fix conversion
     h36m_17_to_14 = (1, 2, 3, 4, 5, 6, 8, 10, 11, 12, 13, 14, 15, 16)
     pred_j3ds_17j = (pred_j3ds - pred_j3ds[:, :1, :])
     target_j3ds_17j = (target_j3ds - target_j3ds[:, :1, :])

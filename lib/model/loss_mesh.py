@@ -9,10 +9,12 @@ class MeshLoss(nn.Module):
             self,
             loss_type='MSE',
             device='cuda',
+            root_idx=0,
     ):
         super(MeshLoss, self).__init__()
         self.device = device
         self.loss_type = loss_type
+        self.root_idx = root_idx
         if loss_type == 'MSE': 
             self.criterion_keypoints = nn.MSELoss(reduction='none').to(self.device)
             self.criterion_regr = nn.MSELoss().to(self.device)
@@ -33,8 +35,14 @@ class MeshLoss(nn.Module):
         pred_theta = preds['theta']
         theta_size = pred_theta.shape[:2]
         pred_theta = reduce(pred_theta)
+        root_idx = self.root_idx
+
         preds_local = preds['kp_3d'] - preds['kp_3d'][:, :, 0:1,:]  # (N, T, 17, 3)
         gt_local = data_gt['kp_3d'] - data_gt['kp_3d'][:, :, 0:1,:]
+        # todo: preds_local, maybe not
+        # preds_local = preds['kp_3d'] - preds['kp_3d'][:, :, root_idx:root_idx+1,:]  # (N, T, 17, 3)
+        # gt_local = data_gt['kp_3d'] - data_gt['kp_3d'][:, :, root_idx:root_idx+1,:]
+
         real_shape, pred_shape = data_3d_theta[:, 72:], pred_theta[:, 72:]
         real_pose, pred_pose = data_3d_theta[:, :72], pred_theta[:, :72]
         loss_dict = {}
