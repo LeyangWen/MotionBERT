@@ -30,6 +30,7 @@ from lib.utils.learning import *
 from lib.data.dataset_mesh import MotionSMPL
 from lib.model.model_mesh import MeshRegressor
 from torch.utils.data import DataLoader
+from lib.utils.vismo import render_and_save
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -38,6 +39,8 @@ def parse_args():
     parser.add_argument('-p', '--pretrained', default='checkpoint', type=str, metavar='PATH', help='pretrained checkpoint directory')
     parser.add_argument('-r', '--resume', default='', type=str, metavar='FILENAME', help='checkpoint to resume (file name)')
     parser.add_argument('-e', '--evaluate', default='', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
+    parser.add_argument('-o', '--out_path', type=str, help='eval pose output path', default=False)
+    parser.add_argument('--fps', default=100)
     parser.add_argument('-freq', '--print_freq', default=100)
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
@@ -164,6 +167,12 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
         err_str += '{}: {:.2f}mm \t'.format(err_key, err_val)
     print(f'=======================> {dataset_name} validation done: ', loss_str)
     print(f'=======================> {dataset_name} validation done: ', err_str)
+    if opts.out_path:
+        os.makedirs(opts.out_path, exist_ok=True)
+        result_file = os.path.join(opts.out_path, f'{dataset_name}_results.pkl')
+        with open(result_file, 'wb') as f:
+            pickle.dump(results, f)
+        render_and_save(results['verts'], osp.join(opts.out_path, f'{dataset_name}_results.mp4'), keep_imgs=False, fps=opts.fps, draw_face=True)
     return losses.avg, error_dict['mpjpe'], error_dict['pa_mpjpe'], error_dict['mpve'], losses_dict
 
 
