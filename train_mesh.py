@@ -79,7 +79,9 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
     J_regressor = smpl.J_regressor_h36m
     with torch.no_grad():
         end = time.time()
+        print(82)
         for idx, (batch_input, batch_gt) in tqdm(enumerate(test_loader)):
+            print(84)
             batch_size, clip_len = batch_input.shape[:2]
             if torch.cuda.is_available():
                 batch_gt['theta'] = batch_gt['theta'].cuda().float()
