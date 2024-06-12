@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=60g
 #SBATCH --gres=gpu:3
-#SBATCH --time=12:00:00
+#SBATCH --time=30:00:00
 #SBATCH --account=shdpm0
 #SBATCH --partition=spgpu
 ##### END preamble
@@ -32,12 +32,10 @@ python train_mesh.py \
 --config configs/mesh/MB_train_VEHS_3D.yaml \
 --pretrained checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/ \
 --selection best_epoch.bin \
---checkpoint checkpoint/mesh/MB_train_VEHSR3 \
+--checkpoint checkpoint/mesh/MB_train_VEHSR3_try2 \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train_mesh" \
---wandb_name "gt2d_17kpts" > output_slurm/train_mesh.out
-
-
-#--resume checkpoint/pose3d/FT_RTM_VEHS_config2/latest_epoch.bin \
+--wandb_name "gt2d_17kpts_try2"
+#--resume checkpoint/mesh/MB_train_VEHSR3/latest_epoch.bin \
 
 

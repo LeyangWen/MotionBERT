@@ -32,15 +32,15 @@ echo "cpu-2, gpu-1, mem-20"
 #config_file="configs/pose3d/MB_train_VEHSR3.yaml"
 #config_file="configs/pose3d/MB_train_h36m.yaml"
 #config_file="configs/pose3d/MB_ft_VEHSR3_6DPose.yaml"
-config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_config6.yaml"
-#config_file="configs/pose3d/RTMPose_exp/MB_ft_inference.yaml"
+#config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_config6.yaml"
+config_file="configs/pose3d/RTMPose_exp/MB_ft_inference.yaml"
 
 # Checkpoint
 #checkpoint_bin="checkpoint/pose3d/MB_ft_VEHSR3_6DPose/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/MB_train_h36m/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin"
-#checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6/best_epoch.bin"
-checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6_GT2d_true/best_epoch.bin"
+checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6/best_epoch.bin"
+#checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6_GT2d_true/best_epoch.bin"
 
 
 
@@ -48,24 +48,24 @@ echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
 
 # evaluate - train.py
-python -u train.py \
---config "$config_file" \
---wandb_project "MotionBert_eval" \
---wandb_name "RTM_input_MB_ft_validate_gt2d_trained" \
---note "save pose output" \
---out_path "experiment/RTM2D_ft/inference_RTM2d_config6_gt2d_trained" \
---test_set_keyword validate \
---evaluate "$checkpoint_bin" > "output_slurm/eval_${SLURM_JOB_ID}_output.out"
-
-# inference only
-#python -u infer3d_train.py \
+#python -u train.py \
 #--config "$config_file" \
 #--wandb_project "MotionBert_eval" \
-#--wandb_name "RTM_input_MB_ft_validate" \
+#--wandb_name "RTM_input_MB_ft_validate_gt2d_trained" \
 #--note "save pose output" \
-#--out_path "experiment/RTM2D_ft/config6" \
+#--out_path "experiment/RTM2D_ft/inference_RTM2d_config6_gt2d_trained" \
 #--test_set_keyword validate \
 #--evaluate "$checkpoint_bin" > "output_slurm/eval_${SLURM_JOB_ID}_output.out"
+
+# inference only
+python -u infer3d_train.py \
+--config "$config_file" \
+--wandb_project "MotionBert_eval" \
+--wandb_name "RTM_input_MB_ft_validate" \
+--note "save pose output" \
+--out_path "experiment/RTM2D_ft/config6" \
+--test_set_keyword validate \
+--evaluate "$checkpoint_bin" > "output_slurm/eval_${SLURM_JOB_ID}_output.out"
 
 
 # (config change 4 location)
