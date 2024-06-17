@@ -80,6 +80,12 @@ def evaluate(args, model_pos, test_loader, datareader):
                 predicted_3d_pos = (predicted_3d_pos_1+predicted_3d_pos_2) / 2
             else:
                 predicted_3d_pos = model_pos(batch_input)
+            if args.save_trace:
+                traced = torch.jit.trace(model_pos, batch_input)
+                os.makedirs(opts.out_path, exist_ok=True)
+                traced.save(f"{opts.out_path}/model.pt")
+                raise NotImplementedError("Tracing is done, exiting")
+
             if args.rootrel:
                 predicted_3d_pos[:,:,args.root_idx,:] = 0     # [N,T,17,3]
             else:

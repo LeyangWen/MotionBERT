@@ -43,7 +43,7 @@ python -u tools/convert_inference.py \
 
 
 # H36M
-#ypython -u tools/convert_h36m.p > output_slurm/preprocess_H36M.out
+#ypython -u tools/convert_h36m.pkl > output_slurm/preprocess_H36M.out
 
 # VEHSR3
 #python -u tools/convert_VEHSR3.py \
