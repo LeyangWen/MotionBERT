@@ -82,7 +82,7 @@ def evaluate(args, model_pos, test_loader, datareader, save_trace=False):
             else:
                 predicted_3d_pos = model_pos(batch_input)
             if save_trace:
-                traced = torch.jit.trace(model_pos, batch_input)
+                traced = torch.jit.trace(model_pos.module, batch_input)
                 traced.save(f"model.pt")
                 raise NotImplementedError("Tracing is done, exiting")
 
