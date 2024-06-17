@@ -39,7 +39,7 @@ echo "checkpoint_bin: $checkpoint_bin"
 python -u train_mesh.py \
 --config "$config_file" \
 --evaluate "$checkpoint_bin" \
---out_path "experiment/VEHS-7M_mesh"
+--out_path "experiment/VEHS-7M_mesh" \
 --wandb_project "MotionBert_mesh_eval" \
 --wandb_name "GT_input_MB_mesh_validate_17" \
 --note "save pose output" \
