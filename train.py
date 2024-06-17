@@ -39,6 +39,7 @@ def parse_args():
     parser.add_argument('-o', '--out_path', type=str, help='eval pose output path', default=r'experiment/VEHS-7M_6D')
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
+    parser.add_argument('--save_trace', action='store_true')
     parser.add_argument('--test_set_keyword', default='validate', type=str, help='eval set name, either test or validate, only for VEHS')
     parser.add_argument('--wandb_project', default='MotionBert_train', type=str, help='wandb project name')
     parser.add_argument('--wandb_name', default='VEHS_ft_train', type=str, help='wandb run name')

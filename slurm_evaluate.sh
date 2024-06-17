@@ -54,7 +54,8 @@ python -u train.py \
 --wandb_name "RTM_input_MB_ft_validate_gt2d_trained" \
 --note "save pose output" \
 --out_path "experiment/RTM2D_ft/inference_RTM2d_config6_gt2d_trained" \
---test_set_keyword validate \
+--test_set_keyword test \
+--save_trace \
 --evaluate "$checkpoint_bin" > "output_slurm/eval_${SLURM_JOB_ID}_output.out"
 
 # inference only
