@@ -62,7 +62,7 @@ def save_checkpoint(chk_path, epoch, lr, optimizer, model_pos, min_loss):
         'min_loss' : min_loss
     }, chk_path)
     
-def evaluate(args, model_pos, test_loader, datareader):
+def evaluate(args, model_pos, test_loader, datareader, save_trace=False):
     print('INFO: Testing')
     results_all = []
     model_pos.eval()            
@@ -81,10 +81,9 @@ def evaluate(args, model_pos, test_loader, datareader):
                 predicted_3d_pos = (predicted_3d_pos_1+predicted_3d_pos_2) / 2
             else:
                 predicted_3d_pos = model_pos(batch_input)
-            if opts.save_trace:
+            if save_trace:
                 traced = torch.jit.trace(model_pos, batch_input)
-                os.makedirs(opts.out_path, exist_ok=True)
-                traced.save(f"{opts.out_path}/model.pt")
+                traced.save(f"model.pt")
                 raise NotImplementedError("Tracing is done, exiting")
 
             if args.rootrel:
@@ -449,7 +448,7 @@ def train_with_config(args, opts):
                 save_checkpoint(chk_path_best, epoch, lr, optimizer, model_pos, min_loss)
             
     if opts.evaluate:
-        e1, e2, results_all = evaluate(args, model_pos, test_loader, datareader)
+        e1, e2, results_all = evaluate(args, model_pos, test_loader, datareader, save_trace=opts.save_trace)
         os.makedirs(opts.out_path, exist_ok=True)
         np.save('%s/X3D.npy' % (opts.out_path), results_all)
         # render_and_save(results_all, '%s/X3D.mp4' % (opts.out_path), keep_imgs=False, fps=50)
