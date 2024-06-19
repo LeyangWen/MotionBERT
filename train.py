@@ -82,8 +82,13 @@ def evaluate(args, model_pos, test_loader, datareader, save_trace=False):
             else:
                 predicted_3d_pos = model_pos(batch_input)
             if save_trace:
+                predicted_3d_pos = model_pos(batch_input)
                 traced = torch.jit.trace(model_pos.module, batch_input)
                 traced.save(f"model.pt")
+                # save input and output
+                input_output = {"input": batch_input, "gt": batch_gt}
+                with open(f"input_output.pkl", "wb") as f:
+                    pickle.dump(input_output, f)
                 raise NotImplementedError("Tracing is done, exiting")
 
             if args.rootrel:
