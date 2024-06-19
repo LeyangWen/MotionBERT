@@ -86,7 +86,7 @@ def evaluate(args, model_pos, test_loader, datareader, save_trace=False):
                 traced = torch.jit.trace(model_pos.module, batch_input)
                 traced.save(f"model.pt")
                 # save input and output
-                input_output = {"input": batch_input, "gt": batch_gt}
+                input_output = {"input": batch_input.cpu(), "gt": batch_gt.cpu()}
                 with open(f"input_output.pkl", "wb") as f:
                     pickle.dump(input_output, f)
                 raise NotImplementedError("Tracing is done, exiting")
