@@ -97,6 +97,7 @@ class WildDetDataset(Dataset):
     
     def __getitem__(self, index):
         'Generates one sample of data'
+        # todo: this might caused difference in infer & evaluation_infer code
         st = index*self.clip_len
         end = min((index+1)*self.clip_len, len(self.vid_all))
         return self.vid_all[st:end]
