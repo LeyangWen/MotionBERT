@@ -29,12 +29,12 @@ echo "spgpu test"
 
 # finetune RTMPose24 - VEHS  (config change 4 location)
 python train.py \
---config configs/pose3d/RTMPose_exp/MB_ft_VEHS_config6.yaml \
+--config configs/pose3d/RTMPose_exp/MB_ft_VEHS_tilt_correct.yaml \
 --pretrained checkpoint/pose3d/MB_train_VEHSR3_3DPose/ \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train_RTM2D" \
---wandb_name "config6_unprocessed_gt2d_true" \
---checkpoint checkpoint/pose3d/FT_RTM_VEHS_config6_GT2d_true \
+--wandb_name "tilt_corrected" \
+--checkpoint checkpoint/pose3d/FT_RTM_VEHS_tilt_corrected \
 --selection latest_epoch.bin > output_slurm/train_RTM.out
 
 #--checkpoint checkpoint/pose3d/FT_RTM_VEHS_config6 \

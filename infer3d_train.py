@@ -73,10 +73,10 @@ def evaluate(args, model_pos, test_loader, datareader):
             if args.no_conf:
                 batch_input = batch_input[:, :, :, :2]
             if args.flip:    
-                batch_input_flip = flip_data(batch_input)
+                batch_input_flip = flip_data(batch_input, args)
                 predicted_3d_pos_1 = model_pos(batch_input)
-                predicted_3d_pos_flip = model_pos(batch_input_flip)
-                predicted_3d_pos_2 = flip_data(predicted_3d_pos_flip)                   # Flip back
+                predicted_3d_pos_flip = model_pos(batch_input_flip, args)
+                predicted_3d_pos_2 = flip_data(predicted_3d_pos_flip, args)                   # Flip back
                 predicted_3d_pos = (predicted_3d_pos_1+predicted_3d_pos_2) / 2
             else:
                 predicted_3d_pos = model_pos(batch_input)
@@ -122,8 +122,8 @@ def train_epoch(args, model_pos, train_loader, losses, optimizer, has_3d, has_gt
             loss_3d_pos = loss_mpjpe(predicted_3d_pos, batch_gt)
             loss_3d_scale = n_mpjpe(predicted_3d_pos, batch_gt)
             loss_3d_velocity = loss_velocity(predicted_3d_pos, batch_gt)
-            loss_lv = loss_limb_var(predicted_3d_pos)
-            loss_lg = loss_limb_gt(predicted_3d_pos, batch_gt)
+            loss_lv = loss_limb_var(predicted_3d_pos, args)
+            loss_lg = loss_limb_gt(predicted_3d_pos, batch_gt, args)
             loss_a = loss_angle(predicted_3d_pos, batch_gt)
             loss_av = loss_angle_velocity(predicted_3d_pos, batch_gt)
             loss_total = loss_3d_pos + \
@@ -369,4 +369,8 @@ if __name__ == "__main__":
     opts = parse_args()
     set_random_seed(opts.seed)
     args = get_config(opts.config)
+    try:
+        args.joint_format
+    except:
+        raise ValueError("Add joint_format in your config file")
     train_with_config(args, opts)

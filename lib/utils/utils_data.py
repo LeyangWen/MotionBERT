@@ -52,20 +52,23 @@ def crop_scale_3d(motion, scale_range=[1, 1]):
     result = (result - 0.5) * 2
     return result
 
-def flip_data(data):
+def flip_data(data, args=False):
     """
     horizontal flip
         data: [N, F, 17, D] or [F, 17, D]. X (horizontal coordinate) is the first channel in D.
     Return
         result: same
     """
-    if True:
+    if args == False or args.joint_format == 'H36M':
         left_joints = [4, 5, 6, 11, 12, 13] # Human 3.6
         right_joints = [1, 2, 3, 14, 15, 16]
-    else:
-        left_joints = [3, 5, 7, 9, 11, 13,16] # todo: temp fix for Vicon RTMPose dataset
+    elif args.joint_format == 'RTM-24':
+        left_joints = [3, 5, 7, 9, 11, 13,16]
         right_joints = [4, 6, 8, 10, 12, 14,19]
-    warnings.warn('WARNING: flip_data is set for RTMPose-24-veeru joint index now, if you are using different joint idx, need to modify in utils_data.py')
+    elif args.joint_format == 'xxx_hand':
+        raise NotImplementedError
+    else:
+        raise ValueError("args.joint_format not recognized")
     flipped_data = copy.deepcopy(data)
     flipped_data[..., 0] *= -1                                               # flip x of all joints
     flipped_data[..., left_joints+right_joints, :] = flipped_data[..., right_joints+left_joints, :]

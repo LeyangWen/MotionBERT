@@ -96,48 +96,52 @@ def weighted_boneratio_loss(predict_3d_length, gt_3d_length):
     loss_length = 0.1 * torch.pow((predict_3d_length - gt_3d_length)/gt_3d_length, 2).mean()
     return loss_length
 
-def get_limb_lens(x):
+def get_limb_lens(x, args=False):
     '''
         Input: (N, T, 17, 3)
         Output: (N, T, 16)
     '''
-    warnings.warn('WARNING: get_limb_lens is set for RTMPose-24-veeru joint index now, if you are using different joint idx, need to modify in loss.py')
+    if args == False or args.joint_format == 'H36M':
+        limbs_id = [[0, 1], [1, 2], [2, 3],
+                    [0, 4], [4, 5], [5, 6],
+                    [0, 7], [7, 8], [8, 9], [9, 10],
+                    [8, 11], [11, 12], [12, 13],
+                    [8, 14], [14, 15], [15, 16]
+                    ]  # wen: idx for h36M
+    elif args.joint_format == 'RTM-24':
+        limbs_id = [[22, 3], [22, 4], [4, 6],
+                    [3, 5], [5, 7], [6, 8],
+                    [7, 16], [8, 19], [21, 9],
+                    [21, 10], [9, 11], [10, 12],
+                    [11, 13], [12, 14], [21, 22],
+                    [22, 23]]
+    elif args.joint_format == 'xxx_hand':
+        raise NotImplementedError
+    else:
+        raise ValueError("args.joint_format not recognized")
 
-    limbs_id = [[0,1], [1,2], [2,3],
-         [0,4], [4,5], [5,6],
-         [0,7], [7,8], [8,9], [9,10],
-         [8,11], [11,12], [12,13],
-         [8,14], [14,15], [15,16]
-        ]  # wen: idx for h36M
-
-    limbs_id = [[22, 3], [22, 4], [4, 6],
-                [3, 5], [5, 7], [6, 8],
-                [7, 16], [8, 19], [21, 9],
-                [21, 10], [9, 11], [10, 12],
-                [11, 13], [12, 14], [21, 22],
-                [22, 23]]  # todo: temp fix for RTMPose-24-veeru input
     limbs = x[:,:,limbs_id,:]
     limbs = limbs[:,:,:,0,:]-limbs[:,:,:,1,:]
     limb_lens = torch.norm(limbs, dim=-1)
     return limb_lens
 
-def loss_limb_var(x):
+def loss_limb_var(x, args=False):
     '''
         Input: (N, T, 17, 3)
     '''
     if x.shape[1]<=1:
         return torch.FloatTensor(1).fill_(0.)[0].to(x.device)
-    limb_lens = get_limb_lens(x)
+    limb_lens = get_limb_lens(x, args)
     limb_lens_var = torch.var(limb_lens, dim=1)
     limb_loss_var = torch.mean(limb_lens_var)
     return limb_loss_var
 
-def loss_limb_gt(x, gt):
+def loss_limb_gt(x, gt, args=False):
     '''
         Input: (N, T, 17, 3), (N, T, 17, 3)
     '''
-    limb_lens_x = get_limb_lens(x)
-    limb_lens_gt = get_limb_lens(gt) # (N, T, 16)
+    limb_lens_x = get_limb_lens(x, args)
+    limb_lens_gt = get_limb_lens(gt, args) # (N, T, 16)
     return nn.L1Loss()(limb_lens_x, limb_lens_gt)
 
 def loss_velocity(predicted, target):
@@ -160,7 +164,7 @@ def get_angles(x):
         Input: (N, T, 17, 3)
         Output: (N, T, 16)
     '''
-    warnings.warn('WARNING: get_angles is set for H36M joint index now, if you are using different joint idx, need to modify in loss.py')
+    warnings.warn('WARNING: get_angles is set for H36M joint index now, if the angle weight is not 0 and you are using different joint idx, need to modify in loss.py')
     limbs_id = [[0,1], [1,2], [2,3],
          [0,4], [4,5], [5,6],
          [0,7], [7,8], [8,9], [9,10],
