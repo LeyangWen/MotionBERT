@@ -33,8 +33,8 @@ echo "cpu-2, gpu-1, mem-20"
 #config_file="configs/pose3d/MB_train_VEHSR3.yaml"
 #config_file="configs/pose3d/MB_ft_VEHSR3_6DPose.yaml"
 #config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_config6.yaml"
-#config_file="configs/pose3d/RTMPose_exp/MB_ft_inference.yaml"
-config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_tilt_correct.yaml"
+config_file="configs/pose3d/RTMPose_exp/MB_ft_inference.yaml"
+#config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_tilt_correct.yaml"
 
 # Checkpoint
 #checkpoint_bin="checkpoint/pose3d/MB_train_h36m/best_epoch.bin"
@@ -50,25 +50,26 @@ echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
 
 # evaluate - train.py
-python -u train.py \
---config "$config_file" \
---wandb_project "MotionBert_eval" \
---wandb_name "RTM_input_MB_ft_validate_tilt_corrected" \
---note "gt_2d false" \
---out_path "experiment/RTM2D_ft/validate_RTM2d_tilt_corrected" \
---test_set_keyword validate \
---evaluate "$checkpoint_bin" \
+#python -u train.py \
+#--config "$config_file" \
+#--wandb_project "MotionBert_eval" \
+#--wandb_name "RTM_input_MB_ft_validate_tilt_corrected" \
+#--note "gt_2d false" \
+#--out_path "experiment/RTM2D_ft/validate_RTM2d_tilt_corrected" \
+#--test_set_keyword validate \
+#--evaluate "$checkpoint_bin" \
 #--save_trace \
 
 # inference only
-#python -u infer3d_train.py \
-#--config "$config_file" \
-#--wandb_project "MotionBert_eval" \
-#--wandb_name "RTM_input_MB_ft_validate" \
-#--note "save pose output" \
-#--out_path "experiment/RTM2D_ft/config6" \
-#--test_set_keyword validate \
-#--evaluate "$checkpoint_bin" > "output_slurm/eval_${SLURM_JOB_ID}_output.out"
+python -u infer3d_train.py \
+--config "$config_file" \
+--wandb_project "MotionBert_eval" \
+--wandb_name "RTM_input_MB_ft_inference_industry_tilt_corrected" \
+--note "save pose output" \
+--out_path "experiment/RTM2D_ft/industry_RTM2d_tilt_corrected" \
+--test_set_keyword validate \
+--evaluate "$checkpoint_bin"
+#> "output_slurm/eval_${SLURM_JOB_ID}_output.out"
 
 
 # (config change 4 location)
