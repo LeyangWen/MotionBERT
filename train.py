@@ -11,6 +11,7 @@ import copy
 import random
 import prettytable
 import wandb
+import warnings
 
 import torch
 import torch.nn as nn
@@ -477,5 +478,7 @@ if __name__ == "__main__":
     try:
         args.joint_format
     except:
-        raise ValueError("Add joint_format in your config file, used for loss.py --> limb_loss & utils_data.py --> flip")
+        warnings.warn("no joint_format in your config file, defaulting ti h36m")
+        args.joint_format = 'h36m'
+        # raise ValueError("Add joint_format in your config file, used for loss.py --> limb_loss & utils_data.py --> flip")
     train_with_config(args, opts)
