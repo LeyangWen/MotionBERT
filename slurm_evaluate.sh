@@ -50,25 +50,26 @@ echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
 
 # evaluate - train.py
-#python -u train.py \
-#--config "$config_file" \
-#--wandb_project "MotionBert_eval" \
-#--wandb_name "RTM_input_MB_ft_validate_tilt_corrected" \
-#--note "gt_2d false" \
-#--out_path "experiment/RTM2D_ft/validate_RTM2d_tilt_corrected" \
-#--test_set_keyword validate \
-#--evaluate "$checkpoint_bin" \
-#--save_trace \
-
-# inference only
-python -u infer3d_train.py \
+python -u train.py \
 --config "$config_file" \
 --wandb_project "MotionBert_eval" \
---wandb_name "RTM_input_MB_ft_inference_industry_tilt_corrected" \
---note "save pose output" \
---out_path "experiment/RTM2D_ft/industry_RTM2d_tilt_corrected" \
---test_set_keyword validate \
---evaluate "$checkpoint_bin"
+--wandb_name "h36m_trace"  \
+--note "gt_2d false" \
+--out_path "experiment/RTM2D_ft/validate_RTM2d_tilt_corrected" \
+--test_set_keyword test \
+--evaluate "$checkpoint_bin" \
+--save_trace \
+
+# inference only
+#python -u infer3d_train.py \
+#--config "$config_file" \
+#--wandb_project "MotionBert_eval" \
+#--wandb_name "RTM_input_MB_ft_inference_industry_tilt_corrected" \
+#--note "save pose output" \
+#--out_path "experiment/RTM2D_ft/industry_RTM2d_tilt_corrected" \
+#--test_set_keyword validate \
+#--evaluate "$checkpoint_bin"
+
 #> "output_slurm/eval_${SLURM_JOB_ID}_output.out"
 
 

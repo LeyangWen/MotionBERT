@@ -9,13 +9,16 @@ from lib.utils.tools import *
 from lib.utils.learning import *
 from lib.utils.utils_data import flip_data
 
+## Need to run in base dir
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="configs/pose3d/MB_ft_h36m.yaml", help="Path to the config file.")
-    parser.add_argument('-c', '--checkpoint', default='checkpoint', type=str, metavar='PATH', help='checkpoint directory')
-    parser.add_argument('-e', '--evaluate', default='checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
-    parser.add_argument('-o', '--out_path', type=str, help='eval pose output path', default=r'experiment/VEHS-7M_6D')
-    parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
+    # parser.add_argument('-c', '--checkpoint', default='checkpoint', type=str, metavar='PATH', help='checkpoint directory')
+    # parser.add_argument('-e', '--evaluate', default='checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
+    # parser.add_argument('-o', '--out_path', type=str, help='eval pose output path', default=r'experiment/VEHS-7M_6D')
+    # parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
+
     opts = parser.parse_args()
     return opts
 
@@ -42,6 +45,8 @@ def load_checkpoint(chk_filename, model, map_location='cpu', verbose=False):
 if __name__ == "__main__":
     opts = parse_args()
     args = get_config(opts.config)
+
+    # Step 1: Load model and weights
     # args.backbone = 'DSTformer_coreml'  # modified backbone
     model_backbone = load_backbone(args)
     input_output_file = r'edge/input_output.pkl'
@@ -49,16 +54,19 @@ if __name__ == "__main__":
     with open(input_output_file, 'rb') as f:
         input_output = pickle.load(f)
     input_tensor = input_output['input'].to(dtype=torch.float32)[0:1]
-    gt_output_tensor = input_output['gt']
-
+    gt_output_tensor = input_output['gt'].to(dtype=torch.float32)[0:1]
+    pytorch_output_tensor = input_output['output'].to(dtype=torch.float32)[0:1]
 
     chk_filename = opts.evaluate
     print('Loading checkpoint', chk_filename)
     load_checkpoint(chk_filename, model_backbone)
     model_backbone.eval()
+
+    # Step 2: Trace model
     print("Tracing model")
-    ##### tracing
     traced_model = torch.jit.trace(model_backbone, input_tensor)
+
+    # Step 3: Convert & Save
     print("Converting model")
     # # Convert the model
     input_ct = ct.TensorType(name='input_ct', shape=input_tensor.shape)
@@ -68,16 +76,11 @@ if __name__ == "__main__":
                          source="pytorch",
                          convert_to="mlprogram"
                          )
-    # mlmodel = ct.convert(scripted_model,
-    #                      inputs=[input_ct, input_ct_2],
-    #                      source="pytorch",
-    #                      convert_to="mlprogram"
-    #                      )  # https://apple.github.io/coremltools/source/coremltools.converters.convert.html#coremltools.converters._converters_entry.convert
-
     print("Saving model")
-    # # Save the converted model
+    # Save the converted model
     mlmodel.save('MyModel.mlpackage')
 
+    # Step 4: Compare pytorch vs coreml-python output
     coreml_model = ct.models.MLModel('MyModel.mlpackage')
     input_data = {
         'input_ct': input_tensor  # Replace with actual input data and name

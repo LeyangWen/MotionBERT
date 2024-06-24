@@ -65,7 +65,8 @@ def save_checkpoint(chk_path, epoch, lr, optimizer, model_pos, min_loss):
 def evaluate(args, model_pos, test_loader, datareader, save_trace=False):
     print('INFO: Testing')
     results_all = []
-    model_pos.eval()            
+    model_pos.eval()
+    idx = 0
     with torch.no_grad():
         for batch_input, batch_gt in tqdm(test_loader):
             N, T = batch_gt.shape[:2]
@@ -82,14 +83,19 @@ def evaluate(args, model_pos, test_loader, datareader, save_trace=False):
             else:
                 predicted_3d_pos = model_pos(batch_input)
             if save_trace:
-                predicted_3d_pos = model_pos(batch_input)
-                traced = torch.jit.trace(model_pos.module, batch_input)
-                traced.save(f"model.pt")
-                # save input and output
-                input_output = {"input": batch_input.cpu(), "gt": batch_gt.cpu(), "output":predicted_3d_pos}
-                with open(f"input_output.pkl", "wb") as f:
-                    pickle.dump(input_output, f)
-                raise NotImplementedError("Tracing is done, exiting")
+                if idx in [0, 50, 100]:
+                    predicted_3d_pos = model_pos(batch_input)
+                    traced = torch.jit.trace(model_pos.module, batch_input)
+                    # traced.save(f"model.pt")
+                    # save input and output
+                    input_output = {"input": batch_input.cpu(), "gt": batch_gt.cpu(), "output":predicted_3d_pos.cpu()}
+                    with open(f"input_output.pkl", "wb") as f:
+                        pickle.dump(input_output, f)
+                elif idx == 101:
+                    raise NotImplementedError("Tracing is done, exiting")
+                idx += 1
+                continue
+
 
             if args.rootrel:
                 predicted_3d_pos[:,:,args.root_idx,:] = 0     # [N,T,17,3]
