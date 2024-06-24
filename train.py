@@ -90,7 +90,7 @@ def evaluate(args, model_pos, test_loader, datareader, save_trace=False):
                     # traced.save(f"model.pt")
                     # save input and output
                     input_output = {"input": batch_input.cpu(), "gt": batch_gt.cpu(), "output":predicted_3d_pos.cpu()}
-                    with open(f"input_output.pkl", "wb") as f:
+                    with open(f"input_output{idx}.pkl", "wb") as f:
                         pickle.dump(input_output, f)
                 elif idx == 101:
                     raise NotImplementedError("Tracing is done, exiting")
