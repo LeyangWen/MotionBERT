@@ -25,8 +25,6 @@ module list
 
 #conda activate motionbert
 
-echo "spgpu test"
-
 # finetune RTMPose24 - VEHS  (config change 4 location)
 python train.py \
 --config configs/pose3d/RTMPose_exp/MB_ft_VEHS_tilt_correct.yaml \
