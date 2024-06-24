@@ -42,7 +42,7 @@ config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_tilt_correct.yaml"
 #checkpoint_bin="checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6_GT2d_true/best_epoch.bin"
-checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_tilt_corrected"
+checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_tilt_corrected/best_epoch.bin"
 
 
 
