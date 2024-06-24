@@ -101,24 +101,24 @@ def get_limb_lens(x, args=False):
         Input: (N, T, 17, 3)
         Output: (N, T, 16)
     '''
-    if args == False or args.joint_format == 'H36M':
+    if args == False or args.joint_format.upper() == 'H36M':
         limbs_id = [[0, 1], [1, 2], [2, 3],
                     [0, 4], [4, 5], [5, 6],
                     [0, 7], [7, 8], [8, 9], [9, 10],
                     [8, 11], [11, 12], [12, 13],
                     [8, 14], [14, 15], [15, 16]
                     ]  # wen: idx for h36M
-    elif args.joint_format == 'RTM-24':
+    elif args.joint_format.upper() == 'RTM-24':
         limbs_id = [[22, 3], [22, 4], [4, 6],
                     [3, 5], [5, 7], [6, 8],
                     [7, 16], [8, 19], [21, 9],
                     [21, 10], [9, 11], [10, 12],
                     [11, 13], [12, 14], [21, 22],
                     [22, 23]]
-    elif args.joint_format == 'xxx_hand':
+    elif args.joint_format.upper() == 'HAND':
         raise NotImplementedError
     else:
-        raise ValueError("args.joint_format not recognized")
+        raise ValueError(f"args.joint_format: {args.joint_format} not recognized")
 
     limbs = x[:,:,limbs_id,:]
     limbs = limbs[:,:,:,0,:]-limbs[:,:,:,1,:]

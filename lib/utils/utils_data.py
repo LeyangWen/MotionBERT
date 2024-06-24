@@ -59,13 +59,13 @@ def flip_data(data, args=False):
     Return
         result: same
     """
-    if args == False or args.joint_format == 'H36M':
+    if args == False or args.joint_format.upper() == 'H36M':
         left_joints = [4, 5, 6, 11, 12, 13] # Human 3.6
         right_joints = [1, 2, 3, 14, 15, 16]
-    elif args.joint_format == 'RTM-24':
+    elif args.joint_format.upper() == 'RTM-24':
         left_joints = [3, 5, 7, 9, 11, 13,16]
         right_joints = [4, 6, 8, 10, 12, 14,19]
-    elif args.joint_format == 'xxx_hand':
+    elif args.joint_format.upper() == 'HAND':
         raise NotImplementedError
     else:
         raise ValueError("args.joint_format not recognized")
