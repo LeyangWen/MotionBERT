@@ -280,13 +280,13 @@ class DSTformer(nn.Module):
         self.blocks_st = nn.ModuleList([
             Block(
                 dim=dim_feat, num_heads=num_heads, mlp_ratio=mlp_ratio, qkv_bias=qkv_bias, qk_scale=qk_scale,
-                drop=drop_rate, attn_drop=attn_drop_rate, drop_path=dpr[i], norm_layer=norm_layer, 
+                drop=drop_rate, attn_drop=attn_drop_rate, drop_path=dpr[i], norm_layer=norm_layer,
                 st_mode="stage_st")
             for i in range(depth)])
         self.blocks_ts = nn.ModuleList([
             Block(
                 dim=dim_feat, num_heads=num_heads, mlp_ratio=mlp_ratio, qkv_bias=qkv_bias, qk_scale=qk_scale,
-                drop=drop_rate, attn_drop=attn_drop_rate, drop_path=dpr[i], norm_layer=norm_layer, 
+                drop=drop_rate, attn_drop=attn_drop_rate, drop_path=dpr[i], norm_layer=norm_layer,
                 st_mode="stage_ts")
             for i in range(depth)])
         self.norm = norm_layer(dim_feat)
@@ -326,7 +326,7 @@ class DSTformer(nn.Module):
         self.dim_out = dim_out
         self.head = nn.Linear(self.dim_feat, dim_out) if dim_out > 0 else nn.Identity()
 
-    def forward(self, x, return_rep=False):   
+    def forward(self, x, return_rep=False):
         B, F, J, C = x.shape
         x = x.reshape(-1, J, C)
         BF = x.shape[0]
@@ -355,41 +355,6 @@ class DSTformer(nn.Module):
         if return_rep:
             return x
         x = self.head(x)
-        return x
-
-    def forward_dummy(self, x, return_rep=False):
-        """
-        Used for CoreML tracing, will put stuff that are not convertable outside of the model
-        """
-        B, F, J, C = x.shape
-        x = x.reshape(-1, J, C)
-        BF = x.shape[0]
-        x = self.joints_embed(x)
-        # x = x + self.pos_embed
-        # _, J, C = x.shape
-        # x = x.reshape(-1, F, J, C) + self.temp_embed[:,:F,:,:]
-        # x = x.reshape(BF, J, C)
-        # x = self.pos_drop(x)
-        # alphas = []
-        # for idx, (blk_st, blk_ts) in enumerate(zip(self.blocks_st, self.blocks_ts)):
-        #     x_st = blk_st(x, F)
-        #     x_ts = blk_ts(x, F)
-        #     if self.att_fuse:
-        #         att = self.ts_attn[idx]
-        #         alpha = torch.cat([x_st, x_ts], dim=-1)
-        #         BF, J = alpha.shape[:2]
-        #         alpha = att(alpha)
-        #         alpha = alpha.softmax(dim=-1)
-        #         x = x_st * alpha[:,:,0:1] + x_ts * alpha[:,:,1:2]
-        #     else:
-        #         x = (x_st + x_ts)*0.5
-        # x = self.norm(x)
-        # x = x.reshape(B, F, J, -1)
-        # x = self.pre_logits(x)         # [B, F, J, dim_feat]
-        # if return_rep:
-        #     return x
-        # x = self.head(x)
-        print("Forward dummy done")
         return x
 
     def get_representation(self, x):
