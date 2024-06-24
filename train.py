@@ -96,8 +96,6 @@ def evaluate(args, model_pos, test_loader, datareader, save_trace=False):
                     raise NotImplementedError("Tracing is done, exiting")
                 idx += 1
                 continue
-
-
             if args.rootrel:
                 predicted_3d_pos[:,:,args.root_idx,:] = 0     # [N,T,17,3]
             else:
