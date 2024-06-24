@@ -75,7 +75,7 @@ def evaluate(args, model_pos, test_loader, datareader):
             if args.flip:    
                 batch_input_flip = flip_data(batch_input, args)
                 predicted_3d_pos_1 = model_pos(batch_input)
-                predicted_3d_pos_flip = model_pos(batch_input_flip, args)
+                predicted_3d_pos_flip = model_pos(batch_input_flip)
                 predicted_3d_pos_2 = flip_data(predicted_3d_pos_flip, args)                   # Flip back
                 predicted_3d_pos = (predicted_3d_pos_1+predicted_3d_pos_2) / 2
             else:
