@@ -3,7 +3,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 from functools import partial
-from lib.model.DSTformer import DSTformer
+
+
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
@@ -80,8 +81,16 @@ def load_backbone(args):
     if not(hasattr(args, "backbone")):
         args.backbone = 'DSTformer' # Default
     if args.backbone=='DSTformer':
+        from lib.model.DSTformer import DSTformer
         model_backbone = DSTformer(dim_in=3, dim_out=3, dim_feat=args.dim_feat, dim_rep=args.dim_rep, 
                                    depth=args.depth, num_heads=args.num_heads, mlp_ratio=args.mlp_ratio, norm_layer=partial(nn.LayerNorm, eps=1e-6), 
+                                   maxlen=args.maxlen, num_joints=args.num_joints)
+    elif args.backbone=='DSTformer_coreml':
+        from lib.model.DSTformer_coreml import DSTformer_coreml
+        import warnings
+        warnings.warn("Loading DSTformer_coreml class, for tracing only", UserWarning)
+        model_backbone = DSTformer_coreml(dim_in=3, dim_out=3, dim_feat=args.dim_feat, dim_rep=args.dim_rep,
+                                   depth=args.depth, num_heads=args.num_heads, mlp_ratio=args.mlp_ratio, norm_layer=partial(nn.LayerNorm, eps=1e-6),
                                    maxlen=args.maxlen, num_joints=args.num_joints)
     elif args.backbone=='TCN':
         from lib.model.model_tcn import PoseTCN
