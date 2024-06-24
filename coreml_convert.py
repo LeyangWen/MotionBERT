@@ -59,20 +59,7 @@ if __name__ == "__main__":
     print("Tracing model")
     ##### tracing
     traced_model = torch.jit.trace(model_backbone, input_tensor)
-    # torch_model = torch.jit.load(torch_model_file, map_location=torch.device('cpu'))
-
-    ##### scripting
-    # scripted_model = torch.jit.script(model_backbone)
-
-    # traced_model == scripted_model
-
-    ##### ONNX
-    # onnx_model = torch.onnx.export(traced_model, input_tensor, 'model.onnx', verbose=False)
-    # # model = ct.convert(onnx_model, inputs=[input_ct], source="pytorch")  # need old converter
-
-
-
-    # print("Converting model")
+    print("Converting model")
     # # Convert the model
     input_ct = ct.TensorType(name='input_ct', shape=input_tensor.shape)
     input_ct_2 = ct.TensorType(name='input_ct_2', shape=input_tensor.shape)
