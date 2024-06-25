@@ -1,6 +1,5 @@
 import coremltools as ct
 import torch
-import torch.onnx
 import pickle
 import numpy as np
 import argparse
