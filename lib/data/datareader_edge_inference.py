@@ -6,11 +6,11 @@ import random
 import copy
 from lib.utils.tools import read_pkl
 from lib.utils.utils_data import split_clips
-from lib.data.datareader_VEHSR3 import DataReaderVEHSR3
+from lib.data.datareader_inference import DataReaderInference
 random.seed(0)
     
-class DataReaderInference(DataReaderVEHSR3):
-    def __init__(self, n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence=True, dt_root = 'data/motion3d', dt_file = 'h36m_cpn_cam_source.pkl', test_set_keyword='test', num_joints=17, res_w=1920, res_h=1080):
+class DataReaderEdgeInference(DataReaderInference):
+    def __init__(self, input_clip_2d, n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence=True, num_joints=17, res_w=1920, res_h=1080):
         '''
         Args:
             n_frames: frames in each clip
@@ -22,11 +22,28 @@ class DataReaderInference(DataReaderVEHSR3):
             dt_file:
             test_set_keyword: dictionary key for the dataset pickle, set to 'test' or 'validate'
         '''
-        super().__init__(n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence, dt_root, dt_file)
-        # todo: set res_w and res_h according to video input
+        self.gt_trainset = None
+        self.gt_testset = None
+        self.split_id_train = None
+        self.split_id_test = None
+        self.test_hw = None
+        self.n_frames = n_frames
+        self.sample_stride = sample_stride
+        self.data_stride_train = data_stride_train
+        self.data_stride_test = data_stride_test
+        self.read_confidence = read_confidence
+
+        self.load_data(input_clip)
+
         self.res_w = res_w
         self.res_h = res_h
-        
+        self.num_joints = num_joints
+
+    def load_data(self, input_np):
+        self.dt_dataset = {}
+        # self.dt_dataset['test'] =
+
+
     def read_2d(self):
         trainset = self.dt_dataset['train']['joint_2d'][::self.sample_stride, :, :2].astype(np.float32)  # [N, 17, 2]
         testset = self.dt_dataset['test']['joint_2d'][::self.sample_stride, :, :2].astype(np.float32)  # [N, 17, 2]
@@ -90,4 +107,20 @@ class DataReaderInference(DataReaderVEHSR3):
             data[idx, :, :, :2] = (data[idx, :, :, :2] + np.array([1, res_h / res_w])) * res_w / 2
             data[idx, :, :, 2:] = data[idx, :, :, 2:] * res_w / 2
         return data  # [n_clips, -1, 17, 3]
+
+    def get_sliced_data(self, input_2d):
+        train_data, test_data = self.read_2d()     # train_data (1559752, 17, 3) test_data (566920, 17, 3)
+        split_id_train, split_id_test = self.get_split_id()
+        train_data, test_data = train_data[split_id_train], test_data[split_id_test]                # (N, 27, 17, 3)
+        train_labels, test_labels = train_labels[split_id_train], test_labels[split_id_test]        # (N, 27, 17, 3)
+        return test_data, test_labels
+
+    def get_split_id(self):
+        if self.split_id_train is not None and self.split_id_test is not None:
+            return self.split_id_train, self.split_id_test
+        vid_list_train = self.dt_dataset['train']['source'][::self.sample_stride]                          # (1559752,)
+        vid_list_test = self.dt_dataset['test']['source'][::self.sample_stride]                           # (566920,)
+        self.split_id_train = split_clips(vid_list_train, self.n_frames, data_stride=self.data_stride_train)
+        self.split_id_test = split_clips(vid_list_test, self.n_frames, data_stride=self.data_stride_test)
+        return self.split_id_train, self.split_id_test
     

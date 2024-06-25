@@ -32,7 +32,6 @@ from lib.data.datareader_inference import DataReaderInference
 from lib.model.loss import *
 from edge.edge_utils import *
 
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="configs/pose3d/MB_train_h36m.yaml", help="Path to the config file.")
@@ -40,6 +39,8 @@ def parse_args():
     parser.add_argument('-o', '--out_path', type=str, help='eval pose output path', default=r'experiment/coreml_h36m')
     parser.add_argument('--test_set_keyword', default='test', type=str, help='eval set name, either test or validate, only for VEHS')
     parser.add_argument('--coreml_file', type=str, default=r'edge/MB_h36m.mlpackage')
+    parser.add_argument('--residual_mode', type=str, default=r'discard')
+    parser.add_argument('--res_hw', default=(1000,10000))
 
     parser.add_argument('--wandb_mode', default='disabled', type=str, help=r'"online", "offline" or "disabled"')
     parser.add_argument('--wandb_project', default='MotionBert_train', type=str, help='wandb project name')
@@ -47,12 +48,16 @@ def parse_args():
     parser.add_argument('--note', default='', type=str, help='wandb notes')
     opts = parser.parse_args()
     return opts
-    
-def evaluate(args, coreml_model, test_loader, datareader):
+
+
+def infer(args, coreml_model, test_clips):
+    """
+    For all clips, run model, concat results
+    test_clips: Nx243xJx3 (norm_px_x, norm_px_y, confidence), normalized
+    """
     print('INFO: Inference')
     results_all = []
-    for batch_input, batch_gt in tqdm(test_loader):
-        N, T = batch_gt.shape[:2]
+    for batch_input in tqdm(test_clips):  # batch (N) is always 1 now in infer
         if args.no_conf:
             batch_input = batch_input[:, :, :, :2]
         if args.flip:
@@ -65,17 +70,14 @@ def evaluate(args, coreml_model, test_loader, datareader):
             predicted_3d_pos = model_pos_coreml(coreml_model, batch_input)
         if args.rootrel:
             predicted_3d_pos[:,:,args.root_idx,:] = 0     # [N,T,17,3]
-        else:
-            batch_gt[:,0,args.root_idx,2] = 0
         if args.gt_2d:
             predicted_3d_pos[...,:2] = batch_input[...,:2]
         results_all.append(predicted_3d_pos)
     results_all = np.concatenate(results_all)
-    results_all = datareader.denormalize(results_all)
     return results_all
 
 
-def train_with_config(args, opts):
+def infer_with_config(args, opts):
     print(args)
     args_all = vars(opts)
     args_all['yaml_config'] = args
@@ -83,30 +85,26 @@ def train_with_config(args, opts):
 
     start_time = time.time()
     print('Loading dataset...')
-    
-    testloader_params = {
-          'batch_size': args.batch_size,
-          'shuffle': False,
-          'num_workers': 2,
-          'pin_memory': True,
-          'prefetch_factor': 4,
-          'persistent_workers': True
-    }
-    test_dataset = MotionDataset3D(args, args.subset_list, opts.test_set_keyword)
-    test_loader = DataLoader(test_dataset, **testloader_params)
-    datareader = DataReaderH36M(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root='data/motion3d',
-                                    dt_file=args.dt_file)
 
     coreml_model = ct.models.MLModel(opts.coreml_file)
-    results_all = evaluate(args, coreml_model, test_loader, datareader)
+    res_h, res_w = opts.res_hw
 
+    args.test_set_keyword = opts.test_set_keyword
+    input_2d_conf = mock_input_pkl(args)
+    frames = input_2d_conf.shape[0]
+    input_2d_conf = normalize_2d(input_2d_conf, res_h, res_w)
+    # no downsampling or stride
+    input_2d_conf, split_info = split_infer_clips(input_2d_conf, n_frames=args.clip_len, residual_mode=opts.residual_mode)
+
+    results_all = infer(args, coreml_model, input_2d_conf)
+    results_all = denormalize(results_all, res_h, res_w)
 
     end_time = time.time()
     elapsed_time = end_time - start_time
     minutes, seconds = divmod(elapsed_time, 60)
-    fps = datareader.n_frames / elapsed_time
+    fps = frames / elapsed_time
     print(f"Elapsed time: {int(minutes):02d} min:{int(seconds):02d}s")
-    print(f"fps: {fps:.2f}, for {datareader.n_frames} frames")
+    print(f"fps: {fps:.2f}, for {frames} frames")
 
     wandb.log({
         'Elapsed time (min:s)': f"{int(minutes):02d} min:{int(seconds):02d}s",
@@ -129,6 +127,6 @@ if __name__ == "__main__":
         args.joint_format = 'h36m'
         args.root_idx = 0
         # raise ValueError("Add joint_format in your config file, used for loss.py --> limb_loss & utils_data.py --> flip")
-    train_with_config(args, opts)
+    infer_with_config(args, opts)
 
     # todo: test speed & accuracy with args.flip on and off
