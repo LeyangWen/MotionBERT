@@ -77,8 +77,8 @@ def denormalize(test_data, res_h, res_w):
 def split_infer_clips(test_data, n_frames=243, residual_mode="fill"):
     '''
     Args:
-        vid_list: source name list
-        n_frames: default 243
+        test_data: Frames x Joints x Dim
+        n_frames: default 243, clip length
         residual_mode: discard, fill (with last frame), backfill (test_data[:243])
 
     Returns:
@@ -102,20 +102,21 @@ def split_infer_clips(test_data, n_frames=243, residual_mode="fill"):
             clipped_data = test_data[:frames_to_keep]
             keep_idx = slice(0, frames_to_keep)
         elif residual_mode == 'fill':
-            raise NotImplementedError
-            clipped_data = np.concatenate(
-                (test_data, np.repeat(test_data[[-1], :, :], n_frames - remaining_frames, axis=0)), axis=0
-            )
-            keep_idx = slice(0, frames_to_keep)
+            clipped_data = np.concatenate((
+                                            test_data,
+                                            np.repeat(test_data[[-1], :, :], n_frames - remaining_frames, axis=0)
+                                           ), axis=0)
+            keep_idx = slice(0, frames)
         elif residual_mode == 'backfill':
-            raise NotImplementedError
-            backfill_data = test_data[:n_frames]
-            clipped_data = np.concatenate(
-                (test_data, backfill_data[:remaining_frames-n_frames]), axis=0
-            )
+            # raise NotImplementedError
+            backfill_data = test_data[-n_frames:]
+            clipped_data = np.concatenate((
+                                                test_data[:frames_to_keep],
+                                                backfill_data
+                                                ), axis=0)
             keep_idx = np.concatenate([
                 np.arange(0, frames_to_keep),
-                np.arange(frames-remaining_frames, frames)
+                np.arange(n_frames-remaining_frames+frames_to_keep, clipped_data.shape[0])
             ])
     # Reshape the data
     num_clips = clipped_data.shape[0] // n_frames

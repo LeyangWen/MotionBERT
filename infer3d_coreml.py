@@ -83,14 +83,15 @@ def infer_with_config(args, opts):
     args_all['yaml_config'] = args
     wandb.init(project=opts.wandb_project, name=opts.wandb_name, config=args_all, mode=opts.wandb_mode)  # Initialize a new run
 
-    start_time = time.time()
+
     print('Loading dataset...')
 
     coreml_model = ct.models.MLModel(opts.coreml_file)
     res_h, res_w = opts.res_hw
-
     args.test_set_keyword = opts.test_set_keyword
     input_2d_conf = mock_input_pkl(args)
+
+    start_time = time.time()
     frames = input_2d_conf.shape[0]
     input_2d_conf = normalize_2d(input_2d_conf, res_h, res_w)
     # no downsampling or stride

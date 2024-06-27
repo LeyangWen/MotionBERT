@@ -53,12 +53,15 @@ class TestSplitInferClips(unittest.TestCase):
     def test_fill_10(self):
         test_data = self.generate_test_data(10)
         output_data, info = split_infer_clips(test_data, self.n_frames, residual_mode='fill')
-        output_sliced = output_data.reshape(-1, self.J, self.D)[info['keep_idx']]
+        output_sliced_filled = output_data.reshape(-1, self.J, self.D)
+        output_sliced = output_sliced_filled[info['keep_idx']]
         expected_shape = (3, 4, self.J, self.D)  # Filled to make up to 12 frames total
-        expected_data_3d = self.correct_answer_generator([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9])
+        expected_data_3d = self.correct_answer_generator([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+        expected_data_3d_filled = self.correct_answer_generator([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9])
 
         self.assertEqual(output_data.shape, expected_shape)
         np.testing.assert_array_equal(output_sliced, expected_data_3d)  # Validate only original data is kept
+        np.testing.assert_array_equal(expected_data_3d_filled, output_sliced_filled)
 
     def test_fill_8(self):
         test_data = self.generate_test_data(8)
@@ -73,21 +76,54 @@ class TestSplitInferClips(unittest.TestCase):
     def test_backfill_10(self):
         test_data = self.generate_test_data(10)
         output_data, info = split_infer_clips(test_data, self.n_frames, residual_mode='backfill')
-        output_sliced = output_data.reshape(-1, self.J, self.D)[info['keep_idx']]
-        expected_shape = (3, 4, self.J, self.D)  # Backfilled to make up to 12 frames total
-        expected_data_3d = self.correct_answer_generator([0, 1, 2, 3, 4, 5, 6, 7, 6, 7, 8, 9])
-        breakpoint()
+        output_slided_backfilled = output_data.reshape(-1, self.J, self.D)
+        output_sliced = output_slided_backfilled[info['keep_idx']]
+        expected_shape = (3, 4, self.J, self.D)  # Backfilled to make up to 8 frames, no extra needed
+        expected_data_3d_backfilled = self.correct_answer_generator([0, 1, 2, 3, 4, 5, 6, 7, 6, 7, 8, 9])
+        expected_data_3d = self.correct_answer_generator([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
         self.assertEqual(output_data.shape, expected_shape)
         np.testing.assert_array_equal(output_sliced, expected_data_3d)  # Validate only original data is kept
+        np.testing.assert_array_equal(output_slided_backfilled, expected_data_3d_backfilled)
+
+    def test_backfill_9(self):
+        test_data = self.generate_test_data(9)
+        output_data, info = split_infer_clips(test_data, self.n_frames, residual_mode='backfill')
+        output_slided_backfilled = output_data.reshape(-1, self.J, self.D)
+        output_sliced = output_slided_backfilled[info['keep_idx']]
+        expected_shape = (3, 4, self.J, self.D)  # Backfilled to make up to 8 frames, no extra needed
+        expected_data_3d_backfilled = self.correct_answer_generator([0, 1, 2, 3, 4, 5, 6, 7, 5, 6, 7, 8])
+        expected_data_3d = self.correct_answer_generator([0, 1, 2, 3, 4, 5, 6, 7, 8,])
+
+        self.assertEqual(output_data.shape, expected_shape)
+        np.testing.assert_array_equal(output_sliced, expected_data_3d)  # Validate only original data is kept
+        np.testing.assert_array_equal(output_slided_backfilled, expected_data_3d_backfilled)
+
+    def test_backfill_11(self):
+        test_data = self.generate_test_data(11)
+        output_data, info = split_infer_clips(test_data, self.n_frames, residual_mode='backfill')
+        output_slided_backfilled = output_data.reshape(-1, self.J, self.D)
+        output_sliced = output_slided_backfilled[info['keep_idx']]
+        expected_shape = (3, 4, self.J, self.D)  # Backfilled to make up to 8 frames, no extra needed
+        expected_data_3d_backfilled = self.correct_answer_generator([0, 1, 2, 3, 4, 5, 6, 7, 7, 8, 9, 10])
+        expected_data_3d = self.correct_answer_generator([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+
+        self.assertEqual(output_data.shape, expected_shape)
+        np.testing.assert_array_equal(output_sliced, expected_data_3d)  # Validate only original data is kept
+        np.testing.assert_array_equal(output_slided_backfilled, expected_data_3d_backfilled)
 
     def test_backfill_8(self):
         test_data = self.generate_test_data(8)
         output_data, info = split_infer_clips(test_data, self.n_frames, residual_mode='backfill')
-        output_sliced = output_data.reshape(-1, self.J, self.D)[info['keep_idx']]
+        output_slided_backfilled = output_data.reshape(-1, self.J, self.D)
+        output_sliced = output_slided_backfilled[info['keep_idx']]
         expected_shape = (2, 4, self.J, self.D)  # Backfilled to make up to 8 frames, no extra needed
+        expected_data_3d_backfilled = self.correct_answer_generator([0, 1, 2, 3, 4, 5, 6, 7])
         expected_data_3d = self.correct_answer_generator([0, 1, 2, 3, 4, 5, 6, 7])
 
-        self.assertEqual
+        self.assertEqual(output_data.shape, expected_shape)
+        np.testing.assert_array_equal(output_sliced, expected_data_3d)  # Validate only original data is kept
+        np.testing.assert_array_equal(output_slided_backfilled, expected_data_3d_backfilled)
 
 if __name__ == '__main__':
     unittest.main()
