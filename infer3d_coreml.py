@@ -34,13 +34,15 @@ from edge.edge_utils import *
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default="configs/pose3d/MB_train_h36m.yaml", help="Path to the config file.")
+    parser.add_argument("--config", type=str, default="configs/pose3d/MB_ft_h36m.yaml", help="Path to the config file.")
     parser.add_argument('-e', '--evaluate', default='', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
     parser.add_argument('-o', '--out_path', type=str, help='eval pose output path', default=r'experiment/coreml_h36m')
     parser.add_argument('--test_set_keyword', default='test', type=str, help='eval set name, either test or validate, only for VEHS')
     parser.add_argument('--coreml_file', type=str, default=r'edge/MB_h36m.mlpackage')
     parser.add_argument('--residual_mode', type=str, default=r'discard')
-    parser.add_argument('--res_hw', default=(1000,10000))
+    parser.add_argument('--res_hw', default=(1000,1000))
+    parser.add_argument('--simple_mode', default=True)
+
 
     parser.add_argument('--wandb_mode', default='disabled', type=str, help=r'"online", "offline" or "disabled"')
     parser.add_argument('--wandb_project', default='MotionBert_train', type=str, help='wandb project name')
@@ -90,15 +92,41 @@ def infer_with_config(args, opts):
     res_h, res_w = opts.res_hw
     args.test_set_keyword = opts.test_set_keyword
     input_2d_conf = mock_input_pkl(args)
+    frames = input_2d_conf.shape[0]
 
     start_time = time.time()
-    frames = input_2d_conf.shape[0]
-    input_2d_conf = normalize_2d(input_2d_conf, res_h, res_w)
-    # no downsampling or stride
-    input_2d_conf, split_info = split_infer_clips(input_2d_conf, n_frames=args.clip_len, residual_mode=opts.residual_mode)
 
-    results_all = infer(args, coreml_model, input_2d_conf)
-    results_all = denormalize(results_all, res_h, res_w)
+    if opts.simple_mode:  # for easy swift implementation
+        input_2d_conf = normalize_2d(input_2d_conf, res_h, res_w)
+
+        num_full_clips = frames // args.clip_len
+        frames_to_keep = num_full_clips * args.clip_len
+        J = input_2d_conf.shape[1]
+
+        if opts.residual_mode == 'discard':
+            # Discard remaining frames
+            clipped_data = input_2d_conf[:frames_to_keep]
+        else:
+            raise NotImplementedError
+        output_data = clipped_data.reshape(-1, args.clip_len, J, 3)
+        results_all = []
+        for batch_input in output_data:
+            args.flip = False
+            if args.flip or args.no_conf or args.gt_2d:
+                raise NotImplementedError
+            predicted_3d_pos = model_pos_coreml(coreml_model, batch_input)
+            if args.rootrel:
+                predicted_3d_pos[:, :, args.root_idx, :] = 0  # [N,T,17,3]
+            results_all.append(predicted_3d_pos)
+        results_all = np.concatenate(results_all)
+        results_all = denormalize(results_all, res_h, res_w)
+    else:
+        input_2d_conf = normalize_2d(input_2d_conf, res_h, res_w)
+        # no downsampling or stride
+        input_2d_conf, split_info = split_infer_clips(input_2d_conf, n_frames=args.clip_len, residual_mode=opts.residual_mode)
+
+        results_all = infer(args, coreml_model, input_2d_conf)
+        results_all = denormalize(results_all, res_h, res_w)
 
     end_time = time.time()
     elapsed_time = end_time - start_time
@@ -119,7 +147,7 @@ def infer_with_config(args, opts):
     wandb.finish()
 
 if __name__ == "__main__":
-    opts = parse_args()
+    opts = parse_args()  # we can also turn off flip to maximize speed
     args = get_config(opts.config)
     try:
         args.joint_format
@@ -130,4 +158,3 @@ if __name__ == "__main__":
         # raise ValueError("Add joint_format in your config file, used for loss.py --> limb_loss & utils_data.py --> flip")
     infer_with_config(args, opts)
 
-    # todo: test speed & accuracy with args.flip on and off

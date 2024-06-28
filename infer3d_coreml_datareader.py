@@ -37,7 +37,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="configs/pose3d/MB_train_h36m.yaml", help="Path to the config file.")
     parser.add_argument('-e', '--evaluate', default='', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
-    parser.add_argument('-o', '--out_path', type=str, help='eval pose output path', default=r'experiment/coreml_h36m')
+    parser.add_argument('-o', '--out_path', type=str, help='eval pose output path', default=r'experiment/coreml_h36m_datareader')
     parser.add_argument('--test_set_keyword', default='test', type=str, help='eval set name, either test or validate, only for VEHS')
     parser.add_argument('--coreml_file', type=str, default=r'edge/MB_h36m.mlpackage')
 

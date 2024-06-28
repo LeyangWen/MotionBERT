@@ -2,6 +2,7 @@ import numpy as np
 import warnings
 from lib.utils.tools import *
 
+
 def model_pos_coreml(coreml_model, model_input):
     """
     Run coreml model for N (batch) clips (each 243 frame) model input, simulate pytorch model_pos output format
@@ -19,6 +20,7 @@ def model_pos_coreml(coreml_model, model_input):
         coreml_out = coreml_model.predict(input_data)['linear_87'].reshape(one_frame_shape)
         results_clip.append(coreml_out)
     return np.array(results_clip)
+
 
 # todo: make datareader class? if need iterations
 def mock_input_pkl(args):
