@@ -41,7 +41,7 @@ def parse_args():
     parser.add_argument('--coreml_file', type=str, default=r'edge/MB_h36m.mlpackage')
     parser.add_argument('--residual_mode', type=str, default=r'discard')
     parser.add_argument('--res_hw', default=(1000,1000))
-    parser.add_argument('--simple_mode', default=True)
+    parser.add_argument('--simple_mode', default=False)
 
 
     parser.add_argument('--wandb_mode', default='disabled', type=str, help=r'"online", "offline" or "disabled"')
