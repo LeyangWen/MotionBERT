@@ -42,6 +42,7 @@ def parse_args():
     parser.add_argument('--residual_mode', type=str, default=r'discard')
     parser.add_argument('--res_hw', default=(1000,1000))
     parser.add_argument('--simple_mode', default=False)
+    parser.add_argument('--save_to_json', default=True)
 
 
     parser.add_argument('--wandb_mode', default='disabled', type=str, help=r'"online", "offline" or "disabled"')
@@ -91,7 +92,7 @@ def infer_with_config(args, opts):
     coreml_model = ct.models.MLModel(opts.coreml_file)
     res_h, res_w = opts.res_hw
     args.test_set_keyword = opts.test_set_keyword
-    input_2d_conf = mock_input_pkl(args)
+    input_2d_conf = mock_input_pkl(args, save_to_json=opts.save_to_json)
     frames = input_2d_conf.shape[0]
 
     start_time = time.time()

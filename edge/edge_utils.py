@@ -1,5 +1,6 @@
 import numpy as np
 import warnings
+import json
 from lib.utils.tools import *
 
 
@@ -23,13 +24,14 @@ def model_pos_coreml(coreml_model, model_input):
 
 
 # todo: make datareader class? if need iterations
-def mock_input_pkl(args):
+def mock_input_pkl(args, save_to_json=False):
     """
     For python-coreml testing, read main pkl file from config file, pkl in h36m-MB format
     Only output args.test_set_keyword, can be train, validate, or test
     output: testset: Frames (first vid from first camera) x J x 3
     """
-    dt_dataset = read_pkl('%s/%s' % ('data/motion3d', args.dt_file))
+    pkl_filename = '%s/%s' % ('data/motion3d', args.dt_file)
+    dt_dataset = read_pkl(pkl_filename)
     testset = dt_dataset[args.test_set_keyword]['joint_2d'][::args.sample_stride, :, :2].astype(np.float32)  # [N, 17, 2]
     if not args.no_conf:
         if 'confidence' in dt_dataset[args.test_set_keyword].keys():
@@ -52,6 +54,11 @@ def mock_input_pkl(args):
             break
     testset = testset[:last_vid_frame]
 
+    if save_to_json:
+        json_filename = pkl_filename.replace('.pkl', '.json')
+        with open(json_filename, 'w') as f:
+            json.dump(testset.tolist(), f)
+        print(f"Saved as json to {json_filename}")
     return testset
 
 

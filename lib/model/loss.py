@@ -115,8 +115,20 @@ def get_limb_lens(x, args=False):
                     [21, 10], [9, 11], [10, 12],
                     [11, 13], [12, 14], [21, 22],
                     [22, 23]]
-    elif args.joint_format.upper() == 'HAND':
-        raise NotImplementedError
+    elif args.joint_format.upper() == 'Hand-21':
+        """
+            0: Wrist
+            1-4: Thumb
+            5-8: Index
+            9-12: Middle
+            13-16: Ring
+            17-20: Pinky
+        """
+        limbs_id = [[0, 1], [1, 2], [2, 3], [3, 4],
+                    [0, 5], [5, 6], [6, 7], [7, 8],
+                    [0, 9], [9, 10], [10, 11], [11, 12],
+                    [0, 13], [13, 14], [14, 15], [15, 16],
+                    [0, 17], [17, 18], [18, 19], [19, 20]]
     else:
         raise ValueError(f"args.joint_format: {args.joint_format} not recognized")
 

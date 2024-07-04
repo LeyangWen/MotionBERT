@@ -65,8 +65,9 @@ def flip_data(data, args=False):
     elif args.joint_format.upper() == 'RTM-24':
         left_joints = [3, 5, 7, 9, 11, 13,16]
         right_joints = [4, 6, 8, 10, 12, 14,19]
-    elif args.joint_format.upper() == 'HAND':
-        raise NotImplementedError
+    elif args.joint_format.upper() == 'Hand-21':
+        left_joints = []
+        right_joints = []
     else:
         raise ValueError("args.joint_format not recognized")
     flipped_data = copy.deepcopy(data)
