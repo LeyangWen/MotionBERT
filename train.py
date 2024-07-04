@@ -40,6 +40,7 @@ def parse_args():
     parser.add_argument('-o', '--out_path', type=str, help='eval pose output path', default=r'experiment/VEHS-7M_6D')
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
+    parser.add_argument('--discard_last_layer', action='store_true', help='discard the last layer of the pretrained model')
     parser.add_argument('--save_trace', action='store_true')
     parser.add_argument('--test_set_keyword', default='validate', type=str, help='eval set name, either test or validate, only for VEHS')
     parser.add_argument('--wandb_project', default='MotionBert_train', type=str, help='wandb project name')
@@ -331,7 +332,7 @@ def train_with_config(args, opts):
             chk_filename = os.path.join(opts.pretrained, opts.selection)
             print('Loading checkpoint', chk_filename)
             checkpoint = torch.load(chk_filename, map_location=lambda storage, loc: storage)
-            if args.num_joints != 17:  # 6D pose
+            if args.discard_last_layer:  # 6D pose
                 # todo: use a args flag or other checks instead, sometimes we dont need to delete the last layer
                 # for key, value in checkpoint['model_pos'].items():
                 #     print(key, value.shape)

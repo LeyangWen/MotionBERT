@@ -25,15 +25,27 @@ module list
 
 #conda activate motionbert
 
-# finetune RTMPose24 - VEHS  (config change 4 location)
+# Rokoko - Hand-21
 python train.py \
---config configs/pose3d/RTMPose_exp/MB_ft_VEHS_tilt_correct.yaml \
+--config configs/pose3d/hand/MB_train_Rokoko.yaml \
 --pretrained checkpoint/pose3d/MB_train_VEHSR3_3DPose/ \
 --test_set_keyword validate \
---wandb_project "MotionBert_train_RTM2D" \
---wandb_name "tilt_corrected" \
---checkpoint checkpoint/pose3d/FT_RTM_VEHS_tilt_corrected \
---selection latest_epoch.bin > output_slurm/train_RTM.out
+--wandb_project "MotionBert_train_Hand" \
+--wandb_name "Rokoko_debug" \
+--checkpoint checkpoint/pose3d/MB_train_Rokoko_hand_21 \
+--discard_last_layer \
+--selection latest_epoch.bin > output_slurm/train_hand.out
+
+
+## finetune RTMPose24 - VEHS  (config change 4 location)
+#python train.py \
+#--config configs/pose3d/RTMPose_exp/MB_ft_VEHS_tilt_correct.yaml \
+#--pretrained checkpoint/pose3d/MB_train_VEHSR3_3DPose/ \
+#--test_set_keyword validate \
+#--wandb_project "MotionBert_train_RTM2D" \
+#--wandb_name "tilt_corrected" \
+#--checkpoint checkpoint/pose3d/FT_RTM_VEHS_tilt_corrected \
+#--selection latest_epoch.bin > output_slurm/train_RTM.out
 
 #--checkpoint checkpoint/pose3d/FT_RTM_VEHS_config6 \
 #--resume checkpoint/pose3d/FT_RTM_VEHS_config6/latest_epoch.bin \

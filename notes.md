@@ -11,7 +11,7 @@ add `joint_format: Hand-21` and `root_idx: 0`
 - [x] Root-relative Errors - calculating `batch_gt` in `train.py`
 - [x] In `train.py`, `evaluation` function calculating `root_relative error`, multiple 0 index as pelvis
 - [x] In data loader and data reader, keypoint number (17) and camera resolution hardcoded
-
+- [x] set `args.discard_last_layer`
 ## Other common mistakes
 - [x] Make sure the root_idx is set correctly when generating input dataset in `Vicon-read`, root-z should be 0
 - [x] Make sure the file name, camera, activity sequence is the same sequence in the 2D and 3D. 
