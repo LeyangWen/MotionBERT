@@ -27,11 +27,11 @@ module list
 
 
 # Rokoko - Hand-21
-python -u tools/convert_VEHSR3.py \
---dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Rokoko_hand' \
---dt_file 'motionbert_dict.pkl' \
---test_set_keyword 'validate' \
---root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Rokoko_hand' > output_slurm/Rokoko_hand.out
+#python -u tools/convert_VEHSR3.py \
+#--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Rokoko_hand' \
+#--dt_file 'motionbert_dict.pkl' \
+#--test_set_keyword 'validate' \
+#--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Rokoko_hand' > output_slurm/Rokoko_hand.out
 
 # VEHS - RTMPose24 - industry inference
 #python -u tools/convert_inference.py \
@@ -43,11 +43,11 @@ python -u tools/convert_VEHSR3.py \
 #--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry' > output_slurm/preprocess_RTM6.out
 
 ## VEHS - RTMPose24 - VEHSR3
-#python -u tools/convert_VEHSR3.py \
-#--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_VEHS_tilt_correct' \
-#--dt_file 'VEHS_6D_downsample5_keep1_config6_tilt_corrected_modified_RTM2D.pkl' \
-#--test_set_keyword 'validate' \
-#--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_VEHS_tilt_correct' > output_slurm/preprocess_RTM6.out
+python -u tools/convert_VEHSR3.py \
+--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_VEHS_tilt_correct' \
+--dt_file 'VEHS_6D_downsample5_keep1_config6_tilt_corrected_modified_RTM2D.pkl' \
+--test_set_keyword 'validate' \
+--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_VEHS_tilt_correct' > output_slurm/preprocess_RTM6.out
 
 
 # H36M
