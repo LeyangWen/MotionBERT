@@ -23,7 +23,7 @@ num_heads: 8
 att_fuse: True
 
 # Data
-data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/Rokoko_hand/
+data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
 subset_list: [Rokoko_hand]
 dt_file: VEHS_MB/Rokoko_hand/motionbert_dict.pkl
 clip_len: 243
