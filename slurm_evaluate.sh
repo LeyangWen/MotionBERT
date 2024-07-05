@@ -56,7 +56,7 @@ python -u train.py \
 --wandb_project "MotionBert_eval" \
 --wandb_name "h36m_trace"  \
 --note "gt_2d false" \
---out_path "experiment/RTM2D_ft/validate_RTM2d_tilt_corrected" \
+--out_path "experiment/H36M/test_ft_model" \
 --test_set_keyword test \
 --evaluate "$checkpoint_bin" \
 #--save_trace \
