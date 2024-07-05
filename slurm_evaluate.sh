@@ -29,7 +29,8 @@ module list
 echo "cpu-2, gpu-1, mem-20"
 
 # Dataset
-config_file="configs/pose3d/MB_train_h36m.yaml"
+#config_file="configs/pose3d/MB_train_h36m.yaml"
+config_file="configs/pose3d/MB_ft_h36m.yaml"
 #config_file="configs/pose3d/MB_train_VEHSR3.yaml"
 #config_file="configs/pose3d/MB_ft_VEHSR3_6DPose.yaml"
 #config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_config6.yaml"
@@ -58,7 +59,7 @@ python -u train.py \
 --out_path "experiment/RTM2D_ft/validate_RTM2d_tilt_corrected" \
 --test_set_keyword test \
 --evaluate "$checkpoint_bin" \
---save_trace \
+#--save_trace \
 
 # inference only
 #python -u infer3d_train.py \
