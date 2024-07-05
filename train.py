@@ -479,5 +479,6 @@ if __name__ == "__main__":
     except:
         warnings.warn("no joint_format in your config file, defaulting ti h36m")
         args.joint_format = 'h36m'
+        args.root_idx = 0
         # raise ValueError("Add joint_format in your config file, used for loss.py --> limb_loss & utils_data.py --> flip")
     train_with_config(args, opts)
