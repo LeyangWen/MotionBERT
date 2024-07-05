@@ -104,6 +104,11 @@ class DataReaderH36M(object):
         vid_list_test = self.dt_dataset['test']['source'][::self.sample_stride]                           # (566920,)
         self.split_id_train = split_clips(vid_list_train, self.n_frames, data_stride=self.data_stride_train) 
         self.split_id_test = split_clips(vid_list_test, self.n_frames, data_stride=self.data_stride_test)
+        print(self.split_id_train.shape, self.split_id_test.shape)
+        print(self.split_id_train.shape[0])
+        print()
+        print(self.split_id_test.shape[0])
+        print()
         return self.split_id_train, self.split_id_test
     
     def get_hw(self):
