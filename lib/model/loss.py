@@ -115,7 +115,7 @@ def get_limb_lens(x, args=False):
                     [21, 10], [9, 11], [10, 12],
                     [11, 13], [12, 14], [21, 22],
                     [22, 23]]
-    elif args.joint_format.upper() == 'Hand-21':
+    elif args.joint_format.upper() == 'HAND-21':
         """
             0: Wrist
             1-4: Thumb

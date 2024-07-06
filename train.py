@@ -312,7 +312,7 @@ def train_with_config(args, opts):
         elif "hand" in opts.config:  # Hand
             datareader = DataReaderVEHSHand(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
         else:
-            raise ValueError('make sure dataset name (e.g., h36m, VEHS) is in opts.config')
+            raise ValueError(f'make sure dataset name (e.g., h36m, VEHS) is in opts.config: {opts.config}')
 
     min_loss = 100000
     model_backbone = load_backbone(args)
