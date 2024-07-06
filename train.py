@@ -28,6 +28,7 @@ from lib.data.augmentation import Augmenter2D
 from lib.data.datareader_h36m import DataReaderH36M
 from lib.data.datareader_VEHSR3 import DataReaderVEHSR3
 from lib.data.datareader_inference import DataReaderInference
+from lib.data.datareader_hand import DataReaderVEHSHand
 from lib.model.loss import *
 
 def parse_args():
@@ -293,23 +294,26 @@ def train_with_config(args, opts):
         posetrack_loader_2d = DataLoader(posetrack, **trainloader_params)
         instav = InstaVDataset2D()
         instav_loader_2d = DataLoader(instav, **trainloader_params)
-    if "VEHS" in opts.config:
-        test_set_keyword = opts.test_set_keyword
-        path_components = args.data_root.split('/')
-        this_dt_root = '/'.join(path_components[:-2])  # this_dt_root='data/motion3d'
-        datareader = DataReaderVEHSR3(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
-    elif "infer" in opts.config:
-        test_set_keyword = opts.test_set_keyword
-        path_components = args.data_root.split('/')
-        # todo: res_w and res_h here
-        this_dt_root = '/'.join(path_components[:-2])  # this_dt_root='data/motion3d'
-        datareader = DataReaderInference(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
-    elif "h36m" in opts.config:  # H36M
+
+    if "h36m" in opts.config:  # H36M
         datareader = DataReaderH36M(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root='data/motion3d',
                                     dt_file=args.dt_file)
-    else:
-        raise ValueError('make sure dataset name (e.g., h36m, VEHS) is in opts.config')
-     
+    else:  # Modified data readers
+        # todo: find another way for the datareader switch case
+        warnings.warn(f'Make sure the correct data reader is used for {opts.config}')
+        test_set_keyword = opts.test_set_keyword
+        path_components = args.data_root.split('/')
+        this_dt_root = '/'.join(path_components[:-2])  # this_dt_root='data/motion3d'
+        if "VEHS" in opts.config:
+            datareader = DataReaderVEHSR3(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
+        elif "infer" in opts.config:
+            # todo: res_w and res_h here
+            datareader = DataReaderInference(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
+        elif "hand" in opts.config:  # Hand
+            datareader = DataReaderVEHSHand(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
+        else:
+            raise ValueError('make sure dataset name (e.g., h36m, VEHS) is in opts.config')
+
     min_loss = 100000
     model_backbone = load_backbone(args)
     model_params = 0
