@@ -17,7 +17,8 @@ def parse_args():
     parser.add_argument('--example_in_output', default='edge/pytorch_output/input_output0.pkl', type=str)
     parser.add_argument('-e', '--evaluate', default='checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
     parser.add_argument('-o', '--output_coreml_file', type=str, default=r'edge/MB_h36m.mlpackage')
-    parser.add_argument('--compare_ouput', default=True, type=bool)
+    parser.add_argument('--compare_output', default=True, type=bool)
+    parser.add_argument('--batch_input', default=True, type=bool)
 
     opts = parser.parse_args()
     return opts
@@ -73,18 +74,23 @@ if __name__ == "__main__":
     # Step 3: Convert & Save
     print("Converting model")
     # # Convert the model
-    input_ct = ct.TensorType(name='input', shape=input_example.shape)
+    # todo: set input shape random batch size
+    # print(input_example.shape)  # torch.Size([1, 243, 17, 3])
+    if opts.batch_input:
+        input_ct = ct.TensorType(shape=(ct.RangeDim(1, 128), 243, 17, 3), name="input")
+    else:  # single input torch.Size([1, 243, 17, 3])
+        input_ct = ct.TensorType(name='input', shape=input_example.shape)
     mlmodel = ct.convert(traced_model,
                          inputs=[input_ct],
                          source="pytorch",
                          convert_to="mlprogram"
                          )
-    print("Saving model")
+    print(f"Saving model to {opts.output_coreml_file}")
     # Save the converted model
     mlmodel.save(opts.output_coreml_file)
 
     # Step 4: Compare pytorch vs coreml-python output
-    if opts.compare_ouput:
+    if opts.compare_output:
         coreml_model = ct.models.MLModel(opts.output_coreml_file)
         mpjpe_compare = np.ones([0])
         mpjpe_pytorch = np.ones([0])
