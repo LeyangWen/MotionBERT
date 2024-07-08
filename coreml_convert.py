@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     # Step 0.5: Load input output examples
     input, gt_output, pytorch_output = load_in_output(opts.example_in_output)
-    input_example = input[0:1]  # todo: do we need batch input? or is one by one preferred
+    input_example = input[0:1]
 
     # Step 1: Load model and weights
     # args.backbone = 'DSTformer_coreml'  # modified backbone
@@ -74,7 +74,6 @@ if __name__ == "__main__":
     # Step 3: Convert & Save
     print("Converting model")
     # # Convert the model
-    # todo: set input shape random batch size
     # print(input_example.shape)  # torch.Size([1, 243, 17, 3])
     if opts.batch_input:
         input_ct = ct.TensorType(shape=(ct.RangeDim(1, 128), 243, 17, 3), name="input")
