@@ -123,7 +123,7 @@ class DataReaderH36M(object):
         # print(f"split_id_train: {split_id_train.shape} split_id_test: {split_id_test.shape}")
         # print(f"split_id_train[0]: {split_id_train[0]} split_id_test[0]: {split_id_test[0]}")
         # print()
-        # train_data, test_data = train_data[split_id_train], test_data[split_id_test]                # (N, 27, 17, 3)
+        train_data, test_data = train_data[split_id_train], test_data[split_id_test]                # (N, 27, 17, 3)
         # print(f"After split train_data: {train_data.shape} test_data: {test_data.shape}")
         # print(f"train_data[0]: {train_data[0]} test_data[0]: {test_data[0]}")
         # print()

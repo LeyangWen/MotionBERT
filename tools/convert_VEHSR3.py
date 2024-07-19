@@ -35,7 +35,8 @@ args = parser.parse_args()
 
 datareader = DataReaderVEHSR3(n_frames=243, sample_stride=1, data_stride_train=81, data_stride_test=243, dt_file=args.dt_file, dt_root=args.dt_root, test_set_keyword=args.test_set_keyword)
 train_data, test_data, train_labels, test_labels = datareader.get_sliced_data()
-print(train_data.shape, test_data.shape)
+print(f"train_data: {train_data.shape}, test_data: {test_data.shape}")
+print(f"train_labels: {train_labels.shape}, test_labels: {test_labels.shape}")
 iteration_time = 1  #s
 print(f'Estimated training time per epoch @ {iteration_time} it/s: {datetime.timedelta(seconds=iteration_time*len(train_data))}')
 assert len(train_data) == len(train_labels)
