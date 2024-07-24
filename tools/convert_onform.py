@@ -1,4 +1,4 @@
-print("running convert VEHS")
+print("running convert onform")
 import os
 import sys
 import pickle
@@ -7,7 +7,6 @@ import random
 sys.path.insert(0, os.getcwd())
 from lib.utils.tools import read_pkl
 from lib.data.datareader_h36m import DataReaderH36M
-from lib.data.datareader_VEHSR3 import DataReaderVEHSR3
 from lib.data.datareader_onform import DataReaderOnform
 from tqdm import tqdm
 import argparse
@@ -31,10 +30,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--dt_root', type=str, default='data/motion3d/')
 parser.add_argument('--dt_file', type=str, default='h36m_sh_conf_cam_source_final.pkl')
 parser.add_argument('--root_path', type=str, default='data/motion3d/MB3D_f243s81/H36M-SH"')
-parser.add_argument('--test_set_keyword', default='test', type=str, help='eval set name, either test or validate, only for VEHS')
+parser.add_argument('--test_set_keyword', default='test', type=str, help='eval set name, either test or validate')
 args = parser.parse_args()
 
+print("loading datareader")
 datareader = DataReaderOnform(n_frames=243, sample_stride=1, data_stride_train=81, data_stride_test=243, dt_file=args.dt_file, dt_root=args.dt_root, test_set_keyword=args.test_set_keyword)
+print("slicing data")
 train_data, test_data, train_labels, test_labels = datareader.get_sliced_data()
 print(f"train_data: {train_data.shape}, test_data: {test_data.shape}")
 print(f"train_labels: {train_labels.shape}, test_labels: {test_labels.shape}")
@@ -46,7 +47,7 @@ assert len(test_data) == len(test_labels)
 root_path = args.root_path
 if not os.path.exists(root_path):
     os.makedirs(root_path)
-
+print("saving clips")
 save_clips("train", root_path, train_data, train_labels)
 save_clips(str(args.test_set_keyword), root_path, test_data, test_labels)
 
