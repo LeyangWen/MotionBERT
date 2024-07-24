@@ -38,7 +38,7 @@ available = getattr(psutil.virtual_memory(), 'available')/1024**3  # GB
 
 print(f"loading datareader ({available:.2f} GB mem available)")
 datareader = DataReaderOnform(n_frames=243, sample_stride=1, data_stride_train=81, data_stride_test=243, dt_file=args.dt_file, dt_root=args.dt_root, test_set_keyword=args.test_set_keyword)
-print("slicing data ({available:.2f} GB mem available)")
+print(f"slicing data ({available:.2f} GB mem available)")
 train_data, test_data, train_labels, test_labels = datareader.get_sliced_data()
 print(f"train_data: {train_data.shape}, test_data: {test_data.shape} ({available:.2f} GB mem available)")
 print(f"train_labels: {train_labels.shape}, test_labels: {test_labels.shape}")
