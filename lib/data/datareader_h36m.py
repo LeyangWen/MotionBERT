@@ -21,7 +21,14 @@ class DataReaderH36M(object):
         self.data_stride_train = data_stride_train
         self.data_stride_test = data_stride_test
         self.read_confidence = read_confidence
-        
+
+    def crop_data(self, start_frame, n_frames):
+        mb_dict = self.dt_dataset
+        for dataset_split, dataset_set in mb_dict.items():
+            for key, value in dataset_set.items():
+                mb_dict[dataset_split][key] = value[start_frame:start_frame+n_frames]
+        return mb_dict
+
     def read_2d(self):
         trainset = self.dt_dataset['train']['joint_2d'][::self.sample_stride, :, :2].astype(np.float32)  # [N, 17, 2]
         testset = self.dt_dataset['test']['joint_2d'][::self.sample_stride, :, :2].astype(np.float32)  # [N, 17, 2]
