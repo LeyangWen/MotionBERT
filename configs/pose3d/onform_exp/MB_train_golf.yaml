@@ -50,4 +50,6 @@ flip: True
 mask_ratio: 0.1
 mask_T_ratio: 0.1
 noise: True
+noise_path: params/synthetic_noise.pth
+d2c_params_path: params/d2c_params.pkl
 
