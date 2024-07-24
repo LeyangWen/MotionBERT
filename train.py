@@ -46,6 +46,7 @@ def parse_args():
     parser.add_argument('--test_set_keyword', default='validate', type=str, help='eval set name, either test or validate, only for VEHS')
     parser.add_argument('--wandb_project', default='MotionBert_train', type=str, help='wandb project name')
     parser.add_argument('--wandb_name', default='VEHS_ft_train', type=str, help='wandb run name')
+    parser.add_argument('--wandb_mode', default='online', type=str, help='choose from online, offline, disabled')
     parser.add_argument('--note', default='', type=str, help='wandb notes')
     opts = parser.parse_args()
     return opts
@@ -262,6 +263,7 @@ def train_with_config(args, opts):
     train_writer = tensorboardX.SummaryWriter(os.path.join(opts.checkpoint, "logs"))
     args_all = vars(opts)
     args_all['yaml_config'] = args
+    os.environ["WANDB_MODE"] = opts.wandb_mode
     this_run = wandb.init(project=opts.wandb_project, name=opts.wandb_name, config=args_all)  # Initialize a new run
     
     print('Loading dataset...')
