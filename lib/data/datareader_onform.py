@@ -7,6 +7,7 @@ import copy
 from lib.utils.tools import read_pkl
 from lib.utils.utils_data import split_clips
 from lib.data.datareader_h36m import DataReaderH36M
+import psutil
 random.seed(0)
     
 class DataReaderOnform(DataReaderH36M):
@@ -92,4 +93,27 @@ class DataReaderOnform(DataReaderH36M):
             data[idx, :, :, :2] = (data[idx, :, :, :2] + np.array([1, res_h / res_w])) * res_w / 2
             data[idx, :, :, 2:] = data[idx, :, :, 2:] * res_w / 2
         return data  # [n_clips, -1, 17, 3]
-    
+
+    def get_sliced_data(self):
+        available = getattr(psutil.virtual_memory(), 'available') / 1024 ** 3  # GB
+        print(f"DataReader.read_2d ing... ({available:.2f} GB mem available)")
+        train_data, test_data = self.read_2d()  # train_data (1559752, 17, 3) test_data (566920, 17, 3)
+
+        available = getattr(psutil.virtual_memory(), 'available') / 1024 ** 3  # GB
+        print(f"DataReader.read_3d ing... ({available:.2f} GB mem available)")
+        train_labels, test_labels = self.read_3d()  # train_labels (1559752, 17, 3) test_labels (566920, 17, 3)
+
+        available = getattr(psutil.virtual_memory(), 'available') / 1024 ** 3  # GB
+        print(f"DataReader.get_split_id ing... ({available:.2f} GB mem available)")
+        split_id_train, split_id_test = self.get_split_id()
+        # print(f"train_data: {train_data.shape} test_data: {test_data.shape} train_labels: {train_labels.shape} test_labels: {test_labels.shape}")
+        # print(f"split_id_train: {split_id_train.shape} split_id_test: {split_id_test.shape}")
+        # print(f"split_id_train[0]: {split_id_train[0]} split_id_test[0]: {split_id_test[0]}")
+        # print()
+        train_data, test_data = train_data[split_id_train], test_data[split_id_test]  # (N, 27, 17, 3)
+        # print(f"After split train_data: {train_data.shape} test_data: {test_data.shape}")
+        # print(f"train_data[0]: {train_data[0]} test_data[0]: {test_data[0]}")
+        # print()
+        train_labels, test_labels = train_labels[split_id_train], test_labels[split_id_test]  # (N, 27, 17, 3)
+        # ipdb.set_trace()
+        return train_data, test_data, train_labels, test_labels
