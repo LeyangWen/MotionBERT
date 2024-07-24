@@ -27,7 +27,7 @@ python train.py \
 --config configs/pose3d/onform_exp/MB_train_golf.yaml \
 --test_set_keyword test \
 --wandb_project "MotionBert_train_onform" \
---wandb_name "lab_1" \
+--wandb_name "debuge_small" \
 --checkpoint checkpoint/pose3d/onform_golf \
 --selection latest_epoch.bin
 ```

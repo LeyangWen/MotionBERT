@@ -29,6 +29,7 @@ from lib.data.datareader_h36m import DataReaderH36M
 from lib.data.datareader_VEHSR3 import DataReaderVEHSR3
 from lib.data.datareader_inference import DataReaderInference
 from lib.data.datareader_hand import DataReaderVEHSHand
+from lib.data.datareader_onform import DataReaderOnform
 from lib.model.loss import *
 
 def parse_args():
@@ -313,6 +314,8 @@ def train_with_config(args, opts):
             datareader = DataReaderInference(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
         elif "hand" in opts.config:  # Hand
             datareader = DataReaderVEHSHand(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
+        elif "onform" in opts.config:
+            datareader = DataReaderOnform(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword)
         else:
             raise ValueError(f'make sure dataset name (e.g., h36m, VEHS) is in opts.config: {opts.config}')
 
