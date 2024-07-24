@@ -23,7 +23,7 @@ class DataReaderH36M(object):
         self.read_confidence = read_confidence
 
     def crop_data(self, start_frame, crop_frame):
-        mb_dict = {}
+        mb_dict = {"train":{}, "validate":{}, "test":{}}
         print(f"Cropping data: {start_frame} to {start_frame+crop_frame} frame taken")
         for dataset_split, dataset_set in  self.dt_dataset.items():
             for key, value in dataset_set.items():
