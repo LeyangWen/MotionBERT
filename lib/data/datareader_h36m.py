@@ -22,11 +22,11 @@ class DataReaderH36M(object):
         self.data_stride_test = data_stride_test
         self.read_confidence = read_confidence
 
-    def crop_data(self, start_frame, n_frames):
-        mb_dict = self.dt_dataset
-        for dataset_split, dataset_set in mb_dict.items():
+    def crop_data(self, start_frame, crop_frame):
+        mb_dict = {}
+        for dataset_split, dataset_set in  self.dt_dataset.items():
             for key, value in dataset_set.items():
-                mb_dict[dataset_split][key] = value[start_frame:start_frame+n_frames]
+                mb_dict[dataset_split][key] = value[start_frame:start_frame+crop_frame]
         return mb_dict
 
     def read_2d(self):
