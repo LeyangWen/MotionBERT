@@ -24,6 +24,7 @@ class DataReaderH36M(object):
 
     def crop_data(self, start_frame, crop_frame):
         mb_dict = {}
+        print(f"Cropping data: {start_frame} to {start_frame+crop_frame} frame taken")
         for dataset_split, dataset_set in  self.dt_dataset.items():
             for key, value in dataset_set.items():
                 mb_dict[dataset_split][key] = value[start_frame:start_frame+crop_frame]
