@@ -14,10 +14,10 @@ gsutil cp "gs://csegolfdata2024/Onform Test/Data/pose_downsample1_keep1_filt.pkl
 ## Dataset preparation
 ```bash
 python -u tools/convert_onform.py \
---dt_root 'data/motion3d/onform_golf/' \
+--dt_root 'data/motion3d/' \
 --dt_file 'pose_downsample1_keep1_filt.pkl' \
 --test_set_keyword 'test' \
---root_path 'data/motion3d/onform_golf/lab_1' 
+--root_path 'data/motion3d/onform_golf_0/lab_1' 
 ```
 
 ## Train

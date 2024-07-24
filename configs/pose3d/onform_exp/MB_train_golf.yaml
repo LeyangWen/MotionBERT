@@ -23,7 +23,7 @@ num_heads: 8
 att_fuse: True
 
 # Data
-data_root: data/motion3d/onform_golf/
+data_root: data/motion3d/onform_golf_0/
 subset_list: [lab_1]
 dt_file: pose_downsample1_keep1_filt.pkl
 clip_len: 243
