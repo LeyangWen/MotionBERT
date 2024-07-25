@@ -200,6 +200,7 @@ def evaluate(args, model_pos, test_loader, datareader, save_trace=False):
 def train_epoch(args, model_pos, train_loader, losses, optimizer, has_3d, has_gt):
     model_pos.train()
     total_len = len(train_loader)
+    print(f"total iter per epoch: {total_len}")
     for idx, (batch_input, batch_gt) in tqdm(enumerate(train_loader)):
         if idx/1000 == 0:
             print(f'INFO: Training batch {idx+1}/{total_len} @ {100*(idx+1)/total_len:.2f}%.', end='\r')
