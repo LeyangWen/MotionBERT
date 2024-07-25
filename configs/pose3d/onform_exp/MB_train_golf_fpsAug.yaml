@@ -24,8 +24,8 @@ att_fuse: True
 
 # Data
 data_root: data/motion3d/onform_golf_0/
-subset_list: [lab_1]
-dt_file: pose_downsample1_keep1_filt.pkl
+subset_list: [lab_2]
+dt_file: pose_downsample-1-2-3-4-8_keep1_filt_noNan.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True
