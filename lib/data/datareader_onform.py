@@ -24,7 +24,7 @@ class DataReaderOnform(DataReaderH36M):
             test_set_keyword: dictionary key for the dataset pickle, set to 'test' or 'validate'
         '''
         super().__init__(n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence, dt_root, dt_file)
-        self.dt_dataset = self.crop_data(0, 50000)
+        # self.dt_dataset = self.crop_data(0, 50000)  # stopping early
         self.dt_dataset['test'] = self.dt_dataset[test_set_keyword]
         self.dt_dataset['test']['action'] = list(map(str.lower, self.dt_dataset['test']['action']))
         self.res_w = 1000

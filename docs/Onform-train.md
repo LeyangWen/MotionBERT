@@ -8,7 +8,7 @@ conda activate motionbert
 ## Load dataset
 ```bash
 gcloud auth login
-gsutil cp "gs://csegolfdata2024/Onform Test/Data/pose_downsample1_keep1_filt.pkl" pose_downsample1_keep1_filt.pkl
+gsutil cp "gs://csegolfdata2024/Onform Test/Data/pose_downsample-1_keep1_filt_noNan.pkl" data/motion3d/pose_downsample1_keep1_filt.pkl
 ```
 
 ## Dataset preparation
