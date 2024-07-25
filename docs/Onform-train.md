@@ -8,7 +8,9 @@ conda activate motionbert
 ## Load dataset
 ```bash
 gcloud auth login
+
 gsutil cp "gs://csegolfdata2024/Onform Test/Data/pose_downsample-1_keep1_filt_noNan.pkl" data/motion3d/pose_downsample1_keep1_filt.pkl
+
 ```
 
 ## Dataset preparation
@@ -27,7 +29,7 @@ python train.py \
 --config configs/pose3d/onform_exp/MB_train_golf.yaml \
 --test_set_keyword test \
 --wandb_project "MotionBert_train_onform" \
---wandb_name "debuge_small" \
+--wandb_name "debug" \
 --checkpoint checkpoint/pose3d/onform_golf \
 --selection latest_epoch.bin
 ```
