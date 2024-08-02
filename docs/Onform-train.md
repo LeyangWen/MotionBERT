@@ -68,9 +68,11 @@ python -u infer3d_train.py \
 --out_path "experiment/nateIMU_golf/Train_1-noise-TSFilter-1kpxSquareImg-fpsAug" \
 --test_set_keyword test \
 --evaluate "checkpoint/pose3d/onform_golf/best_epoch.bin" \
+--res_w 1920 \
+--res_h 1920 \
 
 ```
-
+(Set res_wh to the bigger side of the image)
 
 ## todo
 - [ ] make new tools/convert_onform.py

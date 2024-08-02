@@ -43,6 +43,8 @@ def parse_args():
     parser.add_argument('--wandb_project', default='MotionBert_train', type=str, help='wandb project name')
     parser.add_argument('--wandb_name', default='VEHS_ft_train', type=str, help='wandb run name')
     parser.add_argument('--note', default='', type=str, help='wandb notes')
+    parser.add_argument('--res_w', type=int, default=1920)
+    parser.add_argument('--res_h', type=int, default=1080)
     opts = parser.parse_args()
     return opts
 
