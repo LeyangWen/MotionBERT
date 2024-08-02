@@ -58,10 +58,21 @@ python -u train.py \
 ### Infer with train data loader
 First make MB-pkl in the same format as the train data loader and put in data folder.
 
-Then
+Then data preprocesse
+```bash
+python -u tools/convert_inference.py \
+--dt_root 'data/motion3d/' \
+--dt_file 'MB_infer_input.pkl' \
+--test_set_keyword 'test' \
+--root_path 'data/motion3d/nateIMU_golf/test_1' \
+--res_w 1920 \
+--res_h 1920 \
+
+```
+
 ```bash
 python -u infer3d_train.py \
---config MB_infer_nateMU_golf.yaml \
+--config configs/pose3d/onform_exp/MB_infer_nateMU_golf.yaml \
 --wandb_project "MotionBert_eval" \
 --wandb_name "VIT_input_MB_leyang_V1_inference_nateIMU_golf" \
 --note "model == Train_1-noise-TSFilter-1kpxSquareImg-fpsAug" \

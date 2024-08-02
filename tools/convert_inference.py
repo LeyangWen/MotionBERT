@@ -47,7 +47,9 @@ assert len(test_data) == len(test_labels)
 root_path = args.root_path
 if not os.path.exists(root_path):
     os.makedirs(root_path)
-
-save_clips("train", root_path, train_data, train_labels)
+try:
+    save_clips("train", root_path, train_data, train_labels)
+except:
+    print("Warning: Error saving train clips")
 save_clips(str(args.test_set_keyword), root_path, test_data, test_labels)
 
