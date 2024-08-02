@@ -36,7 +36,7 @@ parser.add_argument('--res_w', default='1920', type=int)
 parser.add_argument('--res_h', default='1080', type=int)
 args = parser.parse_args()
 
-datareader = DataReaderInference(n_frames=243, sample_stride=1, data_stride_train=81, data_stride_test=243, dt_file=args.dt_file, dt_root=args.dt_root, test_set_keyword=args.test_set_keyword, res_w=args.res_w, res_h=args.res_h)
+datareader = DataReaderInference(n_frames=243, sample_stride=1, data_stride_train=243, data_stride_test=243, dt_file=args.dt_file, dt_root=args.dt_root, test_set_keyword=args.test_set_keyword, res_w=args.res_w, res_h=args.res_h)
 train_data, test_data, train_labels, test_labels = datareader.get_sliced_data()
 assert len(train_data) == len(train_labels)
 assert len(test_data) == len(test_labels)
