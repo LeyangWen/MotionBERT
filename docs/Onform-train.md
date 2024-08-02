@@ -24,10 +24,12 @@ python -u tools/convert_onform.py \
 
 ## Train
 
+Remove old checkpoint
 ```bash
 rm -rf checkpoint/pose3d/onform_golf
 ```
 
+Train
 ```bash
 nohup python train.py \
 --config configs/pose3d/onform_exp/MB_train_golf_fpsAug.yaml \
@@ -36,6 +38,37 @@ nohup python train.py \
 --wandb_name "Train_1-noise-TSFilter-1kpxSquareImg-fpsAug" \
 --checkpoint checkpoint/pose3d/onform_golf \
 --selection latest_epoch.bin
+```
+
+## Evaluation
+```bash
+python -u train.py \
+--config configs/pose3d/onform_exp/MB_train_golf_fpsAug.yaml \
+--wandb_project "MotionBert_eval_onform" \
+--wandb_name "Train_1-noise-TSFilter-1kpxSquareImg-fpsAug" \
+--note "10ish epoch" \
+--out_path "experiment/Onform_golf/Train_1-noise-TSFilter-1kpxSquareImg-fpsAug" \
+--test_set_keyword test \
+--evaluate "checkpoint/pose3d/onform_golf/best_epoch.bin" \
+
+```
+
+## Run inference
+
+### Infer with train data loader
+First make MB-pkl in the same format as the train data loader and put in data folder.
+
+Then
+```bash
+python -u infer3d_train.py \
+--config MB_infer_nateMU_golf.yaml \
+--wandb_project "MotionBert_eval" \
+--wandb_name "VIT_input_MB_leyang_V1_inference_nateIMU_golf" \
+--note "model == Train_1-noise-TSFilter-1kpxSquareImg-fpsAug" \
+--out_path "experiment/nateIMU_golf/Train_1-noise-TSFilter-1kpxSquareImg-fpsAug" \
+--test_set_keyword test \
+--evaluate "checkpoint/pose3d/onform_golf/best_epoch.bin" \
+
 ```
 
 

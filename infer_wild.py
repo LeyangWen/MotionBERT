@@ -26,7 +26,6 @@ def parse_args():
     return opts
 
 def main():
-    # todo: mistake in label sequence: head and neck joint switch, throax and C7 switch
     # torch.multiprocessing.freeze_support()
     opts = parse_args()
     args = get_config(opts.config)
