@@ -38,9 +38,6 @@ args = parser.parse_args()
 
 datareader = DataReaderInference(n_frames=243, sample_stride=1, data_stride_train=81, data_stride_test=243, dt_file=args.dt_file, dt_root=args.dt_root, test_set_keyword=args.test_set_keyword, res_w=args.res_w, res_h=args.res_h)
 train_data, test_data, train_labels, test_labels = datareader.get_sliced_data()
-print(train_data.shape, test_data.shape)
-iteration_time = 1  #s
-print(f'Estimated training time per epoch @ {iteration_time} it/s: {datetime.timedelta(seconds=iteration_time*len(train_data))}')
 assert len(train_data) == len(train_labels)
 assert len(test_data) == len(test_labels)
 
