@@ -9,7 +9,7 @@ conda activate motionbert
 ```bash
 gcloud auth login
 
-gsutil cp "gs://csegolfdata2024/Onform Test/Data/pose_downsample-1-2-3-4-8_keep1_filt_noNan.pkl" data/motion3d/
+gsutil cp "gs://csegolfdata2024/Onform Test/Data/pose_downsample-1-2-3-4-8_keep1_syn_noNan.pkl" data/motion3d/
 
 ```
 
@@ -17,26 +17,28 @@ gsutil cp "gs://csegolfdata2024/Onform Test/Data/pose_downsample-1-2-3-4-8_keep1
 ```bash
 python -u tools/convert_onform.py \
 --dt_root 'data/motion3d/' \
---dt_file 'pose_downsample-1-2-3-4-8_keep1_filt_noNan.pkl' \
+--dt_file 'pose_downsample-1-2-3-4-8_keep1_syn_noNan.pkl' \
 --test_set_keyword 'test' \
---root_path 'data/motion3d/onform_golf_0/lab_2' 
+--root_path 'data/motion3d/onform_golf_1/try_0' 
 ```
 
 ## Train
 
 Remove old checkpoint
 ```bash
-rm -rf checkpoint/pose3d/onform_golf
+rm -rf checkpoint/pose3d/onform_golf_1
 ```
 
 Train
 ```bash
 nohup python train.py \
---config configs/pose3d/onform_exp/MB_train_golf_fpsAug.yaml \
+--config configs/pose3d/onform_exp/MB_train_golf_fpsAug_syn.yaml \
 --test_set_keyword test \
 --wandb_project "MotionBert_train_onform" \
---wandb_name "Train_1-noise-TSFilter-1kpxSquareImg-fpsAug" \
---checkpoint checkpoint/pose3d/onform_golf \
+--wandb_name "Train_2-noise-TSFilter-synthetic-fpsAug" \
+--checkpoint checkpoint/pose3d/onform_golf_1 \
+--pretrained "checkpoint/pose3d/onform_golf" \
+--note "synthetic data" \
 --selection latest_epoch.bin
 ```
 

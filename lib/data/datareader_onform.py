@@ -29,8 +29,8 @@ class DataReaderOnform(DataReaderH36M):
         # self.dt_dataset = self.crop_data(0, 50000)  # stopping early
         self.dt_dataset['test'] = self.dt_dataset[test_set_keyword]
         self.dt_dataset['test']['action'] = list(map(str.lower, self.dt_dataset['test']['action']))
-        self.res_w = 1000
-        self.res_h = 1000
+        self.res_w = 1920
+        self.res_h = 1920
         self.num_joints = num_joints
         
     def read_2d(self):

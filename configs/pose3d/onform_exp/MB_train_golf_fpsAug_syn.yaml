@@ -23,12 +23,12 @@ num_heads: 8
 att_fuse: True
 
 # Data
-data_root: data/motion3d/onform_golf_0/
-subset_list: [lab_2]
-dt_file: pose_downsample-1-2-3-4-8_keep1_filt_noNan.pkl
+data_root: data/motion3d/onform_golf_1/
+subset_list: [try_0]
+dt_file: pose_downsample-1-2-3-4-8_keep1_syn_noNan.pkl
 clip_len: 243
 data_stride: 81
-rootrel: True
+rootrel: False
 sample_stride: 1
 num_joints: 17
 no_conf: False
@@ -47,9 +47,9 @@ lambda_av: 0.0
 # Augmentation
 synthetic: False
 flip: True
-mask_ratio: 0
-mask_T_ratio: 0
-noise: False
+mask_ratio: 0.1
+mask_T_ratio: 0.1
+noise: True
 noise_path: params/synthetic_noise.pth
 d2c_params_path: params/d2c_params.pkl
 
