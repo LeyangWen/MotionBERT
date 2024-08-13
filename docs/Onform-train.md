@@ -38,7 +38,9 @@ nohup python train.py \
 --wandb_name "Train_3-noise-TSFilter-synthetic-fpsAug-noPitch" \
 --checkpoint checkpoint/pose3d/onform_golf_2 \
 --note "synthetic data" \
---selection latest_epoch.bin
+--selection latest_epoch.bin \
+--pretrain "checkpoint/pose3d/onform_golf_0/" \
+
 ```
 
 ## Evaluation
