@@ -77,11 +77,11 @@ python -u tools/convert_inference.py \
 python -u infer3d_train.py \
 --config configs/pose3d/onform_exp/MB_infer_nateMU_golf.yaml \
 --wandb_project "MotionBert_eval" \
---wandb_name "VIT_input_MB_leyang_V2_inference_nateIMU_golf" \
---note "model == Train_2-noise-TSFilter-synthetic-fpsAug" \
---out_path "experiment/nateIMU_golf/Train_2-noise-TSFilter-synthetic-fpsAug" \
+--wandb_name "VIT_input_MB_leyang_V3_inference_nateIMU_golf" \
+--note "model == Train_3-noise-TSFilter-synthetic-fpsAug-noPitch, epoch == 16" \
+--out_path "experiment/nateIMU_golf/Train_3-noise-TSFilter-synthetic-fpsAug" \
 --test_set_keyword test \
---evaluate "checkpoint/pose3d/onform_golf_1/latest_epoch.bin" \
+--evaluate "checkpoint/pose3d/onform_golf_2/latest_epoch.bin" \
 --res_w 1920 \
 --res_h 1920 \
 
