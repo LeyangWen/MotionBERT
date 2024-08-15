@@ -45,7 +45,7 @@ config_file="configs/pose3d/hand/MB_train_Rokoko.yaml"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6_GT2d_true/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_tilt_corrected/best_epoch.bin"
-checkpoint_bin="checkpoint/pose3d/MB_train_Rokoko_hand_21/best_epoch.bin"
+checkpoint_bin="checkpoint/pose3d/MB_train_Rokoko_hand_21/latest_epoch.bin"
 
 
 echo "config_file: $config_file"
