@@ -97,7 +97,7 @@ class DataReaderInference(DataReaderVEHSR3):
         split_id_train, split_id_test = self.get_split_id()
         print(f"train_data: {train_data.shape} test_data: {test_data.shape} train_labels: {train_labels.shape} test_labels: {test_labels.shape}")
         print(f"split_id_train: {split_id_train.shape} split_id_test: {split_id_test.shape}")
-        print(f"split_id_train[0]: {split_id_train[0]} split_id_test[0]: {split_id_test[0]}")
+        # print(f"split_id_train[0]: {split_id_train[0]} split_id_test[0]: {split_id_test[0]}")
         print()
         try:
             train_data = train_data[split_id_train]
