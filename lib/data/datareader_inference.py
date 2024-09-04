@@ -22,7 +22,7 @@ class DataReaderInference(DataReaderVEHSR3):
             dt_file:
             test_set_keyword: dictionary key for the dataset pickle, set to 'test' or 'validate'
         '''
-        super().__init__(n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence, dt_root, dt_file)
+        super().__init__(n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence, dt_root, dt_file, test_set_keyword=test_set_keyword, num_joints=num_joints)
         # todo: set res_w and res_h according to video input
         self.res_w = res_w
         self.res_h = res_h
@@ -106,7 +106,6 @@ class DataReaderInference(DataReaderVEHSR3):
             print(f"Warning: Error slicing train_data and train_labels")
             train_data = []
             train_labels = []
-        print(f"split_id_test: {split_id_test}")
         test_data =test_data[split_id_test]                # (N, 27, 17, 3)
         test_labels = test_labels[split_id_test]        # (N, 27, 17, 3)
         return train_data, test_data, train_labels, test_labels
