@@ -1,4 +1,4 @@
-#!/bin/bash - l
+#!/bin/bash -l
 #SBATCH --job-name=MB_eval
 #SBATCH --output=output_slurm/eval_log.txt
 #SBATCH --error=output_slurm/eval_error.txt
