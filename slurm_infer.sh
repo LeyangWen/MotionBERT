@@ -34,7 +34,7 @@ echo "cpu-2, gpu-1, mem-20"
 #config_file="configs/pose3d/MB_train_VEHSR3.yaml"
 #config_file="configs/pose3d/MB_ft_VEHSR3_6DPose.yaml"
 #config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_config6.yaml"
-#config_file="configs/pose3d/RTMPose_exp/MB_ft_inference.yaml"
+config_file="configs/pose3d/RTMPose_exp/MB_ft_inference.yaml"
 #config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_tilt_correct.yaml"
 #config_file="configs/pose3d/hand/MB_train_Rokoko.yaml"
 
@@ -55,9 +55,9 @@ echo "checkpoint_bin: $checkpoint_bin"
 python -u infer3d_train.py \
 --config "$config_file" \
 --wandb_project "MotionBert_eval" \
---wandb_name "RTM_input_MB_ft_inference_industry_tilt_corrected" \
+--wandb_name "RTM_input_MB_ft_inference_industry_3_tilt_corrected" \
 --note "save pose output" \
---out_path "experiment/RTM2D_ft/industry_RTM2d_tilt_corrected" \
+--out_path "experiment/RTM2D_ft/industry_3_RTM2d_tilt_corrected" \
 --test_set_keyword validate \
 --evaluate "$checkpoint_bin"
 
