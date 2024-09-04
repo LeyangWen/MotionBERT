@@ -91,7 +91,7 @@ def evaluate(args, model_pos, test_loader, datareader, save_trace=False):
                 if idx in [0, 50, 100]:
                     predicted_3d_pos = model_pos(batch_input)
                     traced = torch.jit.trace(model_pos.module, batch_input)
-                    # traced.save(f"model.pt")
+                    traced.save(f"model.pt")
                     # save input and output
                     input_output = {"input": batch_input.cpu(), "gt": batch_gt.cpu(), "output":predicted_3d_pos.cpu()}
                     with open(f"input_output{idx}.pkl", "wb") as f:
@@ -159,6 +159,8 @@ def evaluate(args, model_pos, test_loader, datareader, save_trace=False):
         # Veeru: root_idx 21 -- RTMPose 24 keypoint
         pred = pred - pred[:,args.root_idx:args.root_idx+1,:]
         gt = gt - gt[:,args.root_idx:args.root_idx+1,:]
+        # todo: why am i getting high MPJPE
+        # todo: lamda scale for hand
 
         # wen: convert to h36m temp fix
         # h36m_convert_id = [6, 8, 46, 47, 48, 50, 51, 52, 53, 54, 57, 58, 59, 60, 62, 63, 64]
