@@ -24,7 +24,7 @@ att_fuse: True
 
 # Data
 data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
-subset_list: [RTM2D_industry]
+subset_list: [RTM2D_industry_3]
 dt_file: VEHS_MB/RTM2D_industry_3/rtmpose_industry_3_no3d_j24_f20_s1_RTM2D.pkl
 clip_len: 243
 data_stride: 81
