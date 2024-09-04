@@ -80,10 +80,17 @@ class DataReaderVEHSR3(DataReaderH36M):
         self.test_hw = test_hw
         return test_hw
 
+    def get_hw(self):
+        #       Only Testset HW is needed for denormalization
+        test_hw = self.read_hw()  # train_data (1559752, 2) test_data (566920, 2)
+        split_id_train, split_id_test = self.get_split_id()
+        test_hw = test_hw[split_id_test][:, 0, :]  # (N, 2)
+        return test_hw
+
     def denormalize(self, test_data):
         #       data: (N, n_frames, 51) or data: (N, n_frames, 17, 3)
         n_clips = test_data.shape[0]
-        test_hw = self.read_hw()
+        test_hw = self.get_hw()
         data = test_data.reshape([n_clips, -1, self.num_joints, 3])
         assert len(data) == len(test_hw)
         # denormalize (x,y,z) coordiantes for results
