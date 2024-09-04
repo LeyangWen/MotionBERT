@@ -81,6 +81,7 @@ def evaluate(args, model_pos, test_loader, datareader):
                 predicted_3d_pos[...,:2] = batch_input[...,:2]
             results_all.append(predicted_3d_pos.cpu().numpy())
     results_all = np.concatenate(results_all)
+    print(f"INFO: Results shape: {results_all.shape}")
     results_all = datareader.denormalize(results_all)
     
     return results_all
