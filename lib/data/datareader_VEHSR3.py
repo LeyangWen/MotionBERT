@@ -83,7 +83,7 @@ class DataReaderVEHSR3(DataReaderH36M):
     def denormalize(self, test_data):
         #       data: (N, n_frames, 51) or data: (N, n_frames, 17, 3)
         n_clips = test_data.shape[0]
-        test_hw = self.get_hw()
+        test_hw = self.read_hw()
         data = test_data.reshape([n_clips, -1, self.num_joints, 3])
         assert len(data) == len(test_hw)
         # denormalize (x,y,z) coordiantes for results
