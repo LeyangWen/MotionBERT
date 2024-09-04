@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -I
 #SBATCH --job-name=MB_mesh_eval
 #SBATCH --output=output_slurm/eval_log.txt
 #SBATCH --error=output_slurm/eval_error.txt
@@ -24,9 +24,24 @@ module load python/3.10.4
 module load pytorch/2.0.1
 module list
 
-#conda activate motionbert
+# export PATH="/home/yunxuant/.conda/envs/motionbert/bin:$PATH"
+# which python
+# conda init bash
+# source ~/.bashrc
+# exec bash
 
+# conda init bash
+# source activate /home/yunxuant/.conda/envs/motionbert 
+# source activate motionbert
+# eval "$(conda shell.bash hook)"
+
+# cond init bash
+#conda activate motionbert
+#which python
 # Dataset
+source .env/bin/activate
+pip install -r requirements.txt
+
 config_file="configs/mesh/MB_train_VEHS_3D.yaml"
 
 # Checkpoint
