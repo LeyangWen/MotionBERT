@@ -43,8 +43,8 @@ config_file="configs/pose3d/RTMPose_exp/MB_ft_inference.yaml"
 #checkpoint_bin="checkpoint/pose3d/MB_ft_VEHSR3_6DPose/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6_GT2d_true/best_epoch.bin"
-checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6/best_epoch.bin"
-#checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_tilt_corrected/best_epoch.bin"
+#checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6/best_epoch.bin"
+checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_tilt_corrected/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/MB_train_Rokoko_hand_21/latest_epoch.bin"
 
 
@@ -55,9 +55,9 @@ echo "checkpoint_bin: $checkpoint_bin"
 python -u infer3d_train.py \
 --config "$config_file" \
 --wandb_project "MotionBert_eval" \
---wandb_name "RTM_input_MB_ft_inference_industry_3" \
+--wandb_name "RTM_input_MB_ft_inference_industry_3_tilt_corrected" \
 --note "save pose output" \
---out_path "experiment/RTM2D_ft/industry_3_RTM2d" \
+--out_path "experiment/RTM2D_ft/industry_3_RTM2d_tilt_corrected" \
 --test_set_keyword validate \
 --evaluate "$checkpoint_bin"
 
