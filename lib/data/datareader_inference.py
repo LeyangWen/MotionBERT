@@ -7,8 +7,6 @@ import copy
 from lib.utils.tools import read_pkl
 from lib.utils.utils_data import split_clips
 from lib.data.datareader_VEHSR3 import DataReaderVEHSR3
-# from tools.compress_amass import processed_dir
-
 random.seed(0)
     
 class DataReaderInference(DataReaderVEHSR3):
@@ -108,7 +106,6 @@ class DataReaderInference(DataReaderVEHSR3):
             print(f"Warning: Error slicing train_data and train_labels")
             train_data = []
             train_labels = []
-        print(f"train_data: {train_data.shape} train_labels: {train_labels.shape}, split_id_test: {split_id_test.shape}")
         print(f"split_id_test: {split_id_test}")
         test_data =test_data[split_id_test]                # (N, 27, 17, 3)
         test_labels = test_labels[split_id_test]        # (N, 27, 17, 3)
