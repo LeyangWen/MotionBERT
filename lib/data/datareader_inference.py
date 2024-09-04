@@ -7,7 +7,7 @@ import copy
 from lib.utils.tools import read_pkl
 from lib.utils.utils_data import split_clips
 from lib.data.datareader_VEHSR3 import DataReaderVEHSR3
-from tools.compress_amass import processed_dir
+# from tools.compress_amass import processed_dir
 
 random.seed(0)
     
