@@ -114,7 +114,7 @@ def split_clips(vid_list, n_frames, data_stride):
     i = 0
     saved = set()
     while i<len(vid_list):
-        print(f"i: {i} vid_list[i]: {vid_list[i]}", end="\r")
+        # print(f"i: {i} vid_list[i]: {vid_list[i]}", end="\r")
         i += 1
         if i-st == n_frames:  # if clip is long enough, save it and move forward by stride
             result.append(range(st,i))

@@ -79,9 +79,7 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
     J_regressor = smpl.J_regressor_h36m
     with torch.no_grad():
         end = time.time()
-        print(82)
         for idx, (batch_input, batch_gt) in tqdm(enumerate(test_loader)):
-            print(84)
             batch_size, clip_len = batch_input.shape[:2]
             if torch.cuda.is_available():
                 batch_gt['theta'] = batch_gt['theta'].cuda().float()
@@ -174,7 +172,7 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
         result_file = os.path.join(opts.out_path, f'{dataset_name}_results.pkl')
         with open(result_file, 'wb') as f:
             pickle.dump(results, f)
-        render_and_save(results['verts'], osp.join(opts.out_path, f'{dataset_name}_results.mp4'), keep_imgs=False, fps=opts.fps, draw_face=True)
+        # render_and_save(results['verts'], osp.join(opts.out_path, f'{dataset_name}_results.mp4'), keep_imgs=False, fps=opts.fps, draw_face=True)
     return losses.avg, error_dict['mpjpe'], error_dict['pa_mpjpe'], error_dict['mpve'], losses_dict
 
 

@@ -58,7 +58,7 @@ python -u train.py \
 --wandb_name "Redo-RTM24-RTM_input_MB_ft_validate"  \
 --note "" \
 --out_path "experiment/RTM2D_ft/Redo-RTM24-RTM_input_MB_ft_validate" \
---test_set_keyword validate \
+--test_set_keyword test \
 --evaluate "$checkpoint_bin" \
 #--save_trace \
 
