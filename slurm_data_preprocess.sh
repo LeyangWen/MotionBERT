@@ -30,7 +30,7 @@ module list
 python -u tools/convert_VEHSR3.py \
 --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Rokoko_hand' \
 --dt_file 'Rokoko_hand_3D_downsample1_keep1.pkl' \
---test_set_keyword 'validate' \
+--test_set_keyword 'test' \
 --res_w 1000 \
 --res_h 1000 \
 --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Rokoko_hand' > output_slurm/Rokoko_hand.out
