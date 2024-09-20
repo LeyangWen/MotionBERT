@@ -31,7 +31,7 @@ python train.py \
 --pretrained checkpoint/pose3d/MB_train_VEHSR3_3DPose/ \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train_Hand" \
---wandb_name "Rokoko_1" \
+--wandb_name "Rokoko_2" \
 --checkpoint checkpoint/pose3d/MB_train_Rokoko_hand_21 \
 --discard_last_layer \
 --selection latest_epoch.bin > output_slurm/train_hand.out
