@@ -25,16 +25,18 @@ att_fuse: True
 # Data
 data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
 subset_list: [Rokoko_hand]
-dt_file: VEHS_MB/Rokoko_hand/motionbert_dict.pkl
+dt_file: VEHS_MB/Rokoko_hand/Rokoko_hand_3D_downsample1_keep1.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True
 sample_stride: 1
 num_joints: 21
 joint_format: Hand-21
-no_conf: False
-gt_2d: True
+no_conf: True
+gt_2d: False
 root_idx: 0
+res_w: 1000
+res_h: 1000
 
 # Loss
 lambda_3d_velocity: 20.0
@@ -46,8 +48,10 @@ lambda_av: 0.0
 
 # Augmentation
 synthetic: False
-flip: True
-mask_ratio: 0.
-mask_T_ratio: 0.
-noise: False
+flip: False
+mask_ratio: 0.1
+mask_T_ratio: 0.1
+noise: True
+noise_path: params/synthetic_noise.pth
+d2c_params_path: params/d2c_params.pkl
 

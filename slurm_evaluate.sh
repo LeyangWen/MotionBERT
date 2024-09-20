@@ -52,24 +52,25 @@ echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
 
 # evaluate - train.py [pose3d]
-python -u train.py \
---config "$config_file" \
---wandb_project "MotionBert_eval" \
---wandb_name "Redo-RTM24-RTM_input_MB_ft_validate"  \
---note "" \
---out_path "experiment/RTM2D_ft/Redo-RTM24-RTM_input_MB_ft_validate" \
---test_set_keyword test \
---evaluate "$checkpoint_bin" \
+#python -u train.py \
+#--config "$config_file" \
+#--wandb_project "MotionBert_eval" \
+#--wandb_name "Redo-RTM24-RTM_input_MB_ft_validate"  \
+#--note "" \
+#--out_path "experiment/RTM2D_ft/Redo-RTM24-RTM_input_MB_ft_validate" \
+#--test_set_keyword test \
+#--evaluate "$checkpoint_bin" \
+
 #--save_trace \
 
 ## evaluate - train.py [hand]
-#python -u train.py \
-#--config "$config_file" \
-#--wandb_project "MotionBert_eval_Hand" \
-#--wandb_name "Rokoko_1"  \
-#--note "" \
-#--out_path "experiment/handPose/Rokoko_1" \
-#--test_set_keyword test \
-#--evaluate "$checkpoint_bin" \
+python -u train.py \
+--config "$config_file" \
+--wandb_project "MotionBert_eval_Hand" \
+--wandb_name "Rokoko_1"  \
+--note "" \
+--out_path "experiment/handPose/Rokoko_1" \
+--test_set_keyword test \
+--evaluate "$checkpoint_bin" \
 
 # (config change 4 location)

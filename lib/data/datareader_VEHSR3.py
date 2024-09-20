@@ -10,7 +10,9 @@ from lib.data.datareader_h36m import DataReaderH36M
 random.seed(0)
     
 class DataReaderVEHSR3(DataReaderH36M):
-    def __init__(self, n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence=True, dt_root = 'data/motion3d', dt_file = 'h36m_cpn_cam_source.pkl', test_set_keyword='test', num_joints=17):
+    def __init__(self, n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence=True,
+                 dt_root = 'data/motion3d', dt_file = 'h36m_cpn_cam_source.pkl', test_set_keyword='test',
+                 num_joints=17, res_w = 1920, res_h = 1200):
         '''
         Args:
             n_frames: frames in each clip

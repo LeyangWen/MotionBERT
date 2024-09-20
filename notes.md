@@ -68,6 +68,9 @@ Goal: format VEHS-7M mesh dataset and train on our own, get 66 GT 2D keypoints -
   - [ ] For mesh train, only need to change meshLoss and compute_error, rest is for evaluate.
 
 
-
+## Hand notes
+### 20240920
+- Prepared new dataset, all flipped to right hand
+- Set flip to false, rootrel to true
 
 
