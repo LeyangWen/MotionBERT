@@ -28,13 +28,10 @@ module list
 # Rokoko - Hand-21
 python train.py \
 --config configs/pose3d/hand/MB_train_Rokoko.yaml \
---pretrained checkpoint/pose3d/MB_train_VEHSR3_3DPose/ \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train_Hand" \
 --wandb_name "Rokoko_2" \
---checkpoint checkpoint/pose3d/MB_train_Rokoko_hand_21 \
---discard_last_layer \
---selection latest_epoch.bin > output_slurm/train_hand.out
+--checkpoint checkpoint/pose3d/MB_train_Rokoko_hand_21 > output_slurm/train_hand.out
 
 
 ## finetune RTMPose24 - VEHS  (config change 4 location)
