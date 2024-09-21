@@ -43,7 +43,8 @@ class Augmenter2D(object):
         if self.noise['weight'].shape[0] == num_joints:    # 17 joints
             gaussian_sample = (torch.randn(batch_size, self.num_Kframes, num_joints, 2) * std + mean)
         else:
-            gaussian_sample = 0
+            # todo: add noise & d2c_params for non 17-h36m joints
+            gaussian_sample = torch.randn(batch_size, self.num_Kframes, num_joints, 2)
         uniform_sample = (torch.rand((batch_size, self.num_Kframes, num_joints, 2))-0.5) * uniform_range
         noise_mean = 0
         delta_noise = torch.randn(num_frames, num_joints, 2) * self.noise_std + noise_mean
@@ -59,6 +60,7 @@ class Augmenter2D(object):
         if self.noise['weight'].shape[0] == num_joints:  # 17 joints
             delta = gaussian_sample*(sel<weight) + uniform_sample*(sel>=weight)
         else:
+            # todo: add noise & d2c_params for non 17-h36m joints
             delta = uniform_sample
         delta_expand = torch.nn.functional.interpolate(delta.unsqueeze(1), [num_frames, num_joints, 2], mode='trilinear', align_corners=True)[:,0]
         delta_final = delta_expand + delta_noise      
