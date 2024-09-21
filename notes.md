@@ -67,6 +67,9 @@ Goal: format VEHS-7M mesh dataset and train on our own, get 66 GT 2D keypoints -
     - [x] loss_mesh.py root idx `preds_local = preds['kp_3d'] - preds['kp_3d'][:, :, 0:1,:]  # (N, T, 17, 3)` 
   - [ ] For mesh train, only need to change meshLoss and compute_error, rest is for evaluate.
 
+### 20240921
+- env setup on mac, use 3.8 python, replace chumpy `pip install git+https://github.com/mattloper/chumpy`
+
 
 ## Hand notes
 ### 20240920

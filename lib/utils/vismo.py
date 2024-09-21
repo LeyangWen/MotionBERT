@@ -12,7 +12,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from lib.utils.utils_smpl import *
-import ipdb
+# import ipdb
 
 def render_and_save(motion_input, save_path, keep_imgs=False, fps=25, color="#F96706#FB8D43#FDB381", with_conf=False, draw_face=False):
     ensure_dir(os.path.dirname(save_path))
