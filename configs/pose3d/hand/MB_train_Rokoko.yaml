@@ -49,7 +49,7 @@ lambda_av: 0.0
 # Augmentation
 synthetic: False
 flip: False
-mask_ratio: 0.1
+mask_ratio: 0.05
 mask_T_ratio: 0.1
 noise: True
 noise_path: params/synthetic_noise.pth

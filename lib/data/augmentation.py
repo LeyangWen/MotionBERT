@@ -40,7 +40,10 @@ class Augmenter2D(object):
         std = self.noise['std'].float()
         weight = self.noise['weight'][:,None].float()
         sel = torch.rand((batch_size, self.num_Kframes, num_joints, 1))
-        gaussian_sample = (torch.randn(batch_size, self.num_Kframes, num_joints, 2) * std + mean) 
+        if self.noise['weight'].shape[0] == num_joints:    # 17 joints
+            gaussian_sample = (torch.randn(batch_size, self.num_Kframes, num_joints, 2) * std + mean)
+        else:
+            gaussian_sample = 0
         uniform_sample = (torch.rand((batch_size, self.num_Kframes, num_joints, 2))-0.5) * uniform_range
         noise_mean = 0
         delta_noise = torch.randn(num_frames, num_joints, 2) * self.noise_std + noise_mean
@@ -52,8 +55,11 @@ class Augmenter2D(object):
         uniform_sample = uniform_sample.to(motion_2d.device)
         sel = sel.to(motion_2d.device)
         delta_noise = delta_noise.to(motion_2d.device)
-            
-        delta = gaussian_sample*(sel<weight) + uniform_sample*(sel>=weight)
+
+        if self.noise['weight'].shape[0] == num_joints:  # 17 joints
+            delta = gaussian_sample*(sel<weight) + uniform_sample*(sel>=weight)
+        else:
+            delta = uniform_sample
         delta_expand = torch.nn.functional.interpolate(delta.unsqueeze(1), [num_frames, num_joints, 2], mode='trilinear', align_corners=True)[:,0]
         delta_final = delta_expand + delta_noise      
         motion_2d = motion_2d + delta_final 
