@@ -67,9 +67,9 @@ echo "checkpoint_bin: $checkpoint_bin"
 python -u train.py \
 --config "$config_file" \
 --wandb_project "MotionBert_eval_Hand" \
---wandb_name "Rokoko_1"  \
+--wandb_name "Rokoko_2"  \
 --note "" \
---out_path "experiment/handPose/Rokoko_1" \
+--out_path "experiment/handPose/Rokoko_2" \
 --test_set_keyword test \
 --evaluate "$checkpoint_bin" \
 
