@@ -28,11 +28,11 @@ module list
 
 # Dataset
 config_file="configs/mesh/MB_train_VEHS_3D.yaml"
-config_file="configs/mesh/MB_ft_h36m.yaml"
+#config_file="configs/mesh/MB_ft_h36m.yaml"
 
 # Checkpoint
 checkpoint_bin="checkpoint/mesh/MB_train_VEHSR3/latest_epoch.bin"
-#checkpoint_bin="checkpoint/mesh/MB_train_VEHSR3/latest_epoch.bin"
+checkpoint_bin="checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/best_epoch.bin"
 
 echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
