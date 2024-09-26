@@ -41,6 +41,7 @@ echo "checkpoint_bin: $checkpoint_bin"
 python -u train_mesh.py \
 --config "$config_file" \
 --evaluate "$checkpoint_bin" \
+--test_set_keyword test \
 --wandb_project "MotionBert_mesh_eval" \
 --wandb_name "GT_input_MB_mesh_validate_17_H36M_val" \
 --note "" \
