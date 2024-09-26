@@ -28,9 +28,11 @@ module list
 
 # Dataset
 config_file="configs/mesh/MB_train_VEHS_3D.yaml"
+config_file="configs/mesh/MB_ft_h36m.yaml"
 
 # Checkpoint
 checkpoint_bin="checkpoint/mesh/MB_train_VEHSR3/latest_epoch.bin"
+#checkpoint_bin="checkpoint/mesh/MB_train_VEHSR3/latest_epoch.bin"
 
 echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
@@ -39,8 +41,9 @@ echo "checkpoint_bin: $checkpoint_bin"
 python -u train_mesh.py \
 --config "$config_file" \
 --evaluate "$checkpoint_bin" \
---out_path "experiment/VEHS-7M_mesh" \
 --wandb_project "MotionBert_mesh_eval" \
---wandb_name "GT_input_MB_mesh_validate_17" \
---note "save pose output" \
---fps 100
+--wandb_name "GT_input_MB_mesh_validate_17_H36M_val" \
+--note "" \
+--fps 20
+
+#--out_path "experiment/VEHS-7M_mesh" \
