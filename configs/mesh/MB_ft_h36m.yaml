@@ -33,6 +33,7 @@ clip_len: 16
 data_stride: 8
 sample_stride: 1
 num_joints: 17
+root_idx: 0
 
 # Loss
 lambda_3d: 0.5
