@@ -34,34 +34,42 @@ echo "cpu-2, gpu-1, mem-20"
 #config_file="configs/pose3d/MB_train_VEHSR3.yaml"
 #config_file="configs/pose3d/MB_ft_VEHSR3_6DPose.yaml"
 #config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_config6.yaml"
-config_file="configs/pose3d/RTMPose_exp/MB_ft_inference.yaml"
+#config_file="configs/pose3d/RTMPose_exp/MB_ft_inference.yaml"
 #config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_tilt_correct.yaml"
 #config_file="configs/pose3d/hand/MB_train_Rokoko.yaml"
+config_file="configs/pose3d/hand/MB_infer_lab_RTMinput.yaml"
 
 # Checkpoint
 #checkpoint_bin="checkpoint/pose3d/MB_train_h36m/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/MB_ft_VEHSR3_6DPose/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6_GT2d_true/best_epoch.bin"
-checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6/best_epoch.bin"
+#checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_tilt_corrected/best_epoch.bin"
-#checkpoint_bin="checkpoint/pose3d/MB_train_Rokoko_hand_21/latest_epoch.bin"
+checkpoint_bin="checkpoint/pose3d/MB_train_Rokoko_hand_21/latest_epoch.bin"
 
 
 echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
 
-# inference only
-python -u infer3d_train.py \
---config "$config_file" \
---wandb_project "MotionBert_eval" \
---wandb_name "RTM_input_MB_ft_inference_industry_3" \
---note "save pose output" \
---out_path "experiment/RTM2D_ft/industry_3_RTM2d" \
---test_set_keyword validate \
---evaluate "$checkpoint_bin"
+## inference only
+#python -u infer3d_train.py \
+#--config "$config_file" \
+#--wandb_project "MotionBert_eval" \
+#--wandb_name "RTM_input_MB_ft_inference_industry_3" \
+#--note "save pose output" \
+#--out_path "experiment/RTM2D_ft/industry_3_RTM2d" \
+#--test_set_keyword validate \
+#--evaluate "$checkpoint_bin"
 
 #> "output_slurm/eval_${SLURM_JOB_ID}_output.out"
 
-
 # (config change 4 location)
+
+
+# Hand-21
+python -u infer3d_train.py \
+--config "$config_file" \
+--out_path "experiment/handPose/Lab_RTMin_wRokoko_2" \
+--test_set_keyword validate \
+--evaluate "$checkpoint_bin"

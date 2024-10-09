@@ -40,7 +40,7 @@ def parse_args():
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
     parser.add_argument('--test_set_keyword', default='validate', type=str, help='eval set name, either test or validate, only for VEHS')
-    parser.add_argument('--wandb_project', default='MotionBert_train', type=str, help='wandb project name')
+    parser.add_argument('--wandb_project', default=None, type=str, help='wandb project name')
     parser.add_argument('--wandb_name', default='VEHS_ft_train', type=str, help='wandb run name')
     parser.add_argument('--note', default='', type=str, help='wandb notes')
     parser.add_argument('--res_w', type=int, default=1920)
@@ -98,8 +98,7 @@ def train_with_config(args, opts):
     train_writer = tensorboardX.SummaryWriter(os.path.join(opts.checkpoint, "logs"))
     args_all = vars(opts)
     args_all['yaml_config'] = args
-    this_run = wandb.init(project=opts.wandb_project, name=opts.wandb_name, config=args_all)  # Initialize a new run
-    
+
     print('Loading dataset...')
     trainloader_params = {
           'batch_size': args.batch_size,
@@ -199,7 +198,7 @@ def train_with_config(args, opts):
         raise ValueError('This script is for inference only, please set --evaluate')
 
         
-    wandb.finish()
+
 
 if __name__ == "__main__":
     opts = parse_args()
