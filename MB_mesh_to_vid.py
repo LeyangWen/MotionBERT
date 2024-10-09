@@ -52,7 +52,7 @@ if __name__ == '__main__':
     vertices_gt = results['verts_gt'].reshape(-1, 6890, 3)
     joints_gt = results['kp_3d_gt'].reshape(-1, 17, 3)
 
-    # rotate all 3D verticies in x axis by 90 degree
+    # rotate all 3D vertices in x axis by 90 degree
     rotated_vertices = np.array([mb_result_view_rotate(v) for v in vertices])
     rotated_joints = np.array([mb_result_view_rotate(j) for j in joints])/1000
     rotated_vertices_gt = np.array([mb_result_view_rotate(v) for v in vertices_gt])

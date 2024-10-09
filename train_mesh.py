@@ -75,6 +75,7 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
     mpjpes = AverageMeter()
     mpves = AverageMeter()
     results = defaultdict(list)
+    results_gt = defaultdict(list)
     smpl = SMPL(args.data_root, batch_size=1).cuda()
     J_regressor = smpl.J_regressor_h36m
     with torch.no_grad():
@@ -140,8 +141,10 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
                 batch_gt[keys] = batch_gt[keys].detach().cpu().numpy()
             results['kp_3d'].append(output[0]['kp_3d'])
             results['verts'].append(output[0]['verts'])
-            results['kp_3d_gt'].append(batch_gt['kp_3d'])
-            results['verts_gt'].append(batch_gt['verts'])
+            results['theta'].append(output[0]['theta'])
+            results_gt['kp_3d_gt'].append(batch_gt['kp_3d'])
+            results_gt['verts_gt'].append(batch_gt['verts'])
+            results_gt['theta_gt'].append(batch_gt['theta'])
 
             # measure elapsed time
             batch_time.update(time.time() - end)
@@ -172,6 +175,9 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
         result_file = os.path.join(opts.out_path, f'{dataset_name}_results.pkl')
         with open(result_file, 'wb') as f:
             pickle.dump(results, f)
+        gt_file = os.path.join(opts.out_path, f'{dataset_name}_gt.pkl')
+        with open(gt_file, 'wb') as f:
+            pickle.dump(results_gt, f)
         # render_and_save(results['verts'], osp.join(opts.out_path, f'{dataset_name}_results.mp4'), keep_imgs=False, fps=opts.fps, draw_face=True)
     return losses.avg, error_dict['mpjpe'], error_dict['pa_mpjpe'], error_dict['mpve'], losses_dict
 
