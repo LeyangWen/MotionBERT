@@ -70,6 +70,6 @@ echo "checkpoint_bin: $checkpoint_bin"
 # Hand-21
 python -u infer3d_train.py \
 --config "$config_file" \
---out_path "experiment/handPose/Lab_RTMin_wRokoko_2\left" \
---test_set_keyword validate \
+--out_path "experiment/handPose/Lab_RTMin_wRokoko_2/right" \
+--test_set_keyword test \
 --evaluate "$checkpoint_bin"
