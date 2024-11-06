@@ -70,8 +70,8 @@ python -u train.py \
 --wandb_project "MotionBert_eval_Hand" \
 --wandb_name "Rokoko_2"  \
 --note "" \
---out_path "experiment/handPose/Rokoko_2/right" \
---test_set_keyword test \
+--out_path "experiment/handPose/Rokoko_2/left" \
+--test_set_keyword validate \
 --evaluate "$checkpoint_bin" \
 
 #{'L': 'validate', 'R': 'test'}
