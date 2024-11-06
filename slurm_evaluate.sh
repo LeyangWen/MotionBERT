@@ -62,6 +62,7 @@ echo "checkpoint_bin: $checkpoint_bin"
 #--evaluate "$checkpoint_bin" \
 
 #--save_trace \
+# (config change 4 location)
 
 ## evaluate - train.py [hand]
 python -u train.py \
@@ -69,8 +70,8 @@ python -u train.py \
 --wandb_project "MotionBert_eval_Hand" \
 --wandb_name "Rokoko_2"  \
 --note "" \
---out_path "experiment/handPose/Rokoko_2" \
+--out_path "experiment/handPose/Rokoko_2/right" \
 --test_set_keyword test \
 --evaluate "$checkpoint_bin" \
 
-# (config change 4 location)
+#{'L': 'validate', 'R': 'test'}
