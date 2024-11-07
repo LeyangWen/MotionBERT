@@ -27,21 +27,17 @@ module list
 
 
 # Lab vid - Hand-21
-python -u tools/convert_VEHSR3.py \
+python -u tools/convert_VEHS_hand.py \
 --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Lab_hand' \
 --dt_file 'lab_rtmpose_hand_for_MB.pkl' \
 --test_set_keyword 'validate' \
---res_w 1000 \
---res_h 1000 \
 --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Lab_hand' > output_slurm/Rokoko_hand.out
 
 ## Rokoko - Hand-21
-#python -u tools/convert_VEHSR3.py \
+#python -u tools/convert_VEHS_hand.py \
 #--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Rokoko_hand' \
 #--dt_file 'Rokoko_hand_3D_downsample1_keep1.pkl' \
 #--test_set_keyword 'test' \
-#--res_w 1000 \
-#--res_h 1000 \
 #--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Rokoko_hand' > output_slurm/Rokoko_hand.out
 
 # VEHS - RTMPose24 - industry inference
@@ -49,8 +45,6 @@ python -u tools/convert_VEHSR3.py \
 #--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry_3' \
 #--dt_file 'rtmpose_industry_3_no3d_j24_f20_s1_RTM2D.pkl' \
 #--test_set_keyword 'validate' \
-#--res_w 1920 \
-#--res_h 1080 \
 #--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry_3' > output_slurm/preprocess_RTM6.out
 
 ## VEHS - RTMPose24 - VEHSR3

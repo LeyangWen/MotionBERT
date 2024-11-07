@@ -8,6 +8,7 @@ sys.path.insert(0, os.getcwd())
 from lib.utils.tools import read_pkl
 from lib.data.datareader_h36m import DataReaderH36M
 from lib.data.datareader_VEHSR3 import DataReaderVEHSR3
+from lib.data.datareader_hand import DataReaderVEHSHand
 from tqdm import tqdm
 import argparse
 import datetime
@@ -35,7 +36,7 @@ parser.add_argument('--test_set_keyword', default='test', type=str, help='eval s
 # parser.add_argument('--res_h', default='1080', type=int)
 args = parser.parse_args()
 
-datareader = DataReaderVEHSR3(n_frames=243, sample_stride=1, data_stride_train=81, data_stride_test=243, dt_file=args.dt_file, dt_root=args.dt_root, test_set_keyword=args.test_set_keyword) #, res_w=args.res_w, res_h=args.res_h)
+datareader = DataReaderVEHSHand(n_frames=243, sample_stride=1, data_stride_train=81, data_stride_test=243, dt_file=args.dt_file, dt_root=args.dt_root, test_set_keyword=args.test_set_keyword) #, res_w=args.res_w, res_h=args.res_h)
 train_data, test_data, train_labels, test_labels = datareader.get_sliced_data()
 print(f"train_data: {train_data.shape}, test_data: {test_data.shape}")
 print(f"train_labels: {train_labels.shape}, test_labels: {test_labels.shape}")
