@@ -30,7 +30,7 @@ module list
 python -u tools/convert_VEHS_hand.py \
 --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Lab_hand' \
 --dt_file 'lab_rtmpose_hand_for_MB.pkl' \
---test_set_keyword 'validate' \
+--test_set_keyword 'test' \
 --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Lab_hand' > output_slurm/Rokoko_hand.out
 
 ## Rokoko - Hand-21
