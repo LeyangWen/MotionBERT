@@ -37,7 +37,7 @@ echo "cpu-2, gpu-1, mem-20"
 #config_file="configs/pose3d/RTMPose_exp/MB_ft_inference.yaml"
 #config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_tilt_correct.yaml"
 #config_file="configs/pose3d/hand/MB_train_Rokoko.yaml"
-config_file="configs/pose3d/hand/MB_infer_lab_RTMinput.yaml"
+config_file="configs/pose3d/hand/MB_infer_lab_RTMinput.yaml"  # infer should use infer code
 
 # Checkpoint
 #checkpoint_bin="checkpoint/pose3d/MB_train_h36m/best_epoch.bin"
