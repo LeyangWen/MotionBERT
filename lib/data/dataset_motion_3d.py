@@ -26,6 +26,7 @@ class MotionDataset(Dataset):
             for i in motion_list:
                 file_list_all.append(os.path.join(data_path, i))
         self.file_list = file_list_all
+        print(f"l29-file_list: {len(self.file_list)}")
         
     def __len__(self):
         'Denotes the total number of samples'
@@ -45,6 +46,7 @@ class MotionDataset3D(MotionDataset):
     def __getitem__(self, index):
         'Generates one sample of data'
         # Select sample
+        print(f"l49-index: {index}")
         file_path = self.file_list[index]
         motion_file = read_pkl(file_path)
         motion_3d = motion_file["data_label"]  
