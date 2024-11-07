@@ -10,7 +10,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --partition=gpu
 ##SBATCH --partition=debug
-#SBATCH --time=00:30:00
+#SBATCH --time=00:10:00
 #SBATCH --account=shdpm0
 ##### END preamble
 ##### Run in MotionBert dir
@@ -70,8 +70,8 @@ echo "checkpoint_bin: $checkpoint_bin"
 # Hand-21
 python -u infer3d_train.py \
 --config "$config_file" \
---out_path "experiment/handPose/Lab_RTMin_wRokoko_2/right" \
---test_set_keyword test \
+--out_path "experiment/handPose/Lab_RTMin_wRokoko_2/left" \
+--test_set_keyword validate \
 --evaluate "$checkpoint_bin"
 
 #{'L': 'validate', 'R': 'test'}
