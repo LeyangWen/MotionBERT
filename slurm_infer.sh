@@ -74,4 +74,10 @@ python -u infer3d_train.py \
 --test_set_keyword validate \
 --evaluate "$checkpoint_bin"
 
+python -u infer3d_train.py \
+--config "$config_file" \
+--out_path "experiment/handPose/Lab_RTMin_wRokoko_2/right" \
+--test_set_keyword test \
+--evaluate "$checkpoint_bin"
+
 #{'L': 'validate', 'R': 'test'}
