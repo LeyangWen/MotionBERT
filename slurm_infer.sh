@@ -60,6 +60,8 @@ echo "checkpoint_bin: $checkpoint_bin"
 #--note "save pose output" \
 #--out_path "experiment/RTM2D_ft/industry_3_RTM2d" \
 #--test_set_keyword validate \
+#--res_w 1920 \
+#--res_h 1080 \
 #--evaluate "$checkpoint_bin"
 
 #> "output_slurm/eval_${SLURM_JOB_ID}_output.out"
@@ -72,12 +74,16 @@ python -u infer3d_train.py \
 --config "$config_file" \
 --out_path "experiment/handPose/Lab_RTMin_wRokoko_2/left" \
 --test_set_keyword validate \
+#--res_w 1000 \
+#--res_h 1000 \
 --evaluate "$checkpoint_bin"
 
 python -u infer3d_train.py \
 --config "$config_file" \
 --out_path "experiment/handPose/Lab_RTMin_wRokoko_2/right" \
 --test_set_keyword test \
+#--res_w 1000 \
+#--res_h 1000 \
 --evaluate "$checkpoint_bin"
 
 #{'L': 'validate', 'R': 'test'}
