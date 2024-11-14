@@ -74,16 +74,16 @@ python -u infer3d_train.py \
 --config "$config_file" \
 --out_path "experiment/handPose/Lab_RTMin_wRokoko_2/left" \
 --test_set_keyword validate \
-#--res_w 1000 \
-#--res_h 1000 \
+--res_w 1000 \
+--res_h 1000 \
 --evaluate "$checkpoint_bin"
 
 python -u infer3d_train.py \
 --config "$config_file" \
 --out_path "experiment/handPose/Lab_RTMin_wRokoko_2/right" \
 --test_set_keyword test \
-#--res_w 1000 \
-#--res_h 1000 \
+--res_w 1000 \
+--res_h 1000 \
 --evaluate "$checkpoint_bin"
 
 #{'L': 'validate', 'R': 'test'}
