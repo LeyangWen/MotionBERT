@@ -137,9 +137,9 @@ def train_with_config(args, opts):
     elif "infer" in opts.config:
         test_set_keyword = opts.test_set_keyword
         path_components = args.data_root.split('/')
-        # todo: res_w and res_h here
         this_dt_root = '/'.join(path_components[:-2])  # this_dt_root='data/motion3d'
-        datareader = DataReaderInference(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
+        datareader = DataReaderInference(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len,
+                                         dt_root = this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints, res_w=args.res_w, res_h=args.res_h)
     elif "h36m" in opts.config:  # H36M
         datareader = DataReaderH36M(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root='data/motion3d',
                                     dt_file=args.dt_file)
