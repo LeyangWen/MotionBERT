@@ -26,6 +26,7 @@ from lib.data.dataset_motion_3d import MotionDataset3D
 from lib.data.augmentation import Augmenter2D
 from lib.data.datareader_h36m import DataReaderH36M
 from lib.data.datareader_VEHSR3 import DataReaderVEHSR3
+from lib.data.datareader_hand import DataReaderVEHSHand
 from lib.data.datareader_inference import DataReaderInference
 from lib.model.loss import *
 
@@ -134,6 +135,12 @@ def train_with_config(args, opts):
         path_components = args.data_root.split('/')
         this_dt_root = '/'.join(path_components[:-2])  # this_dt_root='data/motion3d'
         datareader = DataReaderVEHSR3(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len, dt_root = this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
+    elif "hand" in opts.config:  # Hand
+        test_set_keyword = opts.test_set_keyword
+        path_components = args.data_root.split('/')
+        this_dt_root = '/'.join(path_components[:-2])  # this_dt_root='data/motion3d'
+        datareader = DataReaderVEHSHand(n_frames=args.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=args.clip_len,
+                                        dt_root=this_dt_root, dt_file=args.dt_file, test_set_keyword=test_set_keyword, num_joints=args.num_joints)
     elif "infer" in opts.config:
         test_set_keyword = opts.test_set_keyword
         path_components = args.data_root.split('/')
