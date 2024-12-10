@@ -270,7 +270,11 @@ def train_with_config(args, opts):
             model_backbone = load_pretrained_weights(model_backbone, checkpoint)
     if args.partial_train:
         model_backbone = partial_train_layers(model_backbone, args.partial_train)
-    model = MeshRegressor(args, backbone=model_backbone, dim_rep=args.dim_rep, hidden_dim=args.hidden_dim, dropout_ratio=args.dropout, num_joints=args.num_joints, dataset=args.dataset)
+
+    if hasattr(args, "dt_file_VEHS7M"):
+        J_regressor_choice = "VEHS7M"
+    model = MeshRegressor(args, backbone=model_backbone, dim_rep=args.dim_rep, hidden_dim=args.hidden_dim, dropout_ratio=args.dropout, num_joints=args.num_joints, J_regressor_choice=J_regressor_choice)
+
     criterion = MeshLoss(loss_type = args.loss_type, root_idx=args.root_idx)
     best_jpe = 9999.0
     model_params = 0

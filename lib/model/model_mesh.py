@@ -7,7 +7,7 @@ from lib.utils.utils_smpl import SMPL
 from lib.utils.utils_mesh import rotation_matrix_to_angle_axis, rot6d_to_rotmat
 
 class SMPLRegressor(nn.Module):
-    def __init__(self, args, dim_rep=512, num_joints=17, hidden_dim=2048, dropout_ratio=0., dataset='h36m'):
+    def __init__(self, args, dim_rep=512, num_joints=17, hidden_dim=2048, dropout_ratio=0., J_regressor_choice='h36m'):
         super(SMPLRegressor, self).__init__()
         param_pose_dim = 24 * 6
         self.dropout = nn.Dropout(p=dropout_ratio)
@@ -32,7 +32,7 @@ class SMPLRegressor(nn.Module):
         init_shape = torch.from_numpy(mean_params['shape'][:].astype('float32')).unsqueeze(0)
         self.register_buffer('init_pose', init_pose)
         self.register_buffer('init_shape', init_shape)
-        if dataset == 'VEHS7M':
+        if J_regressor_choice == 'VEHS7M':
             self.J_regressor = self.smpl.J_regressor_VEHS7M_66kpts
         else:  # original code, for H36M and more
             self.J_regressor = self.smpl.J_regressor_h36m
@@ -83,11 +83,11 @@ class SMPLRegressor(nn.Module):
         return output
 
 class MeshRegressor(nn.Module):
-    def __init__(self, args, backbone, dim_rep=512, num_joints=17, hidden_dim=2048, dropout_ratio=0.5, dataset='h36m'):
+    def __init__(self, args, backbone, dim_rep=512, num_joints=17, hidden_dim=2048, dropout_ratio=0.5, J_regressor_choice='h36m'):
         super(MeshRegressor, self).__init__()
         self.backbone = backbone
         self.feat_J = num_joints
-        self.head = SMPLRegressor(args, dim_rep, num_joints, hidden_dim, dropout_ratio, dataset)
+        self.head = SMPLRegressor(args, dim_rep, num_joints, hidden_dim, dropout_ratio, J_regressor_choice)
         
     def forward(self, x, init_pose=None, init_shape=None, n_iter=3):
         '''
