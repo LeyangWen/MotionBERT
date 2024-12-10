@@ -66,6 +66,10 @@ class SMPL(_SMPL):
         self.register_buffer('J_regressor_extra', torch.tensor(J_regressor_extra, dtype=torch.float32))
         J_regressor_h36m = np.load(osp.join(args[0], 'J_regressor_h36m_correct.npy'))
         self.register_buffer('J_regressor_h36m', torch.tensor(J_regressor_h36m, dtype=torch.float32))
+
+        J_regressor_VEHS7M_66kpts = np.load(osp.join(args[0], 'J_regressor_VEHS7M_66kpt.npy'))
+        self.register_buffer('J_regressor_VEHS7M_66kpts', torch.tensor(J_regressor_VEHS7M_66kpts, dtype=torch.float32))
+
         self.joint_map = torch.tensor(joints, dtype=torch.long)
 
     def forward(self, *args, **kwargs):

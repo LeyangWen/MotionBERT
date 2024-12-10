@@ -67,6 +67,34 @@ Goal: format VEHS-7M mesh dataset and train on our own, get 66 GT 2D keypoints -
     - [x] loss_mesh.py root idx `preds_local = preds['kp_3d'] - preds['kp_3d'][:, :, 0:1,:]  # (N, T, 17, 3)` 
   - [ ] For mesh train, only need to change meshLoss and compute_error, rest is for evaluate.
 
+- Test using 17 kpts, Train and infer works
+- Convert to 66 kpts input
+- Data flow:
+  - config MB_pkl file --> [`MotionSMPL` class](lib/data/dataset_mesh.py) --> `SMPLDataset` class init  --> `DataReaderVEHSR3`
+    - add condition if dataset=="name", load using `DataReaderVEHSR3`, split into clips here
+      - specify dataset name in `train_mesh.py` 
+    - `MotionSMPL` class set `J_regressor`, which is from `self.smpl.J_regressor_h36m`, which set [here](lib/utils/utils_smpl.py)
+  - 2D data input: def `read_2d` -->  `motion_2d`
+  - 3D data input: `motion_smpl_3d`=dict: pose: `motion_smpl_pose` (n, 72), shape: `motion_smpl_shape`(n, 10) --> `motion_verts` (n, 6890, 3) --> *1000 to mm --> `J_regressor` --> `motion_3d_reg` (n, 17 or 66, 3)
+  - `motion_smpl_3d` overwrite to 
+    ```python
+    motion_smpl_3d = {
+        'theta': motion_theta,       # smpl pose and shape
+        'kp_3d': motion_3d_reg,      # 3D keypoints
+        'verts': motion_verts,       # 3D mesh vertices
+    }
+    ```
+  - Loss: `motion_smpl_3d` --> `batch_input`, `batch_gt` in def `train_epoch` 
+    - `batch_input` --> `model` --> `output
+    - `batch_gt` --> `criterion`
+- Step 1: make our own J_regressor, 66 kpts
+  - Checking `data/mesh/J_regressor_h36m_correct.npy`, shape (17, 6890), max 0.53, mostly zeros
+  - Assuming J_regressor.dot(verts) = 3D keypoints, need to make a new J_regressor for 66 kpts
+    - I got smpl vert to 47 surface kpts in soma github, lets put in `vicon-read` - `conversion_scripts/make_J_regressor_VEHS7M_66kpt.py`
+    - Done, coped to `data/mesh/J_regressor_VEHS7M_66kpt.npy`
+    - Add regressor in (`SMPL` class)[lib/utils/utils_smpl.py]
+    - Change `J_regressor` in (`MotionSMPL` class)[lib/data/dataset_mesh.py]
+
 ### 20240921
 - env setup on mac, use 3.8 python, replace chumpy `pip install git+https://github.com/mattloper/chumpy`
 

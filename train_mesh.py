@@ -296,11 +296,19 @@ def train_with_config(args, opts):
           'persistent_workers': True
     }
     if hasattr(args, "dt_file_h36m"):
-        mesh_train = MotionSMPL(args, data_split='train', dataset="h36m")  # todo: hyjacking for now, modify later, need to fix all dt_file_h36m
+        mesh_train = MotionSMPL(args, data_split='train', dataset="h36m")
         mesh_val = MotionSMPL(args, data_split='test', dataset="h36m")
         train_loader = DataLoader(mesh_train, **trainloader_params)
         test_loader = DataLoader(mesh_val, **testloader_params)
         print('INFO: Training on {} batches (h36m)'.format(len(train_loader)))
+
+    if hasattr(args, "dt_file_VEHS7M"):
+        mesh_train = MotionSMPL(args, data_split='train', dataset="VEHS7M")
+        mesh_val = MotionSMPL(args, data_split='test', dataset="VEHS7M")
+        train_loader = DataLoader(mesh_train, **trainloader_params)
+        test_loader = DataLoader(mesh_val, **testloader_params)
+        print('INFO: Training on {} batches (VEHS7M)'.format(len(train_loader)))
+
 
     if hasattr(args, "dt_file_pw3d"):
         if args.train_pw3d:

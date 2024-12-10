@@ -23,10 +23,10 @@ class SMPLDataset(Dataset):
         np.random.seed(0)
         self.clip_len = args.clip_len
         self.data_split = data_split
-        if dataset=="h36m": # "VEHS":        # todo: consider VEHSR3
+        if dataset=="VEHS7M":
             datareader = DataReaderVEHSR3(n_frames=self.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=self.clip_len, dt_root=args.data_root,
                                           dt_file=args.dt_file_h36m, test_set_keyword=args.test_set_keyword, num_joints=args.num_joints)
-        elif dataset=="h36mxxxxxx":  # old
+        elif dataset=="h36m":  # old
             datareader = DataReaderH36M(n_frames=self.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=self.clip_len, dt_root=args.data_root, dt_file=args.dt_file_h36m)
         elif dataset=="coco":
             datareader = DataReaderMesh(n_frames=1, sample_stride=args.sample_stride, data_stride_train=1, data_stride_test=1, dt_root=args.data_root, dt_file=args.dt_file_coco, res=[640, 640])
@@ -62,6 +62,7 @@ class SMPLDataset(Dataset):
 class MotionSMPL(SMPLDataset):
     def __init__(self, args, data_split, dataset):
         super(MotionSMPL, self).__init__(args, data_split, dataset)
+        self.dataset = dataset
         self.flip = args.flip
         
     def __getitem__(self, index):
@@ -87,7 +88,11 @@ class MotionSMPL(SMPLDataset):
             pose2rot=True
         )
         motion_verts = motion_smpl.vertices.detach()*1000.0
-        J_regressor = self.smpl.J_regressor_h36m
+        if self.dataset == "VEHS7M":
+            J_regressor = self.smpl.J_regressor_VEHS7M_66kpts
+        else:  # original code, for H36M and more
+            J_regressor = self.smpl.J_regressor_h36m
+
         J_regressor_batch = J_regressor[None, :].expand(motion_verts.shape[0], -1, -1).to(motion_verts.device)
         motion_3d_reg = torch.matmul(J_regressor_batch, motion_verts)                 # motion_3d: (T,17,3)  
         motion_verts = motion_verts - motion_3d_reg[:, :1, :]
