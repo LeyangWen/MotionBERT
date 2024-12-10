@@ -68,7 +68,8 @@ Goal: format VEHS-7M mesh dataset and train on our own, get 66 GT 2D keypoints -
   - [ ] For mesh train, only need to change meshLoss and compute_error, rest is for evaluate.
 
 - Test using 17 kpts, Train and infer works
-- Convert to 66 kpts input
+- 
+### Convert to 66 kpts input
 - Data flow:
   - config MB_pkl file --> [`MotionSMPL` class](lib/data/dataset_mesh.py) --> `SMPLDataset` class init  --> `DataReaderVEHSR3`
     - add condition if dataset=="name", load using `DataReaderVEHSR3`, split into clips here
@@ -94,7 +95,10 @@ Goal: format VEHS-7M mesh dataset and train on our own, get 66 GT 2D keypoints -
     - Done, coped to `data/mesh/J_regressor_VEHS7M_66kpt.npy`
     - Add regressor in (`SMPL` class)[lib/utils/utils_smpl.py]
     - Change `J_regressor` in (`MotionSMPL` class)[lib/data/dataset_mesh.py]
-
+    - Change `J_regressor` in (`train_mesh.py`--> `MeshRegressor` class --> `SMPLRegressor` class)[lib/model/model_mesh.py]
+    - **Also need to change `MeshRegressor` in infer wild** not done yet <-------------------------
+- Also need to set root index, pelvis is 57 in V2 66-kpts sequence
+- 
 ### 20240921
 - env setup on mac, use 3.8 python, replace chumpy `pip install git+https://github.com/mattloper/chumpy`
 

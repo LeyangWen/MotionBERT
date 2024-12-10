@@ -37,11 +37,10 @@ class MeshLoss(nn.Module):
         pred_theta = reduce(pred_theta)
         root_idx = self.root_idx
 
-        preds_local = preds['kp_3d'] - preds['kp_3d'][:, :, 0:1,:]  # (N, T, 17, 3)
-        gt_local = data_gt['kp_3d'] - data_gt['kp_3d'][:, :, 0:1,:]
-        # todo: preds_local, maybe not
-        # preds_local = preds['kp_3d'] - preds['kp_3d'][:, :, root_idx:root_idx+1,:]  # (N, T, 17, 3)
-        # gt_local = data_gt['kp_3d'] - data_gt['kp_3d'][:, :, root_idx:root_idx+1,:]
+        # preds_local = preds['kp_3d'] - preds['kp_3d'][:, :, 0:1,:]  # (N, T, 17, 3)
+        # gt_local = data_gt['kp_3d'] - data_gt['kp_3d'][:, :, 0:1,:]
+        preds_local = preds['kp_3d'] - preds['kp_3d'][:, :, root_idx:root_idx+1,:]  # (N, T, 17, 3)
+        gt_local = data_gt['kp_3d'] - data_gt['kp_3d'][:, :, root_idx:root_idx+1,:]
 
         real_shape, pred_shape = data_3d_theta[:, 72:], pred_theta[:, 72:]
         real_pose, pred_pose = data_3d_theta[:, :72], pred_theta[:, :72]
