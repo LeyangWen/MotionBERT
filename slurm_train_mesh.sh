@@ -26,17 +26,18 @@ module list
 #conda activate motionbert
 
 echo "test"
+# rm -rf checkpoint/mesh/MB_train_VEHS66kpts_try1
 
 # for 6D
 python train_mesh.py \
 --config configs/mesh/MB_train_VEHS_3D.yaml \
 --pretrained checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/ \
 --selection best_epoch.bin \
---checkpoint checkpoint/mesh/MB_train_VEHS66kpts_try1 \
+--checkpoint checkpoint/mesh/MB_train_VEHS66kpts \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train_mesh" \
 --wandb_name "gt2d_66kpts_try1"
-#--resume checkpoint/mesh/MB_train_VEHSR3/latest_epoch.bin \
+
 
 ## for 3D
 #python train_mesh.py \

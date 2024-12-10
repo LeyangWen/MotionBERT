@@ -98,7 +98,9 @@ Goal: format VEHS-7M mesh dataset and train on our own, get 66 GT 2D keypoints -
     - Change `J_regressor` in (`train_mesh.py`--> `MeshRegressor` class --> `SMPLRegressor` class)[lib/model/model_mesh.py]
     - **Also need to change `MeshRegressor` in infer wild** not done yet <-------------------------
 - Also need to set root index, pelvis is 57 in V2 66-kpts sequence
-- 
+- Test training
+  - Error: Finished all too quick without training
+
 ### 20240921
 - env setup on mac, use 3.8 python, replace chumpy `pip install git+https://github.com/mattloper/chumpy`
 
