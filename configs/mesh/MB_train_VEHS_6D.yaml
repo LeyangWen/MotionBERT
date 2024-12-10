@@ -4,7 +4,7 @@ partial_train: null
 train_pw3d: False
 warmup_h36m: 100
 
-# Traning 
+# Training
 epochs: 100
 checkpoint_frequency: 25
 batch_size: 8
@@ -28,11 +28,11 @@ hidden_dim: 1024
 
 # Data
 data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/mesh
-dt_file_VEHS7M: /VEHS_SMPL_3D/VEHS_3D_downsample5_keep1_66_SMPL.pkl
+dt_file_VEHS7M: /VEHS_SMPL_6D/VEHS_6D_downsample5_keep1_66_v2_SMPL.pkl
 clip_len: 16
 data_stride: 8
 sample_stride: 1
-num_joints: 17
+num_joints: 66
 root_idx: 0
 
 # Loss
