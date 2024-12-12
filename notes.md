@@ -100,6 +100,8 @@ Goal: format VEHS-7M mesh dataset and train on our own, get 66 GT 2D keypoints -
 - Also need to set root index, pelvis is 57 in V2 66-kpts sequence
 - Test training
   - Error: Finished all too quick without training
+    - This time, caused by opts.checkpoint, it auto resume. 
+    - Still too fast, see `Training epoch #` and `Saving checkpoint` printed out
 
 ### 20240921
 - env setup on mac, use 3.8 python, replace chumpy `pip install git+https://github.com/mattloper/chumpy`

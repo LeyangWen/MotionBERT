@@ -309,9 +309,9 @@ def train_with_config(args, opts):
     if hasattr(args, "dt_file_VEHS7M"):
         mesh_train = MotionSMPL(args, data_split='train', dataset="VEHS7M")
         mesh_val = MotionSMPL(args, data_split='test', dataset="VEHS7M")
-        train_loader = DataLoader(mesh_train, **trainloader_params)
-        test_loader = DataLoader(mesh_val, **testloader_params)
-        print('INFO: Training on {} batches (VEHS7M)'.format(len(train_loader)))
+        train_loader_VEHS7M = DataLoader(mesh_train, **trainloader_params)
+        test_loader_VEHS7M = DataLoader(mesh_val, **testloader_params)
+        print('INFO: Training on {} batches (VEHS7M)'.format(len(train_loader_VEHS7M)))
 
 
     if hasattr(args, "dt_file_pw3d"):
@@ -399,11 +399,21 @@ def train_with_config(args, opts):
             batch_time = AverageMeter()
             data_time = AverageMeter()
             
+            if hasattr(args, "dt_file_VEHS7M") and epoch < args.warmup_h36m:
+                train_epoch(args, opts, model, train_loader_VEHS7M, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch)
+                # test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, test_losses_dict = validate(test_loader_VEHS7M, model, criterion, 'VEHS7M')  # todo: fix OOM error here
+
             if hasattr(args, "dt_file_h36m") and epoch < args.warmup_h36m:
                 train_epoch(args, opts, model, train_loader, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch)
-                #test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, test_losses_dict = validate(test_loader, model, criterion, 'h36m')  # todo: fix OOM error here
-               
+                # test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, test_losses_dict = validate(test_loader, model, criterion, 'h36m')  # todo: fix OOM error here
 
+            if hasattr(args, "dt_file_coco") and epoch < args.warmup_coco:
+                train_epoch(args, opts, model, train_loader_coco, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch)
+
+            if hasattr(args, "dt_file_pw3d"):
+                if args.train_pw3d:
+                    train_epoch(args, opts, model, train_loader_pw3d, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch)
+                test_loss_pw3d, test_mpjpe_pw3d, test_pa_mpjpe_pw3d, test_mpve_pw3d, test_losses_dict_pw3d = validate(test_loader_pw3d, model, criterion, 'pw3d')
 
             wandb.log({
                 'losses_train.avg': losses_train.avg,
@@ -439,6 +449,8 @@ def train_with_config(args, opts):
 
 
     if opts.evaluate:
+        if hasattr(args, "dt_file_VEHS7M") and epoch < args.warmup_h36m:
+            test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, test_losses_dict = validate(test_loader_VEHS7M, model, criterion, 'VEHS7M')
         if hasattr(args, "dt_file_h36m"):
             test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, _ = validate(test_loader, model, criterion, 'h36m')
         if hasattr(args, "dt_file_pw3d"):
