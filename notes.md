@@ -102,6 +102,10 @@ Goal: format VEHS-7M mesh dataset and train on our own, get 66 GT 2D keypoints -
   - Error: Finished all too quick without training
     - This time, caused by opts.checkpoint, it auto resume. 
     - Still too fast, see `Training epoch #` and `Saving checkpoint` printed out
+    - modified train epoch function, forgot to add case for VEHS7M train
+  - Error: reshape (error)[lib/utils/utils_mesh.py]
+    - Many hard coded instances of 17 keypoints, need to change to 66
+    - Many hard coded instances of root index, need to change to 57
 
 ### 20240921
 - env setup on mac, use 3.8 python, replace chumpy `pip install git+https://github.com/mattloper/chumpy`

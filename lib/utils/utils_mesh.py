@@ -354,22 +354,33 @@ def rigid_align(A, B):
     A2 = np.transpose(np.dot(c*R, np.transpose(A))) + t
     return A2
 
+def get_root_idx(joint_num):
+    if joint_num == 17:
+        return 0
+    elif joint_num == 66:
+        return 57
+    else:
+        raise ValueError('joint_num not supported')
+
 def compute_error(output, target):
     with torch.no_grad():
         pred_verts = output[0]['verts'].reshape(-1, 6890, 3)
         target_verts = target['verts'].reshape(-1, 6890, 3)
-        # todo: fix 17 index
-        pred_j3ds = output[0]['kp_3d'].reshape(-1, 17, 3)
-        target_j3ds = target['kp_3d'].reshape(-1, 17, 3)
 
+        frame_num = pred_verts.shape[0]
+        pred_j3ds = output[0]['kp_3d'].reshape(frame_num, -1, 3)
+        target_j3ds = target['kp_3d'].reshape(frame_num, -1, 3)
+
+        joint_num = pred_j3ds.shape[1]
+        root_idx = get_root_idx(joint_num)
         # mpve
-        pred_verts = pred_verts - pred_j3ds[:, :1, :]
-        target_verts = target_verts - target_j3ds[:, :1, :]
+        pred_verts = pred_verts - pred_j3ds[:, root_idx:root_idx+1 :]
+        target_verts = target_verts - target_j3ds[:, root_idx:root_idx+1 :]
         mpves = torch.sqrt(((pred_verts - target_verts) ** 2).sum(dim=-1)).mean(dim=-1).cpu()
 
         # mpjpe
-        pred_j3ds = pred_j3ds - pred_j3ds[:, :1, :]
-        target_j3ds = target_j3ds - target_j3ds[:, :1, :]
+        pred_j3ds = pred_j3ds - pred_j3ds[:, root_idx:root_idx+1 :]
+        target_j3ds = target_j3ds - target_j3ds[:, root_idx:root_idx+1 :]
         mpjpes = torch.sqrt(((pred_j3ds - target_j3ds) ** 2).sum(dim=-1)).mean(dim=-1).cpu()
         return mpjpes.mean(), mpves.mean()
     
@@ -377,32 +388,38 @@ def compute_error_frames(output, target):
     with torch.no_grad():
         pred_verts = output[0]['verts'].reshape(-1, 6890, 3)
         target_verts = target['verts'].reshape(-1, 6890, 3)
-        # todo: fix 17 index
-        pred_j3ds = output[0]['kp_3d'].reshape(-1, 17, 3)
-        target_j3ds = target['kp_3d'].reshape(-1, 17, 3)
+
+        frame_num = pred_verts.shape[0]
+        pred_j3ds = output[0]['kp_3d'].reshape(frame_num, -1, 3)
+        target_j3ds = target['kp_3d'].reshape(frame_num, -1, 3)
 
         # mpve
-        pred_verts = pred_verts - pred_j3ds[:, :1, :]
-        target_verts = target_verts - target_j3ds[:, :1, :]
+        joint_num = pred_j3ds.shape[1]
+        root_idx = get_root_idx(joint_num)
+        pred_verts = pred_verts - pred_j3ds[:, root_idx:root_idx+1 :]
+        target_verts = target_verts - target_j3ds[:, root_idx:root_idx+1 :]
         mpves = torch.sqrt(((pred_verts - target_verts) ** 2).sum(dim=-1)).mean(dim=-1).cpu()
 
         # mpjpe
-        pred_j3ds = pred_j3ds - pred_j3ds[:, :1, :]
-        target_j3ds = target_j3ds - target_j3ds[:, :1, :]
+        pred_j3ds = pred_j3ds - pred_j3ds[:, root_idx:root_idx+1 :]
+        target_j3ds = target_j3ds - target_j3ds[:, root_idx:root_idx+1 :]
         mpjpes = torch.sqrt(((pred_j3ds - target_j3ds) ** 2).sum(dim=-1)).mean(dim=-1).cpu()
         return mpjpes, mpves
 
 def evaluate_mesh(results):
     pred_verts = results['verts'].reshape(-1, 6890, 3)
     target_verts = results['verts_gt'].reshape(-1, 6890, 3)
-    # todo: fix 17 index
-    pred_j3ds = results['kp_3d'].reshape(-1, 17, 3)
-    target_j3ds = results['kp_3d_gt'].reshape(-1, 17, 3)
+
+    frame_num = pred_verts.shape[0]
+    pred_j3ds = results['kp_3d'].reshape(frame_num, -1, 3)
+    target_j3ds = results['kp_3d_gt'].reshape(frame_num, -1, 3)
     num_samples = pred_j3ds.shape[0]
 
+    joint_num = pred_j3ds.shape[1]
+    root_idx = get_root_idx(joint_num)
     # mpve
-    pred_verts = pred_verts - pred_j3ds[:, :1, :]
-    target_verts = target_verts - target_j3ds[:, :1, :]
+    pred_verts = pred_verts - pred_j3ds[:, root_idx:root_idx+1 :]
+    target_verts = target_verts - target_j3ds[:, root_idx:root_idx+1 :]
     mpve = np.mean(np.mean(np.sqrt(np.square(pred_verts - target_verts).sum(axis=2)), axis=1))
 
 
