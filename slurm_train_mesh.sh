@@ -30,7 +30,7 @@ echo "test"
 
 # for 6D
 python train_mesh.py \
---config configs/mesh/MB_train_VEHS_3D.yaml \
+--config configs/mesh/MB_train_VEHS_6D.yaml \
 --pretrained checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/ \
 --selection best_epoch.bin \
 --checkpoint checkpoint/mesh/MB_train_VEHS66kpts \
