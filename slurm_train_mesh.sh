@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=60g
 #SBATCH --gres=gpu:3
-#SBATCH --time=30:00
+#SBATCH --time=30:00:00
 #SBATCH --account=shdpm0
 #SBATCH --partition=spgpu
 ##### END preamble
@@ -36,7 +36,7 @@ python train_mesh.py \
 --checkpoint checkpoint/mesh/MB_train_VEHS66kpts \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train_mesh" \
---wandb_name "gt2d_66kpts_try1"
+--wandb_name "gt2d_66kpts_try2"
 
 
 ## for 3D
