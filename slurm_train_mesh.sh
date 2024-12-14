@@ -23,7 +23,7 @@ module load python/3.10.4
 module load pytorch/2.0.1
 module list
 
-conda activate motionbert
+#conda activate motionbert
 #conda install numpy==1.22.4
 
 echo "test"
