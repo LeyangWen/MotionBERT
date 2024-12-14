@@ -247,7 +247,6 @@ def train_epoch(args, opts, model, train_loader, losses_train, losses_dict, mpjp
 
 def train_with_config(args, opts):
     print(args)
-    wandb.log({"Debug-test": True})
     try:
         os.makedirs(opts.checkpoint)
         shutil.copy(opts.config, opts.checkpoint)
@@ -259,6 +258,8 @@ def train_with_config(args, opts):
     args_all = vars(opts)
     args_all['yaml_config'] = args
     wandb.init(project=opts.wandb_project, name=opts.wandb_name, config=args_all)  # Initialize a new run
+    wandb.log({"Debug-test": True})
+
     args.test_set_keyword = opts.test_set_keyword
     model_backbone = load_backbone(args)
     if args.finetune:
