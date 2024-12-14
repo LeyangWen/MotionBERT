@@ -13,11 +13,12 @@ This is the official PyTorch implementation of the paper *"[MotionBERT: A Unifie
 ## Installation
 
 ```bash
-conda create -n motionbert python=3.7 anaconda
-conda activate motionbert
+conda create -n motionbert2 python=3.7 anaconda
+conda activate motionbert2
 # Please install PyTorch according to your CUDA version.
 conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 pip install -r requirements.txt
+
 ```
 
 
