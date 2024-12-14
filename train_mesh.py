@@ -258,7 +258,6 @@ def train_with_config(args, opts):
     args_all = vars(opts)
     args_all['yaml_config'] = args
     wandb.init(project=opts.wandb_project, name=opts.wandb_name, config=args_all)  # Initialize a new run
-    wandb.log({"Debug-test": True})
 
     args.test_set_keyword = opts.test_set_keyword
     model_backbone = load_backbone(args)
@@ -417,12 +416,13 @@ def train_with_config(args, opts):
                     train_epoch(args, opts, model, train_loader_pw3d, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch)
                 test_loss_pw3d, test_mpjpe_pw3d, test_pa_mpjpe_pw3d, test_mpve_pw3d, test_losses_dict_pw3d = validate(test_loader_pw3d, model, criterion, 'pw3d')
 
-            wandb.log({
-                'losses_train.avg': losses_train.avg,
-                'mpjpes.avg': mpjpes.avg,
-                'mpves.avg': mpves.avg,
-                
-            }, step=epoch + 1)
+            # wandb.log({
+            #     'losses_train.avg': losses_train.avg,
+            #     'mpjpes.avg': mpjpes.avg,
+            #     'mpves.avg': mpves.avg,
+            #
+            # }, step=epoch + 1)
+            print(f"Epoch {epoch}: losses_train.avg: {losses_train.avg}, mpjpes.avg: {mpjpes.avg}, mpves.avg: {mpves.avg}")
                 
             # Decay learning rate exponentially
             scheduler.step()

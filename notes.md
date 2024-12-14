@@ -108,6 +108,7 @@ Goal: format VEHS-7M mesh dataset and train on our own, get 66 GT 2D keypoints -
     - Many hard coded instances of root index, need to change to 57
   - Error: wandb--pandas--numpy version compatibility
     - uninstalled and downgraded wandb to `pip install wandb==0.16.3`
+    - Given up, just remove wandb.log
 
 ### 20240921
 - env setup on mac, use 3.8 python, replace chumpy `pip install git+https://github.com/mattloper/chumpy`
