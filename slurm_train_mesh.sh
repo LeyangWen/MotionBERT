@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 #SBATCH --job-name=MB_train_mesh
 #SBATCH --output=output_slurm/train_log_mesh.txt
 #SBATCH --error=output_slurm/train_error_mesh.txt
@@ -23,7 +23,8 @@ module load python/3.10.4
 module load pytorch/2.0.1
 module list
 
-#conda activate motionbert
+conda activate motionbert
+#conda install numpy==1.22.4
 
 echo "test"
 # rm -rf checkpoint/mesh/MB_train_VEHS66kpts_try1

@@ -247,6 +247,7 @@ def train_epoch(args, opts, model, train_loader, losses_train, losses_dict, mpjp
 
 def train_with_config(args, opts):
     print(args)
+    wandb.log({"Debug-test": True})
     try:
         os.makedirs(opts.checkpoint)
         shutil.copy(opts.config, opts.checkpoint)
