@@ -36,7 +36,8 @@ python train_mesh.py \
 --checkpoint checkpoint/mesh/MB_train_VEHS66kpts \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train_mesh" \
---wandb_name "gt2d_66kpts_try2"
+--wandb_name "gt2d_66kpts_try2_section2" \
+--resume checkpoint/mesh/MB_train_VEHS66kpts/latest_epoch.bin \
 
 
 ## for 3D
