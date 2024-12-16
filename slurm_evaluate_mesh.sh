@@ -27,12 +27,14 @@ module list
 #conda activate motionbert
 
 # Dataset
-config_file="configs/mesh/MB_train_VEHS_3D.yaml"
+#config_file="configs/mesh/MB_train_VEHS_3D.yaml"  # 3D kpts 17
+config_file="configs/mesh/MB_train_VEHS_6D.yaml"  # 6D kpts 66 v2
 #config_file="configs/mesh/MB_ft_h36m.yaml"
 
 # Checkpoint
-checkpoint_bin="checkpoint/mesh/MB_train_VEHSR3/latest_epoch.bin"
-checkpoint_bin="checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/best_epoch.bin"
+#checkpoint_bin="checkpoint/mesh/MB_train_VEHSR3/latest_epoch.bin"  # 3D kpts 17
+checkpoint_bin="checkpoint/mesh/MB_train_VEHS66kpts/latest_epoch.bin"  # 6D kpts 66 v2
+#checkpoint_bin="checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/best_epoch.bin"
 
 echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
@@ -41,10 +43,9 @@ echo "checkpoint_bin: $checkpoint_bin"
 python -u train_mesh.py \
 --config "$config_file" \
 --evaluate "$checkpoint_bin" \
---test_set_keyword validate \
+--test_set_keyword test \
 --wandb_project "MotionBert_mesh_eval" \
---wandb_name "GT_input_MB_mesh_validate_17_VEHS7M_val" \
+--wandb_name "GT_input_MB_mesh_test_66_VEHS7M" \
 --note "" \
---fps 20
-
-#--out_path "experiment/VEHS-7M_mesh" \
+--fps 20 \
+--out_path "experiment/VEHS-7M_mesh_66" \
