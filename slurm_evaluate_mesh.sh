@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=MB_mesh_eval
-#SBATCH --output=output_slurm/eval_log.txt
-#SBATCH --error=output_slurm/eval_error.txt
+#SBATCH --output=output_slurm/eval_mesh_log.txt
+#SBATCH --error=output_slurm/eval_mesh_error.txt
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
@@ -45,9 +45,13 @@ python -u train_mesh.py \
 --evaluate "$checkpoint_bin" \
 --test_set_keyword test \
 --wandb_project "MotionBert_mesh_eval" \
---note "" \
+--note "try 2" \
 --fps 20 \
---wandb_name "GT_input_MB_mesh_test_17_VEHS7M" \
---out_path "/scratch/shdpm_root/shdpm0/wenleyan/17kpts" \
+--wandb_name "GT_input_MB_mesh_test_66_VEHS7M" \
+--out_path "/scratch/shdpm_root/shdpm0/wenleyan/66kpts" \
+
+#--wandb_name "GT_input_MB_mesh_test_17_VEHS7M" \
+#--out_path "/scratch/shdpm_root/shdpm0/wenleyan/17kpts" \
+
 
 # if too big, save to scratch: /scratch/shdpm_root/shdpm0/wenleyan/
