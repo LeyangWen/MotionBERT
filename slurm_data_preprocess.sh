@@ -27,17 +27,17 @@ module list
 
 
 # Lab vid - Hand-21
-python -u tools/convert_VEHS_hand.py \
---dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Lab_hand' \
---dt_file 'lab_rtmpose_hand_for_MB.pkl' \
---test_set_keyword 'test' \
---root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Lab_hand' > output_slurm/Rokoko_hand.out
-
-python -u tools/convert_VEHS_hand.py \
---dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Lab_hand' \
---dt_file 'lab_rtmpose_hand_for_MB.pkl' \
---test_set_keyword 'validate' \
---root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Lab_hand'
+#python -u tools/convert_VEHS_hand.py \
+#--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Lab_hand' \
+#--dt_file 'lab_rtmpose_hand_for_MB.pkl' \
+#--test_set_keyword 'test' \
+#--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Lab_hand' > output_slurm/Rokoko_hand.out
+#
+#python -u tools/convert_VEHS_hand.py \
+#--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Lab_hand' \
+#--dt_file 'lab_rtmpose_hand_for_MB.pkl' \
+#--test_set_keyword 'validate' \
+#--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Lab_hand'
 
 ## Rokoko - Hand-21
 #python -u tools/convert_VEHS_hand.py \
@@ -65,10 +65,10 @@ python -u tools/convert_VEHS_hand.py \
 #python -u tools/convert_h36m.py > output_slurm/preprocess_H36M.out
 
 # VEHSR3
-#python -u tools/convert_VEHSR3.py \
-#--dt_root 'data/motion3d/MB3D_VEHS_25d/3DPose' \
-#--dt_file 'VEHS_3D_downsample2_keep1.pkl' \
-#--root_path 'data/motion3d/MB3D_VEHS_25d/3DPose' > output_slurm/preprocess.out
+python -u tools/convert_VEHSR3.py \
+--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/3DPose' \
+--dt_file 'VEHS_3D_downsample2_keep1.pkl' \
+--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/3DPose' > output_slurm/preprocess.out
 
 # VEHSR3 - 6D
 #python -u tools/convert_VEHSR3.py \
