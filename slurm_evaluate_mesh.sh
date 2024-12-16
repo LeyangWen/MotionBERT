@@ -50,5 +50,6 @@ python -u train_mesh.py \
 --wandb_name "GT_input_MB_mesh_test_66_VEHS7M" \
 --out_path "experiment/VEHS-7M_mesh_66" \
 
+# if too big, save to scratch: /scratch/shdpm_root/shdpm0/wenleyan/
 #--wandb_name "GT_input_MB_mesh_test_17_VEHS7M" \
 #--out_path "experiment/VEHS-7M_mesh_17" \

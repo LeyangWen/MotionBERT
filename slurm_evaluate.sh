@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name=MB_eval
-#SBATCH --output=output_slurm/eval_log.txt
-#SBATCH --error=output_slurm/eval_error.txt
+#SBATCH --output=output_slurm/eval_pose_log.txt
+#SBATCH --error=output_slurm/eval_pose_error.txt
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
