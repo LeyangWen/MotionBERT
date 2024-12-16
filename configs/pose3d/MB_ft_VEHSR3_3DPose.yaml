@@ -33,6 +33,8 @@ sample_stride: 1
 num_joints: 17
 no_conf: False
 gt_2d: True
+res_w: 1920
+res_h: 1200
 
 # Loss
 lambda_3d_velocity: 20.0
