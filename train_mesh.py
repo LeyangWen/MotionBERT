@@ -75,7 +75,6 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
     mpjpes = AverageMeter()
     mpves = AverageMeter()
     results = defaultdict(list)
-    results_gt = defaultdict(list)
     smpl = SMPL(args.data_root, batch_size=1).cuda()
     if dataset_name == 'VEHS7M':
         J_regressor = smpl.J_regressor_VEHS7M_66kpts
@@ -146,9 +145,9 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
             results['kp_3d'].append(output[0]['kp_3d'])
             results['verts'].append(output[0]['verts'])
             results['theta'].append(output[0]['theta'])
-            results_gt['kp_3d_gt'].append(batch_gt['kp_3d'])
-            results_gt['verts_gt'].append(batch_gt['verts'])
-            results_gt['theta_gt'].append(batch_gt['theta'])
+            results['kp_3d_gt'].append(batch_gt['kp_3d'])
+            results['verts_gt'].append(batch_gt['verts'])
+            results['theta_gt'].append(batch_gt['theta'])
 
             # measure elapsed time
             batch_time.update(time.time() - end)
@@ -167,8 +166,6 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
     print(f'==> start concating results of {dataset_name}')
     for term in results.keys():
         results[term] = np.concatenate(results[term])
-    for term in results_gt.keys():
-        results_gt[term] = np.concatenate(results_gt[term])
     print(f'==> start evaluating {dataset_name}...')
     error_dict = evaluate_mesh(results)
     err_str = ''
@@ -179,13 +176,27 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
     if opts.out_path:
         os.makedirs(opts.out_path, exist_ok=True)
         result_file = os.path.join(opts.out_path, f'{dataset_name}_results.pkl')
+
+        # Separate the results and ground truth, so file is smaller
+        results_data = {
+            'kp_3d': results['kp_3d'],
+            'verts': results['verts'],
+            'theta': results['theta']
+        }
         with open(result_file, 'wb') as f:
-            pickle.dump(results, f)
+            pickle.dump(results_data, f)
+
+        gt_data = {
+            'kp_3d_gt': results['kp_3d_gt'],
+            'verts_gt': results['verts_gt'],
+            'theta_gt': results['theta_gt']
+        }
         gt_file = os.path.join(opts.out_path, f'{dataset_name}_gt.pkl')
         with open(gt_file, 'wb') as f:
-            pickle.dump(results_gt, f)
+            pickle.dump(gt_data, f)
         # render_and_save(results['verts'], osp.join(opts.out_path, f'{dataset_name}_results.mp4'), keep_imgs=False, fps=opts.fps, draw_face=True)
-    return losses.avg, error_dict['mpjpe'], error_dict['pa_mpjpe'], error_dict['mpve'], losses_dict
+    # return losses.avg, error_dict['mpjpe'], error_dict['pa_mpjpe'], error_dict['mpve'], losses_dict  # only 14 joints mpjpe, same mpve
+    return losses.avg, error_dict['mpjpe_17j'], error_dict['pa_mpjpe_17j'], error_dict['mpve'], losses_dict  # full 17/66 joints mpjpe, same mpve
 
 
 def train_epoch(args, opts, model, train_loader, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch):

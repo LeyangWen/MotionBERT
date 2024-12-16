@@ -45,7 +45,10 @@ python -u train_mesh.py \
 --evaluate "$checkpoint_bin" \
 --test_set_keyword test \
 --wandb_project "MotionBert_mesh_eval" \
---wandb_name "GT_input_MB_mesh_test_66_VEHS7M" \
 --note "" \
 --fps 20 \
+--wandb_name "GT_input_MB_mesh_test_66_VEHS7M" \
 --out_path "experiment/VEHS-7M_mesh_66" \
+
+#--wandb_name "GT_input_MB_mesh_test_17_VEHS7M" \
+#--out_path "experiment/VEHS-7M_mesh_17" \
