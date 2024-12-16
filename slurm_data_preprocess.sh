@@ -68,6 +68,7 @@ module list
 python -u tools/convert_VEHSR3.py \
 --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/3DPose' \
 --dt_file 'VEHS_3D_downsample2_keep1.pkl' \
+#--test_set_keyword 'test' \
 --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/3DPose' > output_slurm/preprocess.out
 
 # VEHSR3 - 6D
