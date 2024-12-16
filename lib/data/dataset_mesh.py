@@ -27,7 +27,12 @@ class SMPLDataset(Dataset):
             datareader = DataReaderVEHSR3(n_frames=self.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=self.clip_len, dt_root=args.data_root,
                                           dt_file=args.dt_file_VEHS7M, test_set_keyword=args.test_set_keyword, num_joints=args.num_joints)
         elif dataset=="h36m":  # old
-            datareader = DataReaderH36M(n_frames=self.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=self.clip_len, dt_root=args.data_root, dt_file=args.dt_file_h36m)
+            if "VEHS" in args.dt_file_h36m:  # 17 joints but using VEHS7M data
+                datareader = DataReaderVEHSR3(n_frames=self.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride,
+                                              data_stride_test=self.clip_len, dt_root=args.data_root,
+                                              dt_file=args.dt_file_VEHS7M, test_set_keyword=args.test_set_keyword, num_joints=args.num_joints)
+            else:
+                datareader = DataReaderH36M(n_frames=self.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=self.clip_len, dt_root=args.data_root, dt_file=args.dt_file_h36m)
         elif dataset=="coco":
             datareader = DataReaderMesh(n_frames=1, sample_stride=args.sample_stride, data_stride_train=1, data_stride_test=1, dt_root=args.data_root, dt_file=args.dt_file_coco, res=[640, 640])
         elif dataset=="pw3d":
