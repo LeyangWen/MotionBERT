@@ -475,6 +475,7 @@ def train_with_config(args, opts):
         os.makedirs(opts.out_path, exist_ok=True)
         np.save('%s/X3D.npy' % (opts.out_path), results_all)
         # render_and_save(results_all, '%s/X3D.mp4' % (opts.out_path), keep_imgs=False, fps=50)
+        print(f'Output saved to {opts.out_path}')
         
         wandb.log({
             'Error P1': e1,

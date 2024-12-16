@@ -27,13 +27,13 @@ module list
 #conda activate motionbert
 
 # Dataset
-#config_file="configs/mesh/MB_train_VEHS_3D.yaml"  # 3D kpts 17
-config_file="configs/mesh/MB_train_VEHS_6D.yaml"  # 6D kpts 66 v2
+config_file="configs/mesh/MB_train_VEHS_3D.yaml"  # 3D kpts 17
+#config_file="configs/mesh/MB_train_VEHS_6D.yaml"  # 6D kpts 66 v2
 #config_file="configs/mesh/MB_ft_h36m.yaml"
 
 # Checkpoint
-#checkpoint_bin="checkpoint/mesh/MB_train_VEHSR3/latest_epoch.bin"  # 3D kpts 17
-checkpoint_bin="checkpoint/mesh/MB_train_VEHS66kpts/latest_epoch.bin"  # 6D kpts 66 v2
+checkpoint_bin="checkpoint/mesh/MB_train_VEHSR3/latest_epoch.bin"  # 3D kpts 17
+#checkpoint_bin="checkpoint/mesh/MB_train_VEHS66kpts/latest_epoch.bin"  # 6D kpts 66 v2
 #checkpoint_bin="checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/best_epoch.bin"
 
 echo "config_file: $config_file"
@@ -47,9 +47,7 @@ python -u train_mesh.py \
 --wandb_project "MotionBert_mesh_eval" \
 --note "" \
 --fps 20 \
---wandb_name "GT_input_MB_mesh_test_66_VEHS7M" \
---out_path "/scratch/shdpm_root/shdpm0/wenleyan" \
+--wandb_name "GT_input_MB_mesh_test_17_VEHS7M" \
+--out_path "/scratch/shdpm_root/shdpm0/wenleyan/17kpts" \
 
 # if too big, save to scratch: /scratch/shdpm_root/shdpm0/wenleyan/
-#--wandb_name "GT_input_MB_mesh_test_17_VEHS7M" \
-#--out_path "experiment/VEHS-7M_mesh_17" \
