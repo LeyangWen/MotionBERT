@@ -40,7 +40,7 @@ def parse_args():
     parser.add_argument('-r', '--resume', default='', type=str, metavar='FILENAME', help='checkpoint to resume (file name)')
     parser.add_argument('-e', '--evaluate', default='', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
     parser.add_argument('-o', '--out_path', type=str, help='eval pose output path', default=False)
-    parser.add_argument('--fps', default=100)
+    parser.add_argument('--fps', default=20)
     parser.add_argument('-freq', '--print_freq', default=100)
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
@@ -378,6 +378,8 @@ def train_with_config(args, opts):
         chk_filename = opts.evaluate if opts.evaluate else opts.resume
         print('Loading checkpoint', chk_filename)
         checkpoint = torch.load(chk_filename, map_location=lambda storage, loc: storage)
+        # print model layer keyts
+        print('Model keys:', model.module.state_dict().keys())
         model.load_state_dict(checkpoint['model'], strict=True)
     if not opts.evaluate:
         optimizer = optim.AdamW(

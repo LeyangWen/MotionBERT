@@ -110,6 +110,19 @@ Goal: format VEHS-7M mesh dataset and train on our own, get 66 GT 2D keypoints -
     - uninstalled and downgraded wandb to `pip install wandb==0.16.3`
     - slurm's numpy version is too low for panda, but can't be downgraded easily since it is not writable
     - Given up, just remove wandb.log for now and print out
+  - Added case for 17 kpts using VEHS7M dataset 
+  - Error:
+  ```
+  File "/home/wenleyan/projects/MotionBERT/train_mesh.py", line 381, in train_with_config
+    model.load_state_dict(checkpoint['model'], strict=True)
+  File "/sw/pkgs/arc/python/3.10.4/pytorch/2.0.1/lib/python3.10/site-packages/torch/nn/modules/module.py", line 2041, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+  RuntimeError: Error(s) in loading state_dict for DataParallel:
+      Missing key(s) in state_dict: "module.head.smpl.J_regressor_VEHS7M_66kpts". 
+  ```
+    - Checked bin, have: `module.head.smpl.J_regressor_extra`, `module.head.smpl.J_regressor_h36m`, `module.head.smpl.vertex_joint_selector.extra_joints_idxs`
+    - Checked model, also not loading `J_regressor_VEHS7M_66kpts` in this case
+    - Todo: find out this, also about extra joints in (utils_smpl)[lib/utils/utils_smpl.py]
 
 ### 20240921
 - env setup on mac, use 3.8 python, replace chumpy `pip install git+https://github.com/mattloper/chumpy`
