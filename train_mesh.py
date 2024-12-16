@@ -77,7 +77,11 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
     results = defaultdict(list)
     results_gt = defaultdict(list)
     smpl = SMPL(args.data_root, batch_size=1).cuda()
-    J_regressor = smpl.J_regressor_h36m
+    if dataset_name == 'VEHS7M':
+        J_regressor = smpl.J_regressor_VEHS7M
+    else:  # e.g., h36m
+        J_regressor = smpl.J_regressor_h36m
+
     with torch.no_grad():
         end = time.time()
         for idx, (batch_input, batch_gt) in tqdm(enumerate(test_loader)):
