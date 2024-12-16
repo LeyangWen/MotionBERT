@@ -291,6 +291,8 @@ def train_with_config(args, opts):
 
     if hasattr(args, "dt_file_VEHS7M"):
         J_regressor_choice = "VEHS7M"
+    else:
+        J_regressor_choice = "h36m"
     model = MeshRegressor(args, backbone=model_backbone, dim_rep=args.dim_rep, hidden_dim=args.hidden_dim, dropout_ratio=args.dropout, num_joints=args.num_joints, J_regressor_choice=J_regressor_choice)
 
     criterion = MeshLoss(loss_type = args.loss_type, root_idx=args.root_idx)
