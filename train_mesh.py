@@ -451,8 +451,8 @@ def train_with_config(args, opts):
 
 
     if opts.evaluate:
-        if hasattr(args, "dt_file_VEHS7M") and epoch < args.warmup_h36m:
-            test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, test_losses_dict = validate(test_loader_VEHS7M, model, criterion, 'VEHS7M')
+        if hasattr(args, "dt_file_VEHS7M"):
+            test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, _ = validate(test_loader_VEHS7M, model, criterion, 'VEHS7M')
         if hasattr(args, "dt_file_h36m"):
             test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, _ = validate(test_loader, model, criterion, 'h36m')
         if hasattr(args, "dt_file_pw3d"):
