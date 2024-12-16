@@ -29,7 +29,7 @@ def save_clips(subset_name, root_path, train_data, train_labels):
 parser = argparse.ArgumentParser()
 parser.add_argument('--dt_root', type=str, default='data/motion3d/')
 parser.add_argument('--dt_file', type=str, default='h36m_sh_conf_cam_source_final.pkl')
-parser.add_argument('--root_path', type=str, default='data/motion3d/MB3D_f243s81/H36M-SH"')
+parser.add_argument('--root_path', type=str, default='data/motion3d/MB3D_f243s81/H36M-SH')
 parser.add_argument('--test_set_keyword', default='test', type=str, help='eval set name, either test or validate, only for VEHS')
 # parser.add_argument('--res_w', default='1920', type=int)
 # parser.add_argument('--res_h', default='1080', type=int)

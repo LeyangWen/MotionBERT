@@ -10,7 +10,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --partition=gpu
 ##SBATCH --partition=debug
-#SBATCH --time=00:30:00
+#SBATCH --time=02:00:00
 #SBATCH --account=shdpm0
 ##### END preamble
 ##### Run in MotionBert dir
