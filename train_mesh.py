@@ -167,6 +167,8 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
     print(f'==> start concating results of {dataset_name}')
     for term in results.keys():
         results[term] = np.concatenate(results[term])
+    for term in results_gt.keys():
+        results_gt[term] = np.concatenate(results_gt[term])
     print(f'==> start evaluating {dataset_name}...')
     error_dict = evaluate_mesh(results)
     err_str = ''
