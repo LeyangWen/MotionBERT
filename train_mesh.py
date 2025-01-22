@@ -386,7 +386,9 @@ def train_with_config(args, opts):
                 print('Checkpoint keys:', k)
 
         # print model layer keyts
-        print('Model keys:', model.module.state_dict()['module.head.smpl.J_regressor_VEHS7M_66kpts'])
+        for k in model.module.state_dict().keys():
+            if 'head' in k:
+                print('Model keys:', k)
         model.load_state_dict(checkpoint['model'], strict=True)
     if not opts.evaluate:
         optimizer = optim.AdamW(
