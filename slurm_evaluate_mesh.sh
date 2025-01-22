@@ -47,7 +47,7 @@ python -u train_mesh.py \
 --wandb_project "MotionBert_mesh_eval" \
 --note "try 2" \
 --fps 20 \
---wandb_name "GT_input_MB_mesh_test_17_VEHS7M" \
+--wandb_name "GT_input_MB_mesh_validate_17_VEHS7M" \
 --out_path "/scratch/shdpm_root/shdpm0/wenleyan/17kpts" \
 
 #--wandb_name "GT_input_MB_mesh_test_66_VEHS7M" \
