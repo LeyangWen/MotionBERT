@@ -393,8 +393,7 @@ def train_with_config(args, opts):
                 [     {"params": filter(lambda p: p.requires_grad, model.module.backbone.parameters()), "lr": args.lr_backbone},
                       {"params": filter(lambda p: p.requires_grad, model.module.head.parameters()), "lr": args.lr_head},
                 ],      lr=args.lr_backbone, 
-                        weight_decay=args.weight_decay
-        )
+                        weight_decay=args.weight_decay)
         scheduler = StepLR(optimizer, step_size=1, gamma=args.lr_decay)
         st = 0
         if opts.resume:
