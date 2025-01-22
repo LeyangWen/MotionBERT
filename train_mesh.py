@@ -293,6 +293,7 @@ def train_with_config(args, opts):
         J_regressor_choice = "VEHS7M"
     else:
         J_regressor_choice = "h36m"
+    print(f"Using SMPL J_regressor: {J_regressor_choice}")
     model = MeshRegressor(args, backbone=model_backbone, dim_rep=args.dim_rep, hidden_dim=args.hidden_dim, dropout_ratio=args.dropout, num_joints=args.num_joints, J_regressor_choice=J_regressor_choice)
 
     criterion = MeshLoss(loss_type = args.loss_type, root_idx=args.root_idx)
@@ -379,7 +380,7 @@ def train_with_config(args, opts):
         print('Loading checkpoint', chk_filename)
         checkpoint = torch.load(chk_filename, map_location=lambda storage, loc: storage)
         # print model layer keyts
-        print('Model keys:', model.module.state_dict().keys())
+        print('Model keys:', model.module.state_dict()['module.head.smpl.J_regressor_VEHS7M_66kpts'])
         model.load_state_dict(checkpoint['model'], strict=True)
     if not opts.evaluate:
         optimizer = optim.AdamW(
