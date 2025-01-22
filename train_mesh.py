@@ -381,11 +381,10 @@ def train_with_config(args, opts):
         checkpoint = torch.load(chk_filename, map_location=lambda storage, loc: storage)
 
         # print checkpoint key
-        print('Checkpoint keys:', checkpoint.keys())
-        print(1)
-        print('Checkpoint keys:', checkpoint['model'].keys())
-        print(2)
-        print('Checkpoint keys:', checkpoint['model']['head'].keys())
+        for k in checkpoint['model'].keys():
+            if 'head' in k:
+                print('Checkpoint keys:', k)
+
         # print model layer keyts
         print('Model keys:', model.module.state_dict()['module.head.smpl.J_regressor_VEHS7M_66kpts'])
         model.load_state_dict(checkpoint['model'], strict=True)
