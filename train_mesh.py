@@ -389,11 +389,7 @@ def train_with_config(args, opts):
         # for k in model.module.state_dict().keys():  # extra key
         #     if 'head' in k:
         #         print('Model keys:', k)
-
-        if 'head.smpl.J_regressor_VEHS7M_66kpts' in checkpoint['model']:
-            del checkpoint['model']['head.smpl.J_regressor_VEHS7M_66kpts']
-
-        model.load_state_dict(checkpoint['model'], strict=True)
+        model.load_state_dict(checkpoint['model'], strict=False)
     if not opts.evaluate:
         optimizer = optim.AdamW(
                 [     {"params": filter(lambda p: p.requires_grad, model.module.backbone.parameters()), "lr": args.lr_backbone},
