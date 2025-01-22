@@ -380,15 +380,19 @@ def train_with_config(args, opts):
         print('Loading checkpoint', chk_filename)
         checkpoint = torch.load(chk_filename, map_location=lambda storage, loc: storage)
 
-        # print checkpoint key
-        for k in checkpoint['model'].keys():
-            if 'head' in k:
-                print('Checkpoint keys:', k)
+        # # print checkpoint key
+        # for k in checkpoint['model'].keys():
+        #     if 'head' in k:
+        #         print('Checkpoint keys:', k)
+        #
+        # # print model layer keyts
+        # for k in model.module.state_dict().keys():  # extra key
+        #     if 'head' in k:
+        #         print('Model keys:', k)
 
-        # print model layer keyts
-        for k in model.module.state_dict().keys():
-            if 'head' in k:
-                print('Model keys:', k)
+        if 'head.smpl.J_regressor_VEHS7M_66kpts' in checkpoint['model']:
+            del checkpoint['model']['head.smpl.J_regressor_VEHS7M_66kpts']
+
         model.load_state_dict(checkpoint['model'], strict=True)
     if not opts.evaluate:
         optimizer = optim.AdamW(
