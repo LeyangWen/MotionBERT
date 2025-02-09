@@ -115,6 +115,35 @@ def get_limb_lens(x, args=False):
                     [21, 10], [9, 11], [10, 12],
                     [11, 13], [12, 14], [21, 22],
                     [22, 23]]
+    elif args.joint_format.upper() == 'RTM-37':
+        limbs_id = [
+            [22, 0],   # C7 to PELVIS
+            [0, 3],    # PELVIS to RHIP
+            [0, 4],    # PELVIS to LHIP
+            [4, 6],    # LHIP to LKNEE
+            [3, 5],    # RHIP to RKNEE
+            [5, 7],    # RKNEE to RANKLE
+            [6, 8],    # LKNEE to LANKLE
+            [7, 9],    # RANKLE to RFOOT
+            [8, 10],   # LANKLE to LFOOT
+            [11, 13],  # RHAND to RELBOW
+            [12, 14],  # LHAND to LELBOW
+            [15, 22],  # RSHOULDER to C7
+            [16, 22],  # LSHOULDER to C7
+            [13, 15],  # RELBOW to RSHOULDER
+            [14, 16],  # LELBOW to LSHOULDER
+            [22, 23],  # C7 to C7_d
+            [23, 24],  # C7_d to SS
+            [17, 20],  # HEAD to REAR
+            [17, 21],  # HEAD to LEAR
+            [17, 19],  # HEAD to HDTP
+            [25, 26],  # RAP_b to RAP_f
+            [27, 28],  # LAP_b to LAP_f (added LAP connections)
+            [29, 30],  # RLE to RME (added)
+            [31, 32],  # LLE to LME (added)
+            [33, 34],  # MCP
+            [35, 36],  # MCP
+        ]
     elif args.joint_format.upper() == 'HAND-21':
         """
             0: Wrist

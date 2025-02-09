@@ -7,7 +7,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=10g
-#SBATCH --gres=gpu:3
+#SBATCH --gres=gpu:6
 #SBATCH --time=30:00:00
 #SBATCH --account=shdpm0
 #SBATCH --partition=spgpu
@@ -25,13 +25,28 @@ module list
 
 #conda activate motionbert
 
-# Rokoko - Hand-21
+# # Rokoko - Hand-21
+# python train.py \
+# --config configs/pose3d/hand/MB_train_Rokoko.yaml \
+# --test_set_keyword validate \
+# --wandb_project "MotionBert_train_Hand" \
+# --wandb_name "Rokoko_2" \
+# --checkpoint checkpoint/pose3d/MB_train_Rokoko_hand_21 > output_slurm/train_hand.out
+
+
+# finetune RTMPose37 - VEHS
 python train.py \
---config configs/pose3d/hand/MB_train_Rokoko.yaml \
+--config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS.yaml \
+--pretrained checkpoint/pose3d/MB_ft_VEHSR3_6DPose/ \
 --test_set_keyword validate \
---wandb_project "MotionBert_train_Hand" \
---wandb_name "Rokoko_2" \
---checkpoint checkpoint/pose3d/MB_train_Rokoko_hand_21 > output_slurm/train_hand.out
+--wandb_project "MotionBert_train_RTM2D" \
+--wandb_name "37kpts_v1_try" \
+--checkpoint checkpoint/pose3d/FT_RTM_VEHS_37kpts_v1 \
+--selection best_epoch.bin \
+--discard_last_layer \
+
+# --resume checkpoint/pose3d/FT_RTM_VEHS_37kpts_v1/latest_epoch.bin \
+
 
 
 ## finetune RTMPose24 - VEHS  (config change 4 location)
@@ -47,7 +62,6 @@ python train.py \
 #--checkpoint checkpoint/pose3d/FT_RTM_VEHS_config6 \
 #--resume checkpoint/pose3d/FT_RTM_VEHS_config6/latest_epoch.bin \
 #--selection latest_epoch.bin > output_slurm/train_RTM.out
-
 
 # train scratch - VEHS
 #python -u train.py \

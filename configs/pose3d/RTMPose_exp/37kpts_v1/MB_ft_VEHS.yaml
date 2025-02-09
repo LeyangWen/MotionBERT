@@ -1,0 +1,56 @@
+# General  
+train_2d: False
+no_eval: False
+finetune: True
+partial_train: null
+
+# Traning 
+epochs: 120
+checkpoint_frequency: 30
+batch_size: 32
+dropout: 0.0
+learning_rate: 0.0002
+weight_decay: 0.01
+lr_decay: 0.99
+
+# Model
+maxlen: 243
+dim_feat: 512
+mlp_ratio: 2
+depth: 5
+dim_rep: 512
+num_heads: 8
+att_fuse: True
+
+# Data
+data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
+subset_list: [RTM2D_37kpts_VEHS7M]
+dt_file: VEHS_MB/RTM2D_37kpts_VEHS7M/VEHS_6D_downsample20_keep1_37_v1_RTM2D.pkl
+clip_len: 243
+data_stride: 81
+rootrel: True
+sample_stride: 1
+num_joints: 37
+joint_format: RTM-37
+no_conf: False
+gt_2d: False
+root_idx: 0
+res_w: 1920
+res_h: 1080
+
+# Loss
+lambda_3d_velocity: 20.0
+lambda_scale: 0.5
+lambda_lv: 0.05
+lambda_lg: 0.05
+lambda_a: 0.0
+lambda_av: 0.0
+
+# Augmentation
+synthetic: False
+flip: True
+mask_ratio: 0.05
+mask_T_ratio: 0.1
+noise: False
+noise_path: params/synthetic_noise.pth
+d2c_params_path: params/d2c_params.pkl

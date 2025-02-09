@@ -46,6 +46,13 @@ module list
 #--test_set_keyword 'test' \
 #--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Rokoko_hand' > output_slurm/Rokoko_hand.out
 
+# VEHS - RTMPose37 - VEHSR3
+python -u tools/convert_VEHSR3.py \
+--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M' \
+--dt_file 'VEHS_6D_downsample20_keep1_37_v1_RTM2D.pkl' \
+--test_set_keyword 'test' \
+--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M' > output_slurm/preprocess_RTM6.out
+
 # VEHS - RTMPose24 - industry inference
 #python -u tools/convert_inference.py \
 #--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry_3' \
@@ -64,12 +71,12 @@ module list
 # H36M
 #python -u tools/convert_h36m.py > output_slurm/preprocess_H36M.out
 
-# VEHSR3
-python -u tools/convert_VEHSR3.py \
---dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/3DPose' \
---dt_file 'VEHS_3D_downsample2_keep1.pkl' \
---test_set_keyword 'test' \
---root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/3DPose' > output_slurm/preprocess.out
+# # VEHSR3
+# python -u tools/convert_VEHSR3.py \
+# --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/3DPose' \
+# --dt_file 'VEHS_3D_downsample2_keep1.pkl' \
+# --test_set_keyword 'test' \
+# --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/3DPose' > output_slurm/preprocess.out
 
 # VEHSR3 - 6D
 #python -u tools/convert_VEHSR3.py \
