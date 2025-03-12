@@ -158,6 +158,40 @@ def get_limb_lens(x, args=False):
                     [0, 9], [9, 10], [10, 11], [11, 12],
                     [0, 13], [13, 14], [14, 15], [15, 16],
                     [0, 17], [17, 18], [18, 19], [19, 20]]
+    elif args.joint_format.upper() == 'UBHAND-48':
+        """
+            0: left shoulder
+            1: right shoulder
+            2: left arm
+            3: right arm
+            4: left forearm 
+            5: righ forearm
+            6: left wrist
+            7-10: left thumb
+            11-14: left index
+            15-18: left middle
+            19-22: left ring
+            23-26: left pinky
+            27: right wrist
+            28-31: right thumb
+            32-35: right index
+            36-39: right middle
+            40-43: right ring
+            44-47: right pinky
+        """
+        limbs_id = [[0, 2], [2, 4], [4, 6], 
+                    [0, 3], [3, 5], [5, 6],
+                    [6, 7], [7, 8], [8, 9], [9, 10],
+                    [6, 11], [11, 12], [12, 13], [13, 14],
+                    [6, 15], [15, 16], [16, 17], [17, 18],
+                    [6, 19], [19, 20], [20, 21], [21, 22],
+                    [6, 23], [23, 24], [24, 25], [25, 26],
+                    [27, 28], [28, 29], [29, 30], [30, 31],
+                    [27, 32], [32, 33], [33, 34], [34, 35],
+                    [27, 36], [36, 37], [37, 38], [38, 39],
+                    [27, 40], [40, 41], [41, 42], [42, 43],
+                    [27, 44], [44, 45], [45, 46], [46, 47]
+                    ]
     else:
         raise ValueError(f"args.joint_format: {args.joint_format} not recognized")
 

@@ -71,6 +71,9 @@ def flip_data(data, args=False):
     elif args.joint_format.upper() == 'HAND-21':
         left_joints = []
         right_joints = []
+    elif args.joint_format.upper() == 'UBHAND-48':
+        left_joints = [0, 2, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
+        right_joints = [1, 3, 5, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
     else:
         raise ValueError("args.joint_format not recognized")
     flipped_data = copy.deepcopy(data)
@@ -101,7 +104,7 @@ def resample(ori_len, target_len, replay=False, randomness=True):
             result = np.linspace(0, ori_len, num=target_len, endpoint=False, dtype=int)
         return result
 
-def split_clips(vid_list, n_frames, data_stride):
+def split_clips(vid_list, n_frames, data_stride, replay=False, randomness=True):
     '''
     Args:
         vid_list: source name list
@@ -128,7 +131,7 @@ def split_clips(vid_list, n_frames, data_stride):
             break
         if vid_list[i]!=vid_list[i-1]:  # if source name changes, start a new clip
             if not (vid_list[i-1] in saved):
-                resampled = resample(i-st, n_frames) + st
+                resampled = resample(i-st, n_frames, replay=replay, randomness=randomness) + st
                 result.append(resampled)
                 saved.add(vid_list[i-1])
             st = i
