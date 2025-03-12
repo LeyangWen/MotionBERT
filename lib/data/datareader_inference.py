@@ -109,3 +109,4 @@ class DataReaderInference(DataReaderVEHSR3):
         test_data =test_data[split_id_test]                # (N, 27, 17, 3)
         test_labels = test_labels[split_id_test]        # (N, 27, 17, 3)
         return train_data, test_data, train_labels, test_labels
+
