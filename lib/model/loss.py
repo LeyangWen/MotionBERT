@@ -126,23 +126,39 @@ def get_limb_lens(x, args=False):
             [6, 8],    # LKNEE to LANKLE
             [7, 9],    # RANKLE to RFOOT
             [8, 10],   # LANKLE to LFOOT
-            [11, 13],  # RHAND to RELBOW
-            [12, 14],  # LHAND to LELBOW
+            [11, 1],  # RHAND to RWRIST
+            [12, 2],  # LHAND to LWRIST         
+            [1, 13],  # RWRIST to RELBOW
+            [2, 14],  # LWRIST to LELBOW
             [15, 22],  # RSHOULDER to C7
             [16, 22],  # LSHOULDER to C7
             [13, 15],  # RELBOW to RSHOULDER
             [14, 16],  # LELBOW to LSHOULDER
             [22, 23],  # C7 to C7_d
             [23, 24],  # C7_d to SS
+            [23, 18],  # C7_d to Thorax
+            [24, 18],  # SS to Thorax
             [17, 20],  # HEAD to REAR
             [17, 21],  # HEAD to LEAR
             [17, 19],  # HEAD to HDTP
             [25, 26],  # RAP_b to RAP_f
-            [27, 28],  # LAP_b to LAP_f (added LAP connections)
-            [29, 30],  # RLE to RME (added)
-            [31, 32],  # LLE to LME (added)
+            [25, 15],  # RAP_b to RSHOULDER
+            [26, 15],  # RAP_f to RSHOULDER
+            [27, 28],  # LAP_b to LAP_f
+            [27, 16],  # LAP_b to LSHOULDER
+            [28, 16],  # LAP_f to LSHOULDER
+            [29, 30],  # RLE to RME
+            [29, 13],  # RLE to RELBOW
+            [30, 13],  # RME to RELBOW
+            [31, 32],  # LLE to LME
+            [31, 14],  # LLE to LELBOW
+            [32, 14],  # LME to LELBOW
             [33, 34],  # MCP
+            [33, 11], # RMCP to RHAND
+            [34, 11], # RMCP to RHAND
             [35, 36],  # MCP
+            [35, 12], # LMCP to LHAND
+            [36, 12], # LMCP to LHAND
         ]
     elif args.joint_format.upper() == 'HAND-21':
         """
