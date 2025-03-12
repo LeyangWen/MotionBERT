@@ -1,13 +1,13 @@
 # General  
 train_2d: False
 no_eval: False
-finetune: True
+finetune: False
 partial_train: null
 
 # Traning 
-epochs: 60
-checkpoint_frequency: 30
-batch_size: 10
+epochs: 120
+checkpoint_frequency: 60
+batch_size: 16 
 dropout: 0.0
 learning_rate: 0.0002
 weight_decay: 0.01
@@ -24,19 +24,19 @@ att_fuse: True
 
 # Data
 data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
-subset_list: [6DPose]
-dt_file: VEHS_MB/6DPose/VEHS_6D_downsample2_keep1.pkl
+subset_list: [Upper_body_48]
+dt_file: VEHS_MB/Upper_body_48/Gesture_3D_downsample1_keep3.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True
 sample_stride: 1
-num_joints: 66
+num_joints: 21
+joint_format: UBHand-48
 no_conf: False
-gt_2d: True
-joint_format: RTM-66-v1
-root_idx: 57
-res_w: 1920
-res_h: 1200
+gt_2d: False
+root_idx: 0
+res_w: 3840
+res_h: 2160
 
 # Loss
 lambda_3d_velocity: 20.0
@@ -48,7 +48,10 @@ lambda_av: 0.0
 
 # Augmentation
 synthetic: False
-flip: False # set to True for future training after adding flip index in lib/utils/utils_data.py
-mask_ratio: 0.
-mask_T_ratio: 0.
-noise: False
+flip: False
+mask_ratio: 0.0
+mask_T_ratio: 0.0
+noise: True
+noise_path: params/synthetic_noise.pth
+d2c_params_path: params/d2c_params.pkl
+

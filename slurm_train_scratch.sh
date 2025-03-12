@@ -7,8 +7,8 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=10g
-#SBATCH --gres=gpu:6
-#SBATCH --time=30:00:00
+#SBATCH --gres=gpu:5
+#SBATCH --time=24:00:00
 #SBATCH --account=shdpm0
 #SBATCH --partition=spgpu
 ##### END preamble
@@ -33,18 +33,54 @@ module list
 # --wandb_name "Rokoko_2" \
 # --checkpoint checkpoint/pose3d/MB_train_Rokoko_hand_21 > output_slurm/train_hand.out
 
+# Rokoko - UBHand48 gesture control
+# python train.py \
+# --config configs/pose3d/hand/MB_train_Rokoko.yaml \
+# --pretrained checkpoint/pose3d/MB_ft_VEHSR3_6DPose/ \
+# --test_set_keyword validate \
+# --wandb_project "MotionBert_train_Hand" \
+# --wandb_name "Rokoko_WB_exp1" \
+# --selection best_epoch.bin \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_WBHand48_checkpoints/exp1" \
+# --discard_last_layer \
+# --resume "/scratch/shdpm_root/shdpm0/wenleyan/MB_WBHand48_checkpoints/exp1/latest_epoch.bin"\
+
 
 # finetune RTMPose37 - VEHS
+
+### Pretrain  # set gt_2d in config to True
+# python train.py \
+# --pretrained checkpoint/pose3d/MB_ft_VEHSR3_6DPose/ \
+# --test_set_keyword validate \
+# --wandb_project "MotionBert_train_RTM2D" \
+# --selection best_epoch.bin \
+# --discard_last_layer \
+# --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps.yaml \
+# --wandb_name "37kpts_v2_20fps-pretrain-normal" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-pretrain-normal" \
+
+
+### Finetune   # set gt_2d in config to False
 python train.py \
---config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS.yaml \
---pretrained checkpoint/pose3d/MB_ft_VEHSR3_6DPose/ \
+--pretrained /home/wenleyan/projects/MotionBERT/checkpoint/pose3d/FT_RTM_VEHS_37kpts_v1 \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train_RTM2D" \
---wandb_name "37kpts_v1_try" \
---checkpoint checkpoint/pose3d/FT_RTM_VEHS_37kpts_v1 \
---selection best_epoch.bin \
---discard_last_layer \
+--selection pretrain_best_epoch.bin \
+--config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml \
+--wandb_name "37kpts_v2_20fps-finetune-pitch-correct" \
+--checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct" \
 
+
+# --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps.yaml \
+# --wandb_name "37kpts_v2_20fps-finetune-normal" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-normal" \
+
+
+
+
+#--discard_last_layer \
+
+# --checkpoint checkpoint/pose3d/FT_RTM_VEHS_37kpts_v1 \
 # --resume checkpoint/pose3d/FT_RTM_VEHS_37kpts_v1/latest_epoch.bin \
 
 

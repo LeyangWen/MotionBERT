@@ -5,9 +5,9 @@ finetune: True
 partial_train: null
 
 # Traning 
-epochs: 60
+epochs: 120
 checkpoint_frequency: 30
-batch_size: 10
+batch_size: 32
 dropout: 0.0
 learning_rate: 0.0002
 weight_decay: 0.01
@@ -23,32 +23,34 @@ num_heads: 8
 att_fuse: True
 
 # Data
-data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
-subset_list: [6DPose]
-dt_file: VEHS_MB/6DPose/VEHS_6D_downsample2_keep1.pkl
+data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M
+subset_list: [normal]
+dt_file: VEHS_MB/RTM2D_37kpts_VEHS7M/normal/VEHS_6D_downsample5_keep1_37_v2_RTM2D.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True
 sample_stride: 1
-num_joints: 66
+num_joints: 37
+joint_format: RTM-37
 no_conf: False
-gt_2d: True
-joint_format: RTM-66-v1
-root_idx: 57
+gt_2d: False
+root_idx: 0
 res_w: 1920
 res_h: 1200
 
 # Loss
 lambda_3d_velocity: 20.0
 lambda_scale: 0.5
-lambda_lv: 0.0
-lambda_lg: 0.0
+lambda_lv: 0.5
+lambda_lg: 0.5
 lambda_a: 0.0
 lambda_av: 0.0
 
 # Augmentation
 synthetic: False
-flip: False # set to True for future training after adding flip index in lib/utils/utils_data.py
-mask_ratio: 0.
-mask_T_ratio: 0.
+flip: True
+mask_ratio: 0.0
+mask_T_ratio: 0.0
 noise: False
+noise_path: params/synthetic_noise.pth
+d2c_params_path: params/d2c_params.pkl

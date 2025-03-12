@@ -10,7 +10,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --partition=gpu
 ##SBATCH --partition=debug
-#SBATCH --time=00:10:00
+#SBATCH --time=00:30:00
 #SBATCH --account=shdpm0
 ##### END preamble
 ##### Run in MotionBert dir
@@ -32,23 +32,25 @@ echo "cpu-2, gpu-1, mem-20"
 #config_file="configs/pose3d/MB_train_h36m.yaml"
 #config_file="configs/pose3d/MB_ft_h36m.yaml"
 #config_file="configs/pose3d/MB_train_VEHSR3.yaml"
-#config_file="configs/pose3d/MB_ft_VEHSR3_6DPose.yaml"
-config_file="configs/pose3d/MB_ft_VEHSR3_3DPose.yaml"
+# config_file="configs/pose3d/MB_ft_VEHSR3_6DPose.yaml"
+# config_file="configs/pose3d/MB_ft_VEHSR3_3DPose.yaml"
 #config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_config6.yaml"
 #config_file="configs/pose3d/RTMPose_exp/MB_ft_inference.yaml"
 #config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_tilt_correct.yaml"
 #config_file="configs/pose3d/hand/MB_train_Rokoko.yaml"
 #config_file="configs/pose3d/hand/MB_infer_lab_RTMinput.yaml"  # infer should use infer code
+config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS.yaml"
 
 # Checkpoint
 #checkpoint_bin="checkpoint/pose3d/MB_train_h36m/best_epoch.bin"
-#checkpoint_bin="checkpoint/pose3d/MB_ft_VEHSR3_6DPose/best_epoch.bin"
-checkpoint_bin="checkpoint/pose3d/MB_ft_VEHSR3_3DPose/best_epoch.bin"
+# checkpoint_bin="checkpoint/pose3d/MB_ft_VEHSR3_6DPose/best_epoch.bin"
+# checkpoint_bin="checkpoint/pose3d/MB_ft_VEHSR3_3DPose/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6_GT2d_true/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_tilt_corrected/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/MB_train_Rokoko_hand_21/latest_epoch.bin"
+checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/exp6/best_epoch.bin"
 
 
 echo "config_file: $config_file"
@@ -58,9 +60,9 @@ echo "checkpoint_bin: $checkpoint_bin"
 python -u train.py \
 --config "$config_file" \
 --wandb_project "MotionBert_eval" \
---wandb_name "cpt_VEHS3D_ft_dataset_VEHS3D"  \
+--wandb_name "cpt_VEHS6D3-37kptsv1_ft_data_VEHS6D_test"  \
 --note "" \
---out_path "experiment/VEHS-7M_17" \
+--out_path /scratch/shdpm_root/shdpm0/wenleyan/37kpts/6DPose/test \
 --test_set_keyword test \
 --evaluate "$checkpoint_bin" \
 

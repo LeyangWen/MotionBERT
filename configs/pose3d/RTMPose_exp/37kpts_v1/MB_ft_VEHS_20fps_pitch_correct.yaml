@@ -23,9 +23,9 @@ num_heads: 8
 att_fuse: True
 
 # Data
-data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
-subset_list: [RTM2D_37kpts_VEHS7M]
-dt_file: VEHS_MB/RTM2D_37kpts_VEHS7M/VEHS_6D_downsample20_keep1_37_v1_RTM2D.pkl
+data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M
+subset_list: [pitch_correct]
+dt_file: VEHS_MB/RTM2D_37kpts_VEHS7M/pitch_correct/VEHS_6D_downsample5_keep1_37_v2_pitch_correct_RTM2D.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True
@@ -36,21 +36,21 @@ no_conf: False
 gt_2d: False
 root_idx: 0
 res_w: 1920
-res_h: 1080
+res_h: 1200
 
 # Loss
 lambda_3d_velocity: 20.0
 lambda_scale: 0.5
-lambda_lv: 0.05
-lambda_lg: 0.05
+lambda_lv: 0.5
+lambda_lg: 0.5
 lambda_a: 0.0
 lambda_av: 0.0
 
 # Augmentation
 synthetic: False
 flip: True
-mask_ratio: 0.05
-mask_T_ratio: 0.1
+mask_ratio: 0.0
+mask_T_ratio: 0.0
 noise: False
 noise_path: params/synthetic_noise.pth
 d2c_params_path: params/d2c_params.pkl

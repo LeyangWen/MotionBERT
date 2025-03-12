@@ -41,11 +41,8 @@ def parse_args():
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
     parser.add_argument('--test_set_keyword', default='validate', type=str, help='eval set name, either test or validate, only for VEHS')
-    parser.add_argument('--wandb_project', default=None, type=str, help='wandb project name')
-    parser.add_argument('--wandb_name', default='VEHS_ft_train', type=str, help='wandb run name')
-    parser.add_argument('--note', default='', type=str, help='wandb notes')
     parser.add_argument('--res_w', type=int, default=1920)
-    parser.add_argument('--res_h', type=int, default=1080)
+    parser.add_argument('--res_h', type=int, default=1200)
     opts = parser.parse_args()
     return opts
 

@@ -4,6 +4,7 @@
 - add `joint_format: Hand-21` and `root_idx: 0`
 - `d2c_params_path` for mask, `noise_path` for noise 
 - res_w, res_h
+- root idx set
 ## All hardcoded instances of 17 keypoints
 - [x] When `arg.flip` is set to `True`, left and right keypoints idx in `lib\utils\utils_data.py` - `flip_data`
 - [x] When `loss limb` is used, the limb index in `lib\model\loss.py` - `get_limb_lens(x)`

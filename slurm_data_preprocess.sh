@@ -46,19 +46,34 @@ module list
 #--test_set_keyword 'test' \
 #--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Rokoko_hand' > output_slurm/Rokoko_hand.out
 
-# VEHS - RTMPose37 - VEHSR3
-python -u tools/convert_VEHSR3.py \
---dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M' \
---dt_file 'VEHS_6D_downsample20_keep1_37_v1_RTM2D.pkl' \
---test_set_keyword 'test' \
---root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M' > output_slurm/preprocess_RTM6.out
+## Rokoko - UBHand48 gesture control
+# python -u tools/convert_VEHS_UBHand.py \
+# --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Upper_body_48' \
+# --dt_file 'Gesture_3D_downsample1_keep3.pkl' \
+# --test_set_keyword 'test' \
+# --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Upper_body_48'
 
-# VEHS - RTMPose24 - industry inference
-#python -u tools/convert_inference.py \
-#--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry_3' \
-#--dt_file 'rtmpose_industry_3_no3d_j24_f20_s1_RTM2D.pkl' \
-#--test_set_keyword 'validate' \
-#--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry_3' > output_slurm/preprocess_RTM6.out
+# VEHS - RTMPose37 - VEHSR3
+# python -u tools/convert_VEHSR3.py \
+# --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M/normal' \
+# --dt_file 'VEHS_6D_downsample5_keep1_37_v2_RTM2D.pkl' \
+# --test_set_keyword 'test' \
+# --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M/normal' > output_slurm/preprocess_RTM6.out
+
+#### pitch correct version
+# python -u tools/convert_VEHSR3.py \
+# --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M/pitch_correct' \
+# --dt_file 'VEHS_6D_downsample5_keep1_37_v2_pitch_correct_RTM2D.pkl' \
+# --test_set_keyword 'validate' \
+# --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M/pitch_correct' > output_slurm/preprocess_RTM6.out
+
+# VEHS - RTMPose37 - industry inference
+# /nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry/37kpts_v3/
+python -u tools/convert_inference.py \
+--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry/37kpts_v3_20fps' \
+--dt_file 'rtmpose_v3_20fps_industry_37kpts_v2.pkl' \
+--test_set_keyword 'validate' \
+--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry/37kpts_v3_20fps' > output_slurm/preprocess_RTM6.out
 
 ## VEHS - RTMPose24 - VEHSR3
 #python -u tools/convert_VEHSR3.py \
@@ -79,7 +94,8 @@ python -u tools/convert_VEHSR3.py \
 # --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/3DPose' > output_slurm/preprocess.out
 
 # VEHSR3 - 6D
-#python -u tools/convert_VEHSR3.py \
-#--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/6DPose' \
-#--dt_file 'VEHS_6D_downsample2_keep1.pkl' \
-#--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/6DPose' > output_slurm/preprocess_6D.out
+# python -u tools/convert_VEHSR3.py \
+# --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/6DPose' \
+# --dt_file 'VEHS_6D_downsample2_keep1.pkl' \
+# --test_set_keyword 'validate' \
+# --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/6DPose' > output_slurm/preprocess_6D.out
