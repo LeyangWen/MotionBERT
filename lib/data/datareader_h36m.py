@@ -113,7 +113,7 @@ class DataReaderH36M(object):
         # self.split_id_train = split_clips(vid_list_train, self.n_frames, data_stride=self.data_stride_train)
         # self.split_id_test = split_clips(vid_list_test, self.n_frames, data_stride=self.data_stride_test)
         self.split_id_train = np.array(split_clips(vid_list_train, self.n_frames, data_stride=self.data_stride_train) )
-        self.split_id_test = np.array(split_clips(vid_list_test, self.n_frames, data_stride=self.data_stride_test, replay=True, randomness=True))
+        self.split_id_test = np.array(split_clips(vid_list_test, self.n_frames, data_stride=self.data_stride_test, replay=True))
         return self.split_id_train, self.split_id_test
     
     def get_hw(self):

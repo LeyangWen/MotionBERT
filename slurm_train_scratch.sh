@@ -62,19 +62,20 @@ module list
 
 ### Finetune   # set gt_2d in config to False
 python train.py \
---pretrained /home/wenleyan/projects/MotionBERT/checkpoint/pose3d/FT_RTM_VEHS_37kpts_v1 \
+--pretrained checkpoint/pose3d/FT_MB_release_MB_ft_h36m \
+--selection best_epoch.bin \
+--discard_last_layer \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train_RTM2D" \
---selection pretrain_best_epoch.bin \
---note "corrected limb loss wrist" \
+--note "phrase 2 directly" \
 --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps.yaml \
---wandb_name "37kpts_v2_20fps-finetune-normal-2" \
---checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-normal-2" \
+--wandb_name "37kpts_v2_20fps-finetune-normal-3" \
+--checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-normal-3" \
 
 
 # --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml \
-# --wandb_name "37kpts_v2_20fps-finetune-pitch-correct-2" \
-# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-2" \
+# --wandb_name "37kpts_v2_20fps-finetune-pitch-correct-3" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-3" \
 
 
 

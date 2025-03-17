@@ -51,8 +51,9 @@ config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_inference.yaml"
 # checkpoint_bin="checkpoint/pose3d/MB_train_Rokoko_hand_21/latest_epoch.bin"
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/exp6/best_epoch.bin"  # 5fps, also stored in Z-SSD
 # checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_37kpts_v1/20fps-finetune-normal.bin"  # 20fps, trained on RTMPose
-checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_37kpts_v1/20fps-finetune-pitch-correct.bin"  # 20fps, trained on RTMPose, pitch-correct
-
+# checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_37kpts_v1/20fps-finetune-pitch-correct.bin"  # 20fps, trained on RTMPose, pitch-correct
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-2/best_epoch.bin"  # 20fps, trained on RTMPose, pitch-correct
+checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-normal-2/best_epoch.bin"  # 20fps, trained on RTMPose, pitch-correct
 
 echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
@@ -60,7 +61,7 @@ echo "checkpoint_bin: $checkpoint_bin"
 ## inference only
 python -u infer3d_train.py \
 --config "$config_file" \
---out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct/industry" \
+--out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-normal-2/Industry" \
 --test_set_keyword validate \
 --res_w 1920 \
 --res_h 1200 \

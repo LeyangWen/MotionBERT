@@ -82,6 +82,9 @@ def flip_data(data, args=False):
     return flipped_data
 
 def resample(ori_len, target_len, replay=False, randomness=True):
+    """
+    if replay is True, randomness does not matter
+    """
     if replay:
         if ori_len > target_len:
             st = np.random.randint(ori_len-target_len)
