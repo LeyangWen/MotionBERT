@@ -14,6 +14,7 @@
 ##### END preamble
 ##### Run in MotionBert dir
 
+### gpu_mig40 -->1000GB, but can only use one
 my_job_header
 module load python3.10-anaconda
 module load cuda/11.8.0

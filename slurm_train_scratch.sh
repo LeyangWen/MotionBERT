@@ -6,9 +6,9 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=2
-#SBATCH --mem=10g
+#SBATCH --mem=20g
 #SBATCH --gres=gpu:5
-#SBATCH --time=24:00:00
+#SBATCH --time=20:00:00
 #SBATCH --account=shdpm0
 #SBATCH --partition=spgpu
 ##### END preamble
@@ -56,26 +56,28 @@ module list
 # --selection best_epoch.bin \
 # --discard_last_layer \
 # --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps.yaml \
-# --wandb_name "37kpts_v2_20fps-pretrain-normal" \
-# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-pretrain-normal" \
+# --wandb_name "37kpts_v2_20fps-pretrain-normal-2" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-pretrain-normal-1" \
 
 
 ### Finetune   # set gt_2d in config to False
 python train.py \
---pretrained checkpoint/pose3d/FT_MB_release_MB_ft_h36m \
---selection best_epoch.bin \
+--pretrained checkpoint/pose3d/MB_ft_VEHSR3_3DPose/ \
+--selection latest_epoch.bin \
 --discard_last_layer \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train_RTM2D" \
---note "phrase 2 directly" \
---config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps.yaml \
---wandb_name "37kpts_v2_20fps-finetune-normal-3" \
---checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-normal-3" \
+--note "3D-ft-last + phrase2" \
+--config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml \
+--wandb_name "37kpts_v2_20fps-finetune-pitch-correct-6" \
+--checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-6" \
+
+# --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps.yaml \
+# --wandb_name "37kpts_v2_20fps-finetune-normal-7" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-normal-7" \
 
 
-# --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml \
-# --wandb_name "37kpts_v2_20fps-finetune-pitch-correct-3" \
-# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-3" \
+
 
 
 
