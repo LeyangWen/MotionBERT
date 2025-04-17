@@ -231,7 +231,7 @@ def train_epoch(args, model_pos, train_loader, losses, optimizer, has_3d, has_gt
             loss_3d_velocity = loss_velocity(predicted_3d_pos, batch_gt)
             loss_lv = loss_limb_var(predicted_3d_pos, args)
             loss_lg = loss_limb_gt(predicted_3d_pos, batch_gt, args)
-            loss_a = loss_angle(predicted_3d_pos, batch_gt)
+            loss_a = loss_angle(predicted_3d_pos, batch_gt, args)
             loss_av = loss_angle_velocity(predicted_3d_pos, batch_gt)
             loss_total = loss_3d_pos + \
                          args.lambda_scale       * loss_3d_scale + \

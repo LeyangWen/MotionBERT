@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=20g
 #SBATCH --gres=gpu:5
-#SBATCH --time=20:00:00
+#SBATCH --time=7:00:00
 #SBATCH --account=shdpm0
 #SBATCH --partition=spgpu
 ##### END preamble
@@ -25,6 +25,24 @@ module list
 
 #conda activate motionbert
 
+
+
+#################### Viewpoint augmentation experiments
+
+########## Single camera
+### Pretrain  # set gt_2d in config to True
+python train.py \
+--pretrained /nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/MB_ft_VEHSR3_6DPose/ \
+--test_set_keyword validate \
+--wandb_project "MotionBert_train_RTM2D" \
+--selection best_epoch.bin \
+--discard_last_layer \
+--config configs/pose3d/RTMPose_exp/37kpts_v1/viewpoint_aug/MB_ft_VEHS_20fps.yaml \
+--wandb_name "37kpts_v2_20fps-pretrain-normal-oneCam-1" \
+--checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-pretrain-normal-oneCam-1" \
+
+
+#################### Hand
 # # Rokoko - Hand-21
 # python train.py \
 # --config configs/pose3d/hand/MB_train_Rokoko.yaml \
@@ -50,7 +68,7 @@ module list
 
 ### Pretrain  # set gt_2d in config to True
 # python train.py \
-# --pretrained checkpoint/pose3d/MB_ft_VEHSR3_6DPose/ \
+# --pretrained /nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/MB_ft_VEHSR3_6DPose/ \
 # --test_set_keyword validate \
 # --wandb_project "MotionBert_train_RTM2D" \
 # --selection best_epoch.bin \
@@ -61,16 +79,16 @@ module list
 
 
 ### Finetune   # set gt_2d in config to False
-python train.py \
---pretrained checkpoint/pose3d/MB_ft_VEHSR3_3DPose/ \
---selection latest_epoch.bin \
---discard_last_layer \
---test_set_keyword validate \
---wandb_project "MotionBert_train_RTM2D" \
---note "3D-ft-last + phrase2" \
---config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml \
---wandb_name "37kpts_v2_20fps-finetune-pitch-correct-6" \
---checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-6" \
+# python train.py \
+# --pretrained /nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/MB_ft_VEHSR3_3DPose/ \
+# --selection latest_epoch.bin \
+# --discard_last_layer \
+# --test_set_keyword validate \
+# --wandb_project "MotionBert_train_RTM2D" \
+# --note "Angle loss 5.0 0.5" \
+# --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml \
+# --wandb_name "37kpts_v2_20fps-finetune-pitch-correct-angleLoss-2" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-angleLoss-2" \
 
 # --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps.yaml \
 # --wandb_name "37kpts_v2_20fps-finetune-normal-7" \

@@ -3,6 +3,7 @@ import torch.nn as nn
 import numpy as np
 import torch.nn.functional as F
 import warnings
+from .SkeletonAngles import VEHS37SkeletonAngles
 
 # Numpy-based errors
 
@@ -250,17 +251,24 @@ def loss_joint(predicted, target):
     assert predicted.shape == target.shape
     return nn.L1Loss()(predicted, target)
 
-def get_angles(x):
+def get_angles(x, args=False):
     '''
         Input: (N, T, 17, 3)
         Output: (N, T, 16)
     '''
-    warnings.warn('WARNING: get_angles is set for H36M joint index now, if the angle weight is not 0 and you are using different joint idx, need to modify in loss.py')
+    if args and args.joint_format.upper() == 'RTM-37':
+        # run through SkeletonAngles, eary return
+        joint_angles = VEHS37SkeletonAngles(x)
+        return joint_angles.get_angles()
+    elif args == False or args.joint_format.upper() == 'H36M':
+        pass  # run the main code
+    else:
+        warnings.warn('WARNING: get_angles is set for H36M joint index now, if the angle weight is not 0 and you are using different joint idx, need to modify in loss.py')
     limbs_id = [[0,1], [1,2], [2,3],
-         [0,4], [4,5], [5,6],
-         [0,7], [7,8], [8,9], [9,10],
-         [8,11], [11,12], [12,13],
-         [8,14], [14,15], [15,16]
+        [0,4], [4,5], [5,6],
+        [0,7], [7,8], [8,9], [9,10],
+        [8,11], [11,12], [12,13],
+        [8,14], [14,15], [15,16]
         ]
     angle_id = [[ 0,  3],
                 [ 0,  6],
@@ -287,23 +295,23 @@ def get_angles(x):
     angle_cos = F.cosine_similarity(angles[:,:,:,0,:], angles[:,:,:,1,:], dim=-1)
     return torch.acos(angle_cos.clamp(-1+eps, 1-eps)) 
 
-def loss_angle(x, gt):
+def loss_angle(x, gt, args=False):
     '''
         Input: (N, T, 17, 3), (N, T, 17, 3)
     '''
-    limb_angles_x = get_angles(x)
-    limb_angles_gt = get_angles(gt)
+    limb_angles_x = get_angles(x, args)
+    limb_angles_gt = get_angles(gt, args)
     return nn.L1Loss()(limb_angles_x, limb_angles_gt)
 
-def loss_angle_velocity(x, gt):
+def loss_angle_velocity(x, gt, args=False):
     """
     Mean per-angle velocity error (i.e. mean Euclidean distance of the 1st derivative)
     """
     assert x.shape == gt.shape
     if x.shape[1]<=1:
         return torch.FloatTensor(1).fill_(0.)[0].to(x.device)
-    x_a = get_angles(x)
-    gt_a = get_angles(gt)
+    x_a = get_angles(x, args)
+    gt_a = get_angles(gt, args)
     x_av = x_a[:,1:] - x_a[:,:-1]
     gt_av = gt_a[:,1:] - gt_a[:,:-1]
     return nn.L1Loss()(x_av, gt_av)

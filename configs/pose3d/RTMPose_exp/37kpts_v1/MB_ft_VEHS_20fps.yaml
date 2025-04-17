@@ -33,7 +33,7 @@ sample_stride: 1
 num_joints: 37
 joint_format: RTM-37
 no_conf: False
-gt_2d: False
+gt_2d: True
 root_idx: 0
 res_w: 1920
 res_h: 1200

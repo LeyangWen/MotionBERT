@@ -7,7 +7,7 @@ partial_train: null
 # Traning 
 epochs: 120
 checkpoint_frequency: 30
-batch_size: 24
+batch_size: 32
 dropout: 0.0
 learning_rate: 0.0002
 weight_decay: 0.01
@@ -23,9 +23,11 @@ num_heads: 8
 att_fuse: True
 
 # Data
-data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M
-subset_list: [pitch_correct]
-dt_file: VEHS_MB/RTM2D_37kpts_VEHS7M/pitch_correct/VEHS_6D_downsample5_keep1_37_v2_pitch_correct_RTM2D.pkl
+# /nfs/turbo/coe-shdpm/leyang/VEHS_MB/viewpoint_augmentation/single_cam/pitch_correct/VEHS_6D_downsample5_keep1_37_oneCam.pkl
+# this_dt_root = '/'.join(path_components[:-2]) --> two overlapping
+data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/viewpoint_augmentation/single_cam
+subset_list: [normal]
+dt_file: viewpoint_augmentation/single_cam/normal/VEHS_6D_downsample5_keep1_37_oneCam.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True
@@ -33,7 +35,7 @@ sample_stride: 1
 num_joints: 37
 joint_format: RTM-37
 no_conf: False
-gt_2d: False
+gt_2d: True
 root_idx: 0
 res_w: 1920
 res_h: 1200
@@ -43,8 +45,8 @@ lambda_3d_velocity: 20.0
 lambda_scale: 0.5
 lambda_lv: 0.5
 lambda_lg: 0.5
-lambda_a: 5.0
-lambda_av: 0.5
+lambda_a: 0.0
+lambda_av: 0.0
 
 # Augmentation
 synthetic: False
