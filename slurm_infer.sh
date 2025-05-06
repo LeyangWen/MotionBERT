@@ -54,7 +54,9 @@ config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_inference.yaml"
 # checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_37kpts_v1/20fps-finetune-pitch-correct.bin"  # 20fps, trained on RTMPose, pitch-correct
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-6/best_epoch.bin"  # 20fps, trained on RTMPose, pitch-correct
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-normal-6/best_epoch.bin"  # 20fps, trained on RTMPose
-checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-angleLoss-2/best_epoch.bin"  # 20fps, angle loss
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-angleLoss-2/best_epoch.bin"  # 20fps, angle loss
+checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-9/best_epoch.bin" # 20fps, og loss
+
 
 echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
@@ -62,7 +64,7 @@ echo "checkpoint_bin: $checkpoint_bin"
 ## inference only
 python -u infer3d_train.py \
 --config "$config_file" \
---out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-angleLoss-2/Industry" \
+--out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-9/Industry_2" \
 --test_set_keyword validate \
 --res_w 1920 \
 --res_h 1200 \

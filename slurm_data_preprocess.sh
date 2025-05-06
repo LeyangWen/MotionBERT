@@ -29,12 +29,12 @@ module list
 
 #################### Viewpoint augmentation experiments
 
-########## Single camera
-python -u tools/convert_VEHSR3.py \
---dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/viewpoint_augmentation/single_cam/normal/' \
---dt_file 'VEHS_6D_downsample5_keep1_37_oneCam.pkl' \
---test_set_keyword 'validate' \
---root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/viewpoint_augmentation/single_cam/normal/'
+# ########## Single camera
+# python -u tools/convert_VEHSR3.py \
+# --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/viewpoint_augmentation/single_cam/normal/' \
+# --dt_file 'VEHS_6D_downsample5_keep1_37_oneCam.pkl' \
+# --test_set_keyword 'validate' \
+# --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/viewpoint_augmentation/single_cam/normal/'
 
 #### pitch correct version
 # /nfs/turbo/coe-shdpm/leyang/VEHS_MB/viewpoint_augmentation/single_cam/pitch_correct/VEHS_6D_downsample5_keep1_37_oneCam_pitch_correct.pkl
@@ -92,11 +92,11 @@ python -u tools/convert_VEHSR3.py \
 # --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M/pitch_correct' > output_slurm/preprocess_RTM6.out
 
 # VEHS - RTMPose37 - industry inference
-# python -u tools/convert_inference.py \
-# --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry/37kpts_v3_20fps' \
-# --dt_file 'rtmpose_v3_20fps_industry_37kpts_v2.pkl' \
-# --test_set_keyword 'validate' \
-# --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry/37kpts_v3_20fps' > output_slurm/preprocess_RTM6.out
+python -u tools/convert_inference.py \
+--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry_2/37kpts_v3_20fps' \
+--dt_file 'rtmpose_v3_20fps_industry_2_37kpts_v2.pkl' \
+--test_set_keyword 'validate' \
+--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry_2/37kpts_v3_20fps' > output_slurm/preprocess_RTM6.out
 
 ## VEHS - RTMPose24 - VEHSR3
 #python -u tools/convert_VEHSR3.py \
