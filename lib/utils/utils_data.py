@@ -66,8 +66,8 @@ def flip_data(data, args=False):
         left_joints = [3, 5, 7, 9, 11, 13,16]
         right_joints = [4, 6, 8, 10, 12, 14,19]
     elif args.joint_format.upper() == 'RTM-37':
-        left_joints = [4, 6, 8, 10, 12, 14, 16, 21, 27, 28, 31, 32, 35, 36]
-        right_joints = [3, 5, 7, 9, 11, 13, 15, 20, 25, 26, 29, 30, 33, 34]
+        left_joints = [2, 4, 6, 8, 10, 12, 14, 16, 21, 27, 28, 31, 32, 35, 36]
+        right_joints = [1, 3, 5, 7, 9, 11, 13, 15, 20, 25, 26, 29, 30, 33, 34]
     elif args.joint_format.upper() == 'HAND-21':
         left_joints = []
         right_joints = []
