@@ -22,6 +22,8 @@ module load cudnn/11.8-v8.7.0
 module load cupti/11.8.0
 module load python/3.10.4
 module load pytorch/2.0.1
+module load numpy
+module load matplotlib
 module list
 
 #conda activate motionbert
@@ -55,7 +57,12 @@ config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_inference.yaml"
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-6/best_epoch.bin"  # 20fps, trained on RTMPose, pitch-correct
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-normal-6/best_epoch.bin"  # 20fps, trained on RTMPose
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-angleLoss-2/best_epoch.bin"  # 20fps, angle loss
-checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-9/best_epoch.bin" # 20fps, og loss
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-7/best_epoch.bin" # 20fps, og loss
+
+### RTMW
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG/best_epoch.bin" # RTMWV5 2-b 20fps, og loss
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + limb loss
+checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-3-angleLoss/best_epoch.bin" # RTMWV5 2-b 20fps, og loss
 
 
 echo "config_file: $config_file"
@@ -64,7 +71,7 @@ echo "checkpoint_bin: $checkpoint_bin"
 ## inference only
 python -u infer3d_train.py \
 --config "$config_file" \
---out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-9/Industry_2" \
+--out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-3-angleLoss/Industry_both" \
 --test_set_keyword validate \
 --res_w 1920 \
 --res_h 1200 \

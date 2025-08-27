@@ -301,7 +301,10 @@ def loss_angle(x, gt, args=False):
     '''
     limb_angles_x = get_angles(x, args)
     limb_angles_gt = get_angles(gt, args)
-    return nn.L1Loss()(limb_angles_x, limb_angles_gt)
+    if False: # OG motionbert code
+        return nn.L1Loss()(limb_angles_x, limb_angles_gt)
+    else: # wen: cos sin dot product loss
+        return angle_cos_diff(limb_angles_x, limb_angles_gt)
 
 def loss_angle_velocity(x, gt, args=False):
     """
@@ -314,5 +317,17 @@ def loss_angle_velocity(x, gt, args=False):
     gt_a = get_angles(gt, args)
     x_av = x_a[:,1:] - x_a[:,:-1]
     gt_av = gt_a[:,1:] - gt_a[:,:-1]
-    return nn.L1Loss()(x_av, gt_av)
+    if False: # OG motionbert code
+        return nn.L1Loss()(x_av, gt_av)
+    else:
+        return angle_cos_diff(x_av, gt_av)
 
+
+def angle_cos_diff(angle1, angle2):
+    # angles in radians; any shape
+    a1 = angle1.float()
+    a2 = angle2.float()
+    vx = torch.stack([torch.cos(a1), torch.sin(a1)], dim=-1)
+    vg = torch.stack([torch.cos(a2), torch.sin(a2)], dim=-1)
+    cos_sim = (vx * vg).sum(dim=-1).clamp(-1.0, 1.0)  # safety clamp
+    return (1.0 - cos_sim).mean()

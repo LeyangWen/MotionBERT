@@ -22,6 +22,8 @@ module load cudnn/11.8-v8.7.0
 module load cupti/11.8.0
 module load python/3.10.4
 module load pytorch/2.0.1
+module load numpy
+module load matplotlib
 module list
 
 #conda activate motionbert
@@ -40,21 +42,27 @@ echo "cpu-2, gpu-1, mem-20"
 #config_file="configs/pose3d/hand/MB_train_Rokoko.yaml"
 #config_file="configs/pose3d/hand/MB_infer_lab_RTMinput.yaml"  # infer should use infer code
 # config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS.yaml"
-config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps.yaml"
-
+# config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps.yaml"
+config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml"
+# 
 # Checkpoint
-#checkpoint_bin="checkpoint/pose3d/MB_train_h36m/best_epoch.bin"
+# checkpoint_bin="/nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin"  # from h36m MB website
+# checkpoint_bin="/nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/MB_train_H36M_gt2D_3DPose/best_epoch.bin"  # from h36m gt2d custom trained
+# checkpoint_bin="checkpoint/pose3d/MB_train_h36m/best_epoch.bin" 
 # checkpoint_bin="checkpoint/pose3d/MB_ft_VEHSR3_6DPose/best_epoch.bin"
 # checkpoint_bin="checkpoint/pose3d/MB_ft_VEHSR3_3DPose/best_epoch.bin"
-#checkpoint_bin="checkpoint/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_config6_GT2d_true/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/FT_RTM_VEHS_tilt_corrected/best_epoch.bin"
 #checkpoint_bin="checkpoint/pose3d/MB_train_Rokoko_hand_21/latest_epoch.bin"
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/exp6/best_epoch.bin"
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-pretrain-normal-oneCam-1/best_epoch.bin"
-checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-pretrain-normal-1/best_epoch.bin"
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-pretrain-normal-1/best_epoch.bin"
 
+### RTMW
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG/best_epoch.bin" # RTMWV5 2-b 20fps, og loss
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + limb loss
+checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-3-angleLoss/best_epoch.bin" # RTMWV5 2-b 20fps, og loss
 
 echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
@@ -63,11 +71,15 @@ echo "checkpoint_bin: $checkpoint_bin"
 python -u train.py \
 --config "$config_file" \
 --wandb_project "MotionBert_eval" \
---wandb_name "cpt_VEHS6D-37kptsv1_4cam_data_VEHS6D_4cam_validate"  \
---note "4_cam, gt2d, compare to single cam" \
---out_path /scratch/shdpm_root/shdpm0/wenleyan/37kpts/4cam \
+--wandb_name "cpt_RTMWV5-2b-OGLoss_data_VEHS6D_validate-1920x1200"  \
+--note "gt2d_False-20fps-1920x1200" \
+--out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-3-angleLoss/VEHS7M-Validate" \
 --test_set_keyword validate \
 --evaluate "$checkpoint_bin" \
+
+    
+# 
+# --out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/FT_MB_release_MB_ft_h36m/VEHS7M-test-1920x1200" \
 
 #--save_trace \
 

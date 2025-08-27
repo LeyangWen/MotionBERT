@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=20g
 #SBATCH --gres=gpu:5
-#SBATCH --time=16:00:00
+#SBATCH --time=24:00:00
 #SBATCH --account=shdpm0
 #SBATCH --partition=spgpu
 ##### END preamble
@@ -21,6 +21,8 @@ module load cudnn/11.8-v8.7.0
 module load cupti/11.8.0
 module load python/3.10.4
 module load pytorch/2.0.1
+module load numpy
+module load matplotlib
 module list
 
 #conda activate motionbert
@@ -79,17 +81,40 @@ module list
 
 
 ### Finetune   # set gt_2d in config to False
+# python train.py \
+# --pretrained /nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/MB_ft_VEHSR3_3DPose/ \
+# --selection latest_epoch.bin \
+# --discard_last_layer \
+# --test_set_keyword validate \
+# --wandb_project "MotionBert_train_RTM2D" \
+# --note "default loss" \
+# --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml \
+# --wandb_name "RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
+
+
 python train.py \
 --pretrained /nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/MB_ft_VEHSR3_3DPose/ \
 --selection latest_epoch.bin \
 --discard_last_layer \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train_RTM2D" \
---note "default loss" \
---config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml \
---wandb_name "37kpts_v2_20fps-finetune-pitch-correct-9" \
---checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-9" \
---resume /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-9/latest_epoch.bin \
+--note "angle loss V2 only" \
+--config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct_2.yaml \
+--wandb_name "RTMW37kpts_v2_20fps-finetune-pitch-correct-5-angleLossV2-only" \
+--checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-angleLossV2-only" \
+
+# --note "OG loss" \
+# --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml \
+# --wandb_name "RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
+
+# --note "bone loss" \
+# --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml \
+# --wandb_name "RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss" \
+#
+# --resume /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-9/latest_epoch.bin \
 
 # --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps.yaml \
 # --wandb_name "37kpts_v2_20fps-finetune-normal-7" \

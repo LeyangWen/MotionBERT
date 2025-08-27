@@ -166,9 +166,6 @@ def evaluate(args, model_pos, test_loader, datareader, save_trace=False):
         # h36m_convert_id = [6, 8, 46, 47, 48, 50, 51, 52, 53, 54, 57, 58, 59, 60, 62, 63, 64]
         # pred = pred[:, h36m_convert_id, :]
         # gt = gt[:, h36m_convert_id, :]
-        # wen: convert to only cacualted keypoints
-        # pred = pred[:, 50:, :]
-        # gt = gt[:, 50:, :]
                 
         err1 = mpjpe(pred, gt)
         err2 = p_mpjpe(pred, gt)

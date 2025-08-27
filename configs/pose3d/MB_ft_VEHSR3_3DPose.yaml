@@ -23,18 +23,20 @@ num_heads: 8
 att_fuse: True
 
 # Data
-data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
-subset_list: [3DPose]
-dt_file: VEHS_MB/3DPose/VEHS_3D_downsample2_keep1.pkl
+data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/3DPose/
+subset_list: [20fps]
+dt_file: 3DPose/20fps/VEHS_3D_downsample5_keep1_H36M_17.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True
 sample_stride: 1
 num_joints: 17
 no_conf: False
-gt_2d: True
+gt_2d: False
 res_w: 1920
 res_h: 1200
+# res_w: 1920
+# res_h: 1200
 
 # Loss
 lambda_3d_velocity: 20.0

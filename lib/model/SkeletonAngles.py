@@ -127,12 +127,12 @@ class VEHS37SkeletonAngles(SkeletonAngles):
             RSHOULDER_angles.flexion = Point.angle(Point.vector(RSHOULDER, RELBOW).xyz, Point.vector(C7, PELVIS).xyz)
             RSHOULDER_angles.flexion = RSHOULDER_angles.zero_by_idx(0)  # zero by zero frame after setting flexion without function
 
-            shoulder_threshold = 10/180*np.pi  # the H-abduction is not well defined when the flexion is small or near 180 degrees
-            shoulder_filter = torch.logical_and(torch.abs(RSHOULDER_angles.flexion) > shoulder_threshold,
-                                torch.abs(RSHOULDER_angles.flexion) < (np.pi - shoulder_threshold))
-            RSHOULDER_angles.abduction = torch.where(
-                                        shoulder_filter, RSHOULDER_angles.abduction, torch.zeros_like(RSHOULDER_angles.abduction)
-)
+            # shoulder_threshold = 10/180*np.pi  # the H-abduction is not well defined when the flexion is small or near 180 degrees
+#             shoulder_filter = torch.logical_and(torch.abs(RSHOULDER_angles.flexion) > shoulder_threshold,
+#                                 torch.abs(RSHOULDER_angles.flexion) < (np.pi - shoulder_threshold))
+#             RSHOULDER_angles.abduction = torch.where(
+#                                         shoulder_filter, RSHOULDER_angles.abduction, torch.zeros_like(RSHOULDER_angles.abduction)
+# )
         return RSHOULDER_angles
 
     def left_shoulder_angles(self):     # not checked
@@ -166,17 +166,17 @@ class VEHS37SkeletonAngles(SkeletonAngles):
             LSHOULDER_angles.ergo_name = {'flexion': 'elevation', 'abduction': 'H-abduction', 'rotation': 'rotation'}  # horizontal abduction
             LSHOULDER_angles.flexion = Point.angle(Point.vector(LSHOULDER, LELBOW).xyz, Point.vector(C7, PELVIS).xyz)
             LSHOULDER_angles.flexion = LSHOULDER_angles.zero_by_idx(0)
-            shoulder_threshold = 10/180*np.pi
-            shoulder_filter = torch.logical_and(
-                torch.abs(LSHOULDER_angles.flexion) > shoulder_threshold,
-                torch.abs(LSHOULDER_angles.flexion) < (np.pi - shoulder_threshold)
-            )
+            # shoulder_threshold = 10/180*np.pi
+            # shoulder_filter = torch.logical_and(
+            #     torch.abs(LSHOULDER_angles.flexion) > shoulder_threshold,
+            #     torch.abs(LSHOULDER_angles.flexion) < (np.pi - shoulder_threshold)
+            # )
 
-            LSHOULDER_angles.abduction = torch.where(
-                shoulder_filter, 
-                LSHOULDER_angles.abduction, 
-                torch.zeros_like(LSHOULDER_angles.abduction)
-            )
+            # LSHOULDER_angles.abduction = torch.where(
+            #     shoulder_filter, 
+            #     LSHOULDER_angles.abduction, 
+            #     torch.zeros_like(LSHOULDER_angles.abduction)
+            # )
         return LSHOULDER_angles
 
     def right_elbow_angles(self):

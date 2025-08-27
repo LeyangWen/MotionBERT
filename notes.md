@@ -138,3 +138,6 @@ Goal: format VEHS-7M mesh dataset and train on our own, get 66 GT 2D keypoints -
 - Set flip to false, rootrel to true
 
 
+#
+- `ModuleNotFoundError: No module named 'numpy._core'`
+  - solution: use an older version numpy to save the file
