@@ -61,9 +61,22 @@ config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_inference.yaml"
 
 ### RTMW
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG/best_epoch.bin" # RTMWV5 2-b 20fps, og loss
-checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + limb loss
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + limb loss
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-3-angleLoss/best_epoch.bin" # RTMWV5 2-b 20fps, og loss
 
+checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-angleLossV2-only/best_epoch.bin" # RTMWV5 2-b 20fps, + angle loss V2
+
+### Try 2
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-centerLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + center loss
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-6-center-angleLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + center and angle loss
+
+
+
+#################### Output folder
+# Custom folder name you want to append
+custom_name="Industry_both"
+base_dir="$(dirname "$checkpoint_bin")"
+out_path="${base_dir}/${custom_name}"
 
 echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
@@ -71,7 +84,7 @@ echo "checkpoint_bin: $checkpoint_bin"
 ## inference only
 python -u infer3d_train.py \
 --config "$config_file" \
---out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss/Industry_both_2" \
+--out_path "$out_path" \
 --test_set_keyword validate \
 --res_w 1920 \
 --res_h 1200 \

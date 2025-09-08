@@ -57,12 +57,33 @@ config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct
 #checkpoint_bin="checkpoint/pose3d/MB_train_Rokoko_hand_21/latest_epoch.bin"
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/exp6/best_epoch.bin"
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-pretrain-normal-oneCam-1/best_epoch.bin"
-# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-pretrain-normal-1/best_epoch.bin"
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/20fps-finetune-pitch-correct-7/best_epoch.bin"
 
 ### RTMW
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG/best_epoch.bin" # RTMWV5 2-b 20fps, og loss
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + limb loss
-checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-3-angleLoss/best_epoch.bin" # RTMWV5 2-b 20fps, og loss
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-3-angleLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + limb loss, + angle loss
+
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-4-angleLossV2/best_epoch.bin" # RTMWV5 2-b 20fps, + limb loss, + angle loss V2
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-angleLossV2-only/best_epoch.bin" # RTMWV5 2-b 20fps, + angle loss V2
+
+# Try 2
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-centerLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + center loss
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-6-center-angleLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + center and angle loss
+
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG/best_epoch.bin"
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss/best_epoch.bin"
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-3-angleLoss/best_epoch.bin"
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-4-limb-angleLoss/best_epoch.bin"
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-centerLoss/best_epoch.bin"
+checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-6-center-angleLoss/best_epoch.bin"
+#################### Output folder
+
+# Custom folder name you want to append
+custom_name="VEHS7M-Validate"
+base_dir="$(dirname "$checkpoint_bin")"
+out_path="${base_dir}/${custom_name}"
+
 
 echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
@@ -71,9 +92,9 @@ echo "checkpoint_bin: $checkpoint_bin"
 python -u train.py \
 --config "$config_file" \
 --wandb_project "MotionBert_eval" \
---wandb_name "cpt_RTMWV5-2b-OGLoss_data_VEHS6D_validate-1920x1200"  \
---note "gt2d_False-20fps-1920x1200" \
---out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-3-angleLoss/VEHS7M-Validate" \
+--wandb_name "cpt_RTMWV3-MBV2-6-center-angleLoss_data_VEHS6D_validate-1920x1200"  \
+--note "gt2d_False-20fps-1920x1200, flip wrist" \
+--out_path "$out_path" \
 --test_set_keyword validate \
 --evaluate "$checkpoint_bin" \
 

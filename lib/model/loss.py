@@ -234,7 +234,49 @@ def loss_limb_gt(x, gt, args=False):
     '''
     limb_lens_x = get_limb_lens(x, args)
     limb_lens_gt = get_limb_lens(gt, args) # (N, T, 16)
-    return nn.L1Loss()(limb_lens_x, limb_lens_gt)
+    limb_loss = nn.L1Loss()(limb_lens_x, limb_lens_gt)
+    return limb_loss
+    # center_loss = loss_center(x, args)
+    # # todo: hijacking limb loss for center loss right now, make it separate later
+    # return 2* center_loss #+ limb_loss
+
+def loss_center(x, args=False):
+    """
+    only for VEHS-37 kpts, enforce shoulder center to be in center of back & front of shoulder, same for elbow and wrist
+    Input: (N, T, 37, 3), (N, T, 37, 3)
+    """
+    loss = 0.0
+    if args and args.joint_format.upper() == 'RTM-37':
+        # Indices in rtm_pose_37_keypoints_vicon_dataset_v1 (zero-based)
+        # Centers: RSHOULDER, LSHOULDER, RELBOW, LELBOW, RHAND, LHAND
+        center_ids = [15, 16, 13, 14, 11, 12]
+
+        # Supporting pairs:
+        # Shoulders: RAP_b/RAP_f, LAP_b/LAP_f
+        # Elbows: RLE/RME, LLE/LME
+        # Hands: RMCP2/RMCP5, LMCP2/LMCP5
+        support_pairs = [
+            (25, 26),  # R shoulder supports
+            (27, 28),  # L shoulder supports
+            (29, 30),  # R elbow supports
+            (31, 32),  # L elbow supports
+            (33, 34),  # R hand supports
+            (35, 36),  # L hand supports
+        ]
+
+        # Select predicted and GT points
+        # x, gt: (N, T, 37, 3)
+        # Gather both support points for all pairs → (N, T, K, 2, 3)
+        pred_support_pts = x[:, :, support_pairs, :]    # (N, T, K, 2, 3)
+        pred_mid_pts = x[:, :, center_ids, :]          # (N, T, K, 3)
+
+        # Compute midpoint along the "2" axis
+        pred_support_mid = pred_support_pts.mean(dim=3) # (N, T, K, 3)
+
+        loss = loss_mpjpe(pred_support_mid, pred_mid_pts)
+
+    return loss
+
 
 def loss_velocity(predicted, target):
     """

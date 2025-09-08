@@ -99,17 +99,35 @@ python train.py \
 --discard_last_layer \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train_RTM2D" \
---note "angle loss V2 only" \
---config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct_2.yaml \
---wandb_name "RTMW37kpts_v2_20fps-finetune-pitch-correct-5-angleLossV2-only" \
---checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-angleLossV2-only" \
+--note "OG loss" \
+--config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct_3.yaml \
+--wandb_name "Try2-RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
+--checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
+
+# --note "limb loss V1" \
+# --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct_2.yaml \
+# --wandb_name "Try2-RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss" \
+
+
+
+
+
+
+
+
+
+# --note "angle loss V2 only" \
+# --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml \
+# --wandb_name "Try2-RTMW37kpts_v2_20fps-finetune-pitch-correct-5-angleLossV2-only" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-angleLossV2-only" \
 
 # --note "OG loss" \
 # --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml \
 # --wandb_name "RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
 # --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
 
-# --note "bone loss" \
+# --note "bone loss V2" \
 # --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml \
 # --wandb_name "RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss" \
 # --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss" \
