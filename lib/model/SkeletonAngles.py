@@ -58,7 +58,7 @@ class VEHS37SkeletonAngles(SkeletonAngles):
         """
         all_angles = None
         for angle_index, this_angle_name in enumerate(self.angle_names):
-            joint = getattr(self, this_angle_name + '_angles')()
+            joint = getattr(self, this_angle_name + '_angles')(mode=self.mode)
             for this_ergo_angle in self.sub_angle_names:
                 angle = getattr(joint, this_ergo_angle)
                 if angle is not None:
@@ -69,7 +69,7 @@ class VEHS37SkeletonAngles(SkeletonAngles):
                         all_angles = torch.cat((all_angles, angle), dim=1)
         return all_angles.reshape(self.N, self.T, -1)
 
-    def neck_angles(self):
+    def neck_angles(self, mode=None):
         zero_frame = [-90, -180, -180]
         REAR = self.point_poses['REAR']
         LEAR = self.point_poses['LEAR']
@@ -93,7 +93,7 @@ class VEHS37SkeletonAngles(SkeletonAngles):
         NECK_angles.get_rot(LEAR, REAR, LSHOULDER, RSHOULDER)
         return NECK_angles
 
-    def right_shoulder_angles(self):
+    def right_shoulder_angles(self, mode='VEHS'):
         zero_frame = [0, 90, 90]
         RSHOULDER = self.point_poses['RSHOULDER']
         C7 = self.point_poses['C7']
@@ -120,22 +120,23 @@ class VEHS37SkeletonAngles(SkeletonAngles):
         RSHOULDER_angles.get_flex_abd(RSHOULDER_coord, Point.vector(RSHOULDER, RELBOW), plane_seq=['xy', 'xz'])
         RSHOULDER_angles.get_rot(RAP_b, RAP_f, RME, RLE)
 
-        if False:  # shoulder angles used in paper
+        if mode=="paper":  # shoulder angles used in paper
             RSHOULDER_angles.ergo_name = {'flexion': 'flexion', 'abduction': 'abduction', 'rotation': 'rotation'}
-        else:
+        elif mode=="VEHS":  # shoulder angles used in VEHS application
             RSHOULDER_angles.ergo_name = {'flexion': 'elevation', 'abduction': 'H-abduction', 'rotation': 'rotation'}
             RSHOULDER_angles.flexion = Point.angle(Point.vector(RSHOULDER, RELBOW).xyz, Point.vector(C7, PELVIS).xyz)
             RSHOULDER_angles.flexion = RSHOULDER_angles.zero_by_idx(0)  # zero by zero frame after setting flexion without function
-
             # shoulder_threshold = 10/180*np.pi  # the H-abduction is not well defined when the flexion is small or near 180 degrees
 #             shoulder_filter = torch.logical_and(torch.abs(RSHOULDER_angles.flexion) > shoulder_threshold,
 #                                 torch.abs(RSHOULDER_angles.flexion) < (np.pi - shoulder_threshold))
 #             RSHOULDER_angles.abduction = torch.where(
 #                                         shoulder_filter, RSHOULDER_angles.abduction, torch.zeros_like(RSHOULDER_angles.abduction)
 # )
+        else:
+            raise ValueError(f'mode {mode} not recognized, should be "paper" or "VEHS"')
         return RSHOULDER_angles
 
-    def left_shoulder_angles(self):     # not checked
+    def left_shoulder_angles(self, mode='VEHS'):     # not checked
         zero_frame = [0, 0, -90]
         LSHOULDER = self.point_poses['LSHOULDER']
         C7 = self.point_poses['C7']
@@ -160,9 +161,9 @@ class VEHS37SkeletonAngles(SkeletonAngles):
         LSHOULDER_angles.get_flex_abd(LSHOULDER_coord, Point.vector(LSHOULDER, LELBOW), plane_seq=['xy', 'xz'], flip_sign=[1, -1])
         LSHOULDER_angles.set_zero(zero_frame, by_frame=False)
         LSHOULDER_angles.get_rot(LAP_b, LAP_f, LME, LLE)
-        if False:  # shoulder angles used in paper
+        if mode=="paper":  # shoulder angles used in paper
             LSHOULDER_angles.ergo_name = {'flexion': 'flexion', 'abduction': 'abduction', 'rotation': 'rotation'}  # horizontal abduction
-        else:  # shoulder angles used in VEHS application
+        elif mode=="VEHS":  # shoulder angles used in VEHS application
             LSHOULDER_angles.ergo_name = {'flexion': 'elevation', 'abduction': 'H-abduction', 'rotation': 'rotation'}  # horizontal abduction
             LSHOULDER_angles.flexion = Point.angle(Point.vector(LSHOULDER, LELBOW).xyz, Point.vector(C7, PELVIS).xyz)
             LSHOULDER_angles.flexion = LSHOULDER_angles.zero_by_idx(0)
@@ -177,9 +178,11 @@ class VEHS37SkeletonAngles(SkeletonAngles):
             #     LSHOULDER_angles.abduction, 
             #     torch.zeros_like(LSHOULDER_angles.abduction)
             # )
+        else:
+            raise ValueError(f'mode {mode} not recognized, should be "paper" or "VEHS"')
         return LSHOULDER_angles
 
-    def right_elbow_angles(self):
+    def right_elbow_angles(self, mode=None):
         zero_frame = [-180, 0, 0]
         RELBOW = self.point_poses['RELBOW']
         RSHOULDER = self.point_poses['RSHOULDER']
@@ -195,7 +198,7 @@ class VEHS37SkeletonAngles(SkeletonAngles):
         RELBOW_angles.rotation = None
         return RELBOW_angles
 
-    def left_elbow_angles(self):  # not checked
+    def left_elbow_angles(self, mode=None):  # not checked
         zero_frame = [-180, 0, 0]
         LELBOW = self.point_poses['LELBOW']
         LSHOULDER = self.point_poses['LSHOULDER']
@@ -211,7 +214,7 @@ class VEHS37SkeletonAngles(SkeletonAngles):
         LELBOW_angles.rotation = None
         return LELBOW_angles
 
-    def right_wrist_angles(self):
+    def right_wrist_angles(self, mode=None):
         zero_frame = [-90, -180, -90]
         RWRIST = self.point_poses['RWRIST']
         RMCP2 = self.point_poses['RMCP2']
@@ -240,7 +243,7 @@ class VEHS37SkeletonAngles(SkeletonAngles):
             RWRIST_angles.get_rot(RMCP2, RMCP5, RLE, RME)
         return RWRIST_angles
 
-    def left_wrist_angles(self):  # not checked
+    def left_wrist_angles(self, mode=None):  # not checked
         zero_frame = [-90, -180, 90]
         LWrist = self.point_poses['LWRIST']
         LMCP2 = self.point_poses['LMCP2']
@@ -269,7 +272,7 @@ class VEHS37SkeletonAngles(SkeletonAngles):
             LWrist_angles.get_rot(LMCP2, LMCP5, LLE, LME)
         return LWrist_angles
 
-    def back_angles(self, up_axis=[0, 1000, 0], zero_frame = [-90, 180, 180]):
+    def back_angles(self, up_axis=[0, 1000, 0], zero_frame = [-90, 180, 180], mode=None):
         # todo: back correction
         C7 = self.point_poses['C7']
         # RPSIS = self.point_poses['RPSIS']
@@ -296,7 +299,7 @@ class VEHS37SkeletonAngles(SkeletonAngles):
 
         return BACK_angles
 
-    def right_knee_angles(self):
+    def right_knee_angles(self, mode=None):
         zero_frame = -180
         RKNEE = self.point_poses['RKNEE']
         RHIP = self.point_poses['RHIP']
@@ -312,7 +315,7 @@ class VEHS37SkeletonAngles(SkeletonAngles):
         RKNEE_angles.rotation = None
         return RKNEE_angles
 
-    def left_knee_angles(self):  # not checked
+    def left_knee_angles(self, mode=None):  # not checked
         zero_frame = -180
         LKNEE = self.point_poses['LKNEE']
         LHIP = self.point_poses['LHIP']
@@ -327,3 +330,29 @@ class VEHS37SkeletonAngles(SkeletonAngles):
         LKNEE_angles.abduction = None
         LKNEE_angles.rotation = None
         return LKNEE_angles
+    
+
+class VEHS66SkeletonAngles(VEHS37SkeletonAngles):
+    def __init__(self, kpt_xyz):
+        """
+        kpt_xyz: torch.Size([N, T, 66, 3])
+
+        """
+        super().__init__()
+        paper_custom_6D_joint_names = ['RPSIS', 'RASIS', 'LPSIS', 'LASIS', 'C7_d', 'SS', 'T8', 'XP', 'C7', 'HDTP', 'MDFH', 'REAR', 'LEAR', 'RAP', 'RAP_f', 'RLE', 'RAP_b', 'RME', 'LAP', 'LAP_f', 'LLE', 'LAP_b', 'LME',
+                             'LUS', 'LRS', 'RUS', 'RRS', 'RMCP5', 'RMCP2', 'LMCP5', 'LMCP2', 'LGT', 'LMFC', 'LLFC', 'RGT', 'RMFC', 'RLFC', 'RMM', 'RLM', 'LMM', 'LLM', 'LMTP1', 'LMTP5', 'LHEEL',
+                             'RMTP1', 'RMTP5', 'RHEEL', 'HEAD', 'RSHOULDER', 'LSHOULDER', 'THORAX', 'LELBOW', 'RELBOW', 'RWRIST', 'LWRIST', 'RHAND', 'LHAND', 'PELVIS', 'RHIP', 'RKNEE',
+                             'RANKLE', 'RFOOT', 'LHIP', 'LKNEE', 'LANKLE', 'LFOOT']  # 66: drop c7_m, add MDFH, V2
+        if len(kpt_xyz.shape) != 4:
+            raise ValueError(f'kpt_xyz should be in shape of (N, T, 66, 3), but got {kpt_xyz.shape}')
+        self.N = kpt_xyz.shape[0]
+        self.T = kpt_xyz.shape[1]
+        self.kpt = kpt_xyz.shape[2]
+        kpt_xyz = kpt_xyz.reshape(self.N*self.T, 66, 3)
+        self.load_name_list(paper_custom_6D_joint_names)
+        self.load_points(kpt_xyz)
+        self.angle_names = ['neck', 'right_shoulder', 'left_shoulder', 'right_elbow', 'left_elbow', 'right_wrist', 'left_wrist', 'back', 'right_knee', 'left_knee']
+        self.sub_angle_names = ['flexion', 'abduction', 'rotation']
+        self.mode = "paper"  # "paper" or "VEHS" **** added mode here ****
+    
+   

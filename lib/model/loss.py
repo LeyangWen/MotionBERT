@@ -4,6 +4,7 @@ import numpy as np
 import torch.nn.functional as F
 import warnings
 from .SkeletonAngles import VEHS37SkeletonAngles
+from .SkeletonAngles import VEHS66SkeletonAngles
 
 # Numpy-based errors
 
@@ -210,7 +211,10 @@ def get_limb_lens(x, args=False):
                     [27, 44], [44, 45], [45, 46], [46, 47]
                     ]
     else:
-        raise ValueError(f"args.joint_format: {args.joint_format} not recognized")
+        if args.lambda_lv > 1e-7 or args.lambda_lg > 1e-7:
+            raise ValueError(f"args.joint_format: {args.joint_format} not recognized, weight: {args.lambda_lv}, {args.lambda_lg}")
+        warnings.warn(f'WARNING: get_limb_lens is set for H36M joint index now, weight: {args.lambda_lv}, {args.lambda_lg} is near zero')
+        limbs_id = [[0, 0],[1, 1]]
 
     limbs = x[:,:,limbs_id,:]
     limbs = limbs[:,:,:,0,:]-limbs[:,:,:,1,:]
@@ -274,7 +278,9 @@ def loss_center(x, args=False):
         pred_support_mid = pred_support_pts.mean(dim=3) # (N, T, K, 3)
 
         loss = loss_mpjpe(pred_support_mid, pred_mid_pts)
-
+    else:
+        raise ValueError(f"loss_center is only for RTM-37 joint format, got {args.joint_format}")
+        return 0.0
     return loss
 
 
@@ -302,10 +308,15 @@ def get_angles(x, args=False):
         # run through SkeletonAngles, eary return
         joint_angles = VEHS37SkeletonAngles(x)
         return joint_angles.get_angles()
+    elif args and args.joint_format.upper() == 'RTM-66':
+        joint_angles = VEHS66SkeletonAngles(x)
+        return joint_angles.get_angles()
     elif args == False or args.joint_format.upper() == 'H36M':
         pass  # run the main code
     else:
-        warnings.warn('WARNING: get_angles is set for H36M joint index now, if the angle weight is not 0 and you are using different joint idx, need to modify in loss.py')
+        if args.lambda_a > 1e-6 or args.lambda_av > 1e-6:
+            raise ValueError(f"args.joint_format: {args.joint_format} not recognized")
+        warnings.warn(f'WARNING: get_angles is set for H36M joint index now, weight: {args.lambda_a}, {args.lambda_av} is near zero')
     limbs_id = [[0,1], [1,2], [2,3],
         [0,4], [4,5], [5,6],
         [0,7], [7,8], [8,9], [9,10],

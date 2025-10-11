@@ -6,9 +6,9 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=2
-#SBATCH --mem=20g
+#SBATCH --mem=50g
 #SBATCH --gres=gpu:5
-#SBATCH --time=24:00:00
+#SBATCH --time=48:00:00
 #SBATCH --account=shdpm0
 #SBATCH --partition=spgpu
 ##### END preamble
@@ -92,17 +92,17 @@ module list
 # --wandb_name "RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
 # --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
 
-
-python train.py \
---pretrained /nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/MB_ft_VEHSR3_3DPose/ \
---selection latest_epoch.bin \
---discard_last_layer \
---test_set_keyword validate \
---wandb_project "MotionBert_train_RTM2D" \
---note "OG loss" \
---config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct_3.yaml \
---wandb_name "Try2-RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
---checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
+## VEHSR3 + RTMWv5-2b 37kpts - 20fps - pitch correct 
+# python train.py \
+# --pretrained /nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/MB_ft_VEHSR3_3DPose/ \
+# --selection latest_epoch.bin \
+# --discard_last_layer \
+# --test_set_keyword validate \
+# --wandb_project "MotionBert_train_RTM2D" \
+# --note "OG loss" \
+# --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct_3.yaml \
+# --wandb_name "Try2-RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-1-OG" \
 
 # --note "limb loss V1" \
 # --config configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct_2.yaml \
@@ -197,3 +197,16 @@ python train.py \
 #--test_set_keyword validate \
 #--checkpoint checkpoint/pose3d/MB_ft_VEHSR3_6DPose \
 #--selection best_epoch.bin > output_slurm/train_6D.out
+
+
+## VEHSR3R4 + GT2D - 66v2 kpts - 50fps - pitch correct 
+python train.py \
+--pretrained /nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/MB_ft_VEHSR3_3DPose/ \
+--selection latest_epoch.bin \
+--discard_last_layer \
+--test_set_keyword validate \
+--wandb_project "MotionBert_train" \
+--note "angle loss v2" \
+--config configs/pose3d/MB_ft_VEHSR3R4_50fps_6DPose_pitch_correct.yaml \
+--wandb_name "Try1-GT66kpts_v2_50fps-finetune-pitch-correct-1-angleLossV2" \
+--checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/GT2D/Try1/GT66kpts_v2_50fps-finetune-pitch-correct-1-angleLossV2" \

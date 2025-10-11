@@ -6,7 +6,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=40g
+#SBATCH --mem=80g
 #SBATCH --time=00:30:00
 #SBATCH --account=shdpm0
 #SBATCH --partition=standard
@@ -87,11 +87,11 @@ module list
 # --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M/normal' > output_slurm/preprocess_RTM6.out
 
 #### pitch correct version
-python -u tools/convert_VEHSR3.py \
---dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M/V5_2-b/pitch_correct' \
---dt_file 'VEHS_6D_downsample5_keep1_37_v2_pitch_correct_modified_RTM2D.pkl' \
---test_set_keyword 'validate' \
---root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M/V5_2-b/pitch_correct' > output_slurm/preprocess_RTM6.out
+# python -u tools/convert_VEHSR3.py \
+# --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M/V5_2-b/pitch_correct' \
+# --dt_file 'VEHS_6D_downsample5_keep1_37_v2_pitch_correct_modified_RTM2D.pkl' \
+# --test_set_keyword 'validate' \
+# --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_37kpts_VEHS7M/V5_2-b/pitch_correct' > output_slurm/preprocess_RTM6.out
 
 # VEHS - RTMPose37 - industry inference
 # python -u tools/convert_inference.py \
@@ -107,7 +107,7 @@ python -u tools/convert_VEHSR3.py \
 #--test_set_keyword 'validate' \
 #--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_VEHS_tilt_correct' > output_slurm/preprocess_RTM6.out
 
-
+################## paper
 # H36M
 #python -u tools/convert_h36m.py > output_slurm/preprocess_H36M.out
 
@@ -124,3 +124,11 @@ python -u tools/convert_VEHSR3.py \
 # --dt_file 'VEHS_6D_downsample2_keep1.pkl' \
 # --test_set_keyword 'validate' \
 # --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/6DPose' > output_slurm/preprocess_6D.out
+
+
+# VEHSR3R4 - 6D - 66v2
+python -u tools/convert_VEHSR3.py \
+--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_R3_R4_MB/66kptv2/GT2D/50fps' \
+--dt_file 'VEHS_6D_downsample2_keep1_pitch_correct_0.pkl' \
+--test_set_keyword 'validate' \
+--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_R3_R4_MB/66kptv2/GT2D/50fps' > output_slurm/preprocess_RTM6.out

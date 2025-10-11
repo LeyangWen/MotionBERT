@@ -1,0 +1,55 @@
+# General  
+train_2d: False
+no_eval: False
+finetune: True
+partial_train: null
+
+# Traning 
+epochs: 120
+checkpoint_frequency: 50
+batch_size: 12
+dropout: 0.0
+learning_rate: 0.0002
+weight_decay: 0.01
+lr_decay: 0.99
+
+# Model
+maxlen: 243
+dim_feat: 512
+mlp_ratio: 2
+depth: 5
+dim_rep: 512
+num_heads: 8
+att_fuse: True
+
+# Data
+#/nfs/turbo/coe-shdpm/leyang/VEHS_R3_R4_MB/66kptv2/GT2D/50fps/VEHS_6D_downsample2_keep1_pitch_correct_0.pkl
+data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_R3_R4_MB/66kptv2/GT2D/
+subset_list: [50fps]
+dt_file: /GT2D/50fps/VEHS_6D_downsample2_keep1_pitch_correct_0.pkl
+clip_len: 243
+data_stride: 81
+rootrel: True
+sample_stride: 1
+num_joints: 66
+no_conf: False
+gt_2d: False
+joint_format: RTM-66
+root_idx: 57
+res_w: 1920
+res_h: 1200
+
+# Loss
+lambda_3d_velocity: 20.0
+lambda_scale: 0.5
+lambda_lv: 0.0
+lambda_lg: 0.0
+lambda_a: 0.5
+lambda_av: 0.5
+
+# Augmentation
+synthetic: False
+flip: True
+mask_ratio: 0.
+mask_T_ratio: 0.
+noise: False

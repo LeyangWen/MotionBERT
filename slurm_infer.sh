@@ -64,11 +64,11 @@ config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_inference.yaml"
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-2-limbLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + limb loss
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-3-angleLoss/best_epoch.bin" # RTMWV5 2-b 20fps, og loss
 
-checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-angleLossV2-only/best_epoch.bin" # RTMWV5 2-b 20fps, + angle loss V2
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-angleLossV2-only/best_epoch.bin" # RTMWV5 2-b 20fps, + angle loss V2
 
 ### Try 2
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-centerLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + center loss
-# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-6-center-angleLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + center and angle loss
+checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-6-center-angleLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + center and angle loss
 
 
 
