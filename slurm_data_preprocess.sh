@@ -127,8 +127,31 @@ module list
 
 
 # VEHSR3R4 - 6D - 66v2
-python -u tools/convert_VEHSR3.py \
---dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_R3_R4_MB/66kptv2/GT2D/50fps' \
---dt_file 'VEHS_6D_downsample2_keep1_pitch_correct_0.pkl' \
+# python -u tools/convert_VEHSR3.py \
+# --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_R3_R4_MB/66kptv2/GT2D/50fps' \
+# --dt_file 'VEHS_6D_downsample2_keep1_pitch_correct_0.pkl' \
+# --test_set_keyword 'validate' \
+# --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_R3_R4_MB/66kptv2/GT2D/50fps' > output_slurm/preprocess_RTM6.out
+
+
+# VEHSR3R4 - 6D - 37v2
+# python -u tools/convert_VEHSR3.py \
+# --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_R3_R4_MB/37kptv2/RTM2D/20fps' \
+# --dt_file 'VEHS_6D_downsample5_keep1_37_v2_pitch_correct_modified_RTM2D.pkl' \
+# --test_set_keyword 'validate' \
+# --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_R3_R4_MB/37kptv2/RTM2D/20fps' > output_slurm/preprocess_RTM6.out
+
+
+# Industry_Jeff - 37v2: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/Industry_Jeff/
+python -u tools/convert_inference.py \
+--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Industry_Jeff' \
+--dt_file 'rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl' \
 --test_set_keyword 'validate' \
---root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_R3_R4_MB/66kptv2/GT2D/50fps' > output_slurm/preprocess_RTM6.out
+--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Industry_Jeff' > output_slurm/preprocess_RTM6.out
+
+# Industry_Youtube_1 - 37v2: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/Youtube_1/
+# python -u tools/convert_inference.py \
+# --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Youtube_1' \
+# --dt_file 'rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl' \
+# --test_set_keyword 'validate' \
+# --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Youtube_1' > output_slurm/preprocess_RTM6.out

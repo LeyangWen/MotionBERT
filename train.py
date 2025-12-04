@@ -163,7 +163,8 @@ def evaluate(args, model_pos, test_loader, datareader, save_trace=False):
         # todo: lamda scale for hand
 
         # wen: convert to h36m temp fix
-        # h36m_convert_id = [6, 8, 46, 47, 48, 50, 51, 52, 53, 54, 57, 58, 59, 60, 62, 63, 64]
+        # h36m_convert_id = [6, 8, 46, 47, 48, 50, 51, 52, 53, 54, 57, 58, 59, 60, 62, 63, 64]  # not sure where this came from
+        # h36m_convert_id = [57, 58, 59, 60, 62, 63, 64, 6, 50, 8, 47, 49, 51, 54, 48, 52, 53]  # checked against h36m order
         # pred = pred[:, h36m_convert_id, :]
         # gt = gt[:, h36m_convert_id, :]
                 

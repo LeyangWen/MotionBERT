@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=20g
 #SBATCH --gres=gpu:1
-#SBATCH --partition=gpu
+#SBATCH --partition=spgpu
 ##SBATCH --partition=debug
 #SBATCH --time=00:15:00
 #SBATCH --account=shdpm0
@@ -40,7 +40,7 @@ echo "cpu-2, gpu-1, mem-20"
 #config_file="configs/pose3d/RTMPose_exp/MB_ft_VEHS_tilt_correct.yaml"
 #config_file="configs/pose3d/hand/MB_train_Rokoko.yaml"
 # config_file="configs/pose3d/hand/MB_infer_lab_RTMinput.yaml"
-config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_inference.yaml"
+config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_inference.yaml"  # there are two files of the same name, make sure to modify the right one
 # config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps.yaml"  # --> This would work for both normal and pitch correct
 
 # Checkpoint
@@ -68,13 +68,13 @@ config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_inference.yaml"
 
 ### Try 2
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-centerLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + center loss
-checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-6-center-angleLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + center and angle loss
-
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-6-center-angleLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + center and angle loss
+checkpoint_bin="/nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/RTM37kpts_v2_20fps-finetune-pitch-correct-angleLossV2/best_epoch.bin"
 
 
 #################### Output folder
 # Custom folder name you want to append
-custom_name="Industry_both"
+custom_name="Youtube_1"
 base_dir="$(dirname "$checkpoint_bin")"
 out_path="${base_dir}/${custom_name}"
 

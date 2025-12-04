@@ -51,6 +51,7 @@ class VEHS37SkeletonAngles(SkeletonAngles):
         self.load_points(kpt_xyz)
         self.angle_names = ['neck', 'right_shoulder', 'left_shoulder', 'right_elbow', 'left_elbow', 'right_wrist', 'left_wrist', 'back', 'right_knee', 'left_knee']
         self.sub_angle_names = ['flexion', 'abduction', 'rotation']
+        self.mode = "VEHS"  # "paper" or "VEHS" **** added mode here ****
     
     def get_angles(self):
         """
@@ -338,7 +339,6 @@ class VEHS66SkeletonAngles(VEHS37SkeletonAngles):
         kpt_xyz: torch.Size([N, T, 66, 3])
 
         """
-        super().__init__()
         paper_custom_6D_joint_names = ['RPSIS', 'RASIS', 'LPSIS', 'LASIS', 'C7_d', 'SS', 'T8', 'XP', 'C7', 'HDTP', 'MDFH', 'REAR', 'LEAR', 'RAP', 'RAP_f', 'RLE', 'RAP_b', 'RME', 'LAP', 'LAP_f', 'LLE', 'LAP_b', 'LME',
                              'LUS', 'LRS', 'RUS', 'RRS', 'RMCP5', 'RMCP2', 'LMCP5', 'LMCP2', 'LGT', 'LMFC', 'LLFC', 'RGT', 'RMFC', 'RLFC', 'RMM', 'RLM', 'LMM', 'LLM', 'LMTP1', 'LMTP5', 'LHEEL',
                              'RMTP1', 'RMTP5', 'RHEEL', 'HEAD', 'RSHOULDER', 'LSHOULDER', 'THORAX', 'LELBOW', 'RELBOW', 'RWRIST', 'LWRIST', 'RHAND', 'LHAND', 'PELVIS', 'RHIP', 'RKNEE',

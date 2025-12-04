@@ -6,11 +6,11 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=2
-#SBATCH --mem=20g
+#SBATCH --mem=120g
 #SBATCH --gres=gpu:1
-#SBATCH --partition=gpu
+#SBATCH --partition=spgpu
 ##SBATCH --partition=debug
-#SBATCH --time=00:30:00
+#SBATCH --time=1:00:00
 #SBATCH --account=shdpm0
 ##### END preamble
 ##### Run in MotionBert dir
@@ -44,6 +44,7 @@ echo "cpu-2, gpu-1, mem-20"
 # config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS.yaml"
 # config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps.yaml"
 config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml"
+# config_file="configs/pose3d/MB_ft_VEHSR3R4_50fps_6DPose_pitch_correct.yaml"
 # 
 # Checkpoint
 # checkpoint_bin="/nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin"  # from h36m MB website
@@ -76,7 +77,9 @@ config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-3-angleLoss/best_epoch.bin"
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-4-limb-angleLoss/best_epoch.bin"
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-centerLoss/best_epoch.bin"
-checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-6-center-angleLoss/best_epoch.bin"
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-6-center-angleLoss/best_epoch.bin"
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/GT2D/Try1/GT66kpts_v2_50fps-finetune-pitch-correct-2-angleLossV2/best_epoch.bin"
+checkpoint_bin="/nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/RTM37kpts_v2_20fps-finetune-pitch-correct-angleLossV2/best_epoch.bin"
 #################### Output folder
 
 # Custom folder name you want to append
@@ -92,8 +95,8 @@ echo "checkpoint_bin: $checkpoint_bin"
 python -u train.py \
 --config "$config_file" \
 --wandb_project "MotionBert_eval" \
---wandb_name "cpt_RTMWV3-MBV2-6-center-angleLoss_data_VEHS6D_validate-1920x1200"  \
---note "gt2d_False-20fps-1920x1200, flip wrist" \
+--wandb_name "cpt_R3R4_MBV3-angleLoss_data_VEHS6D_validate-1920x1200-h36M17kpts"  \
+--note "gt2d_False-20fps-1920x1200" \
 --out_path "$out_path" \
 --test_set_keyword validate \
 --evaluate "$checkpoint_bin" \

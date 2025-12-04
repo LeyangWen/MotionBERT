@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=50g
 #SBATCH --gres=gpu:5
-#SBATCH --time=48:00:00
+#SBATCH --time=50:00:00
 #SBATCH --account=shdpm0
 #SBATCH --partition=spgpu
 ##### END preamble
@@ -200,13 +200,32 @@ module list
 
 
 ## VEHSR3R4 + GT2D - 66v2 kpts - 50fps - pitch correct 
+# python train.py \
+# --pretrained /nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/MB_ft_VEHSR3_3DPose/ \
+# --selection latest_epoch.bin \
+# --test_set_keyword validate \
+# --wandb_project "MotionBert_train" \
+# --note "angle loss v2" \
+# --config configs/pose3d/MB_ft_VEHSR3R4_50fps_6DPose_pitch_correct.yaml \
+# --wandb_name "Try1-GT66kpts_v2_50fps-finetune-pitch-correct-2-angleLossV2" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/GT2D/Try1/GT66kpts_v2_50fps-finetune-pitch-correct-2-angleLossV2" \
+# --resume /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/GT2D/Try1/GT66kpts_v2_50fps-finetune-pitch-correct-2-angleLossV2/latest_epoch.bin \
+
+# --discard_last_layer \
+
+
+
+## VEHSR3R4 + RTM2D - 37v2 kpts - 20fps - pitch correct 
 python train.py \
---pretrained /nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/MB_ft_VEHSR3_3DPose/ \
---selection latest_epoch.bin \
---discard_last_layer \
+--pretrained /nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/FT_MB_release_MB_ft_h36m/ \
+--selection best_epoch.bin \
 --test_set_keyword validate \
 --wandb_project "MotionBert_train" \
---note "angle loss v2" \
---config configs/pose3d/MB_ft_VEHSR3R4_50fps_6DPose_pitch_correct.yaml \
---wandb_name "Try1-GT66kpts_v2_50fps-finetune-pitch-correct-1-angleLossV2" \
---checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/GT2D/Try1/GT66kpts_v2_50fps-finetune-pitch-correct-1-angleLossV2" \
+--note "" \
+--config configs/pose3d/MB_ft_VEHSR3R4_20fps_RTM37kpt_6DPose_pitch_correct.yaml \
+--wandb_name "Try2-RTM27kpts_v2_20fps-finetune-pitch-correct-angleLossV2" \
+--checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/GT2D/Try2/RTM27kpts_v2_20fps-finetune-pitch-correct-angleLossV2" \
+--discard_last_layer
+# --resume /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/GT2D/Try2/RTM27kpts_v2_20fps-finetune-pitch-correct-angleLossV2/latest_epoch.bin \
+
+

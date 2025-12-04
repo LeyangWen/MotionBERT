@@ -6,8 +6,8 @@ partial_train: null
 
 # Traning 
 epochs: 120
-checkpoint_frequency: 30
-batch_size: 32
+checkpoint_frequency: 50
+batch_size: 12
 dropout: 0.0
 learning_rate: 0.0002
 weight_decay: 0.01
@@ -23,25 +23,18 @@ num_heads: 8
 att_fuse: True
 
 # Data
-# data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry/
-# subset_list: [37kpts_v5-2b]
-# dt_file: RTM2D_industry/37kpts_v5-2b/rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl
-
-data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
-subset_list: [Youtube_1]
-dt_file: VEHS_MB/Youtube_1/rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl
-
-# data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
-# subset_list: [Industry_Jeff]
-# dt_file: VEHS_MB/Industry_Jeff/rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl
+# /nfs/turbo/coe-shdpm/leyang/VEHS_R3_R4_MB/37kptv2/RTM2D/20fps/VEHS_6D_downsample5_keep1_37_v2_pitch_correct_modified_RTM2D.pkl
+data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_R3_R4_MB/37kptv2/RTM2D/
+subset_list: [20fps]
+dt_file: /RTM2D/20fps/VEHS_6D_downsample5_keep1_37_v2_pitch_correct_modified_RTM2D.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True
 sample_stride: 1
 num_joints: 37
-joint_format: RTM-37
 no_conf: False
 gt_2d: False
+joint_format: RTM-37
 root_idx: 0
 res_w: 1920
 res_h: 1200
@@ -51,8 +44,8 @@ lambda_3d_velocity: 20.0
 lambda_scale: 0.5
 lambda_lv: 0.0
 lambda_lg: 0.0
-lambda_a: 0.0
-lambda_av: 0.0
+lambda_a: 0.5
+lambda_av: 0.5
 
 # Augmentation
 synthetic: False
