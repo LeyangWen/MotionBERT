@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=60g
 #SBATCH --gres=gpu:3
-#SBATCH --time=30:00:00
+#SBATCH --time=100:00:00
 #SBATCH --account=shdpm0
 #SBATCH --partition=spgpu
 ##### END preamble
@@ -30,26 +30,38 @@ echo "test"
 # rm -rf checkpoint/mesh/MB_train_VEHS66kpts_try1
 
 # for 6D
-python train_mesh.py \
---config configs/mesh/MB_train_VEHS_6D.yaml \
---pretrained checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/ \
---selection best_epoch.bin \
---checkpoint checkpoint/mesh/MB_train_VEHS66kpts \
---test_set_keyword validate \
---wandb_project "MotionBert_train_mesh" \
---wandb_name "gt2d_66kpts_try2_section2" \
---resume checkpoint/mesh/MB_train_VEHS66kpts/latest_epoch.bin \
+# python train_mesh.py \
+# --config configs/mesh/MB_train_VEHS_6D.yaml \
+# --pretrained checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/ \
+# --selection best_epoch.bin \
+# --checkpoint checkpoint/mesh/MB_train_VEHS66kpts \
+# --test_set_keyword validate \
+# --wandb_project "MotionBert_train_mesh" \
+# --wandb_name "gt2d_66kpts_try2_section2" \
+# --resume checkpoint/mesh/MB_train_VEHS66kpts/latest_epoch.bin \
 
+# TODO: To train 37 kpt model (/nfs/turbo/coe-shdpm/leyang/VEHS_MB/mesh/RTM2D_37kpts_SMPL/), change file loc, change J_regressor in multiple places
 
 ## for 3D
-#python train_mesh.py \
-#--config configs/mesh/MB_train_VEHS_3D.yaml \
-#--pretrained checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/ \
-#--selection best_epoch.bin \
-#--checkpoint checkpoint/mesh/MB_train_VEHSR3_try2 \
-#--test_set_keyword validate \
-#--wandb_project "MotionBert_train_mesh" \
-#--wandb_name "gt2d_17kpts_try2"
-##--resume checkpoint/mesh/MB_train_VEHSR3/latest_epoch.bin \
+python train_mesh.py \
+--config configs/mesh/RTM2D_train_17kpts_3D.yaml \
+--pretrained checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/ \
+--selection best_epoch.bin \
+--checkpoint /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V2 \
+--test_set_keyword validate \
+--wandb_project "MotionBert_train_mesh" \
+--wandb_name "SMPL_RTM17kpts_V2" \
+--note "RTM2D 17kpts, SMPL model, 160 epochs" \
+# --resume /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1/latest_epoch.bin \
 
 
+# python train_mesh.py \
+# --config configs/mesh/RTM2D_train_17kpts_3D.yaml \
+# --pretrained /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1/ \
+# --selection epoch_99.bin \
+# --checkpoint /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1_100-160epoch \
+# --test_set_keyword validate \
+# --wandb_project "MotionBert_train_mesh" \
+# --wandb_name "SMPL_RTM17kpts_V1_100-160epoch" \
+# --note "RTM2D 17kpts, SMPL model" \
+# # --resume /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1/latest_epoch.bin \

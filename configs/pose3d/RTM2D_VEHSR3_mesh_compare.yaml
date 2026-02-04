@@ -1,11 +1,13 @@
-# General  
+# Mesh compare
+
+#General  
 train_2d: False
 no_eval: False
 finetune: True
 partial_train: null
 
 # Traning 
-epochs: 120
+epochs: 100
 checkpoint_frequency: 30
 batch_size: 32
 dropout: 0.0
@@ -22,29 +24,22 @@ dim_rep: 512
 num_heads: 8
 att_fuse: True
 
-# Data
-# data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry/
-# subset_list: [37kpts_v5-2b]
-# dt_file: RTM2D_industry/37kpts_v5-2b/rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl
-
-# data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
-# subset_list: [Youtube_1]
-# dt_file: VEHS_MB/Youtube_1/rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl
-
-data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
-subset_list: [RTM2D_industry_3]
-dt_file: VEHS_MB/RTM2D_industry_3/rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl
+# Data: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/mesh/RTM2D/mesh_compare_17kpts/VEHS_6D_downsample5_keep1_17_v2_modified_RTM2D.pkl
+data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/mesh/RTM2D/
+subset_list: [mesh_compare_17kpts]
+dt_file: RTM2D/mesh_compare_17kpts/VEHS_6D_downsample5_keep1_17_v2_pitch_correct_modified_RTM2D.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True
 sample_stride: 1
-num_joints: 37
-joint_format: RTM-37
+num_joints: 17
+root_idx: 0
 no_conf: False
 gt_2d: False
-root_idx: 0
 res_w: 1920
 res_h: 1200
+# res_w: 1920
+# res_h: 1200
 
 # Loss
 lambda_3d_velocity: 20.0

@@ -7,7 +7,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=50g
-#SBATCH --gres=gpu:5
+#SBATCH --gres=gpu:3
 #SBATCH --time=50:00:00
 #SBATCH --account=shdpm0
 #SBATCH --partition=spgpu
@@ -216,16 +216,27 @@ module list
 
 
 ## VEHSR3R4 + RTM2D - 37v2 kpts - 20fps - pitch correct 
+# python train.py \
+# --pretrained /nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/FT_MB_release_MB_ft_h36m/ \
+# --selection best_epoch.bin \
+# --test_set_keyword validate \
+# --wandb_project "MotionBert_train" \
+# --note "" \
+# --config configs/pose3d/MB_ft_VEHSR3R4_20fps_RTM37kpt_6DPose_pitch_correct.yaml \
+# --wandb_name "Try2-RTM27kpts_v2_20fps-finetune-pitch-correct-angleLossV2" \
+# --checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/GT2D/Try2/RTM27kpts_v2_20fps-finetune-pitch-correct-angleLossV2" \
+# --discard_last_layer
+# # --resume /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/GT2D/Try2/RTM27kpts_v2_20fps-finetune-pitch-correct-angleLossV2/latest_epoch.bin \
+
+
+## MEsh compare VEHSR3 + RTM2D - 17 kpts - 20fps - pitch correct 
 python train.py \
 --pretrained /nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/FT_MB_release_MB_ft_h36m/ \
 --selection best_epoch.bin \
 --test_set_keyword validate \
---wandb_project "MotionBert_train" \
---note "" \
---config configs/pose3d/MB_ft_VEHSR3R4_20fps_RTM37kpt_6DPose_pitch_correct.yaml \
---wandb_name "Try2-RTM27kpts_v2_20fps-finetune-pitch-correct-angleLossV2" \
---checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/GT2D/Try2/RTM27kpts_v2_20fps-finetune-pitch-correct-angleLossV2" \
---discard_last_layer
+--config configs/pose3d/RTM2D_VEHSR3_mesh_compare.yaml \
+--wandb_project "MotionBert_train_mesh" \
+--wandb_name "Pose_RTM17kpts_PitchCorrect_V1" \
+--note "mesh compare, pitch correct, 17kpts, RTM2D" \
+--checkpoint "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/Pose_RTM17kpts_PitchCorrect_V1" \
 # --resume /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/GT2D/Try2/RTM27kpts_v2_20fps-finetune-pitch-correct-angleLossV2/latest_epoch.bin \
-
-

@@ -43,8 +43,13 @@ echo "cpu-2, gpu-1, mem-20"
 #config_file="configs/pose3d/hand/MB_infer_lab_RTMinput.yaml"  # infer should use infer code
 # config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS.yaml"
 # config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps.yaml"
-config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml"
+# config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct.yaml"
 # config_file="configs/pose3d/MB_ft_VEHSR3R4_50fps_6DPose_pitch_correct.yaml"
+
+# mesh compare
+config_file="configs/pose3d/RTM2D_VEHSR3_mesh_compare.yaml"
+
+
 # 
 # Checkpoint
 # checkpoint_bin="/nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/FT_MB_release_MB_ft_h36m/best_epoch.bin"  # from h36m MB website
@@ -66,7 +71,7 @@ config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-3-angleLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + limb loss, + angle loss
 
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-4-angleLossV2/best_epoch.bin" # RTMWV5 2-b 20fps, + limb loss, + angle loss V2
-# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-angleLossV2-only/best_epoch.bin" # RTMWV5 2-b 20fps, + angle loss V2
+checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-angleLossV2-only/best_epoch.bin" # RTMWV5 2-b 20fps, + angle loss V2
 
 # Try 2
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-centerLoss/best_epoch.bin" # RTMWV5 2-b 20fps, + center loss
@@ -79,7 +84,10 @@ config_file="configs/pose3d/RTMPose_exp/37kpts_v1/MB_ft_VEHS_20fps_pitch_correct
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-5-centerLoss/best_epoch.bin"
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/RTMW/Try2/RTMW37kpts_v2_20fps-finetune-pitch-correct-6-center-angleLoss/best_epoch.bin"
 # checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/GT2D/Try1/GT66kpts_v2_50fps-finetune-pitch-correct-2-angleLossV2/best_epoch.bin"
-checkpoint_bin="/nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/RTM37kpts_v2_20fps-finetune-pitch-correct-angleLossV2/best_epoch.bin"
+# checkpoint_bin="/nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/RTM37kpts_v2_20fps-finetune-pitch-correct-angleLossV2/best_epoch.bin"
+
+# mesh compare
+checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/Pose_RTM17kpts_PitchCorrect_V1/best_epoch.bin"
 #################### Output folder
 
 # Custom folder name you want to append
@@ -94,13 +102,16 @@ echo "checkpoint_bin: $checkpoint_bin"
 # evaluate - train.py [pose3d]
 python -u train.py \
 --config "$config_file" \
---wandb_project "MotionBert_eval" \
---wandb_name "cpt_R3R4_MBV3-angleLoss_data_VEHS6D_validate-1920x1200-h36M17kpts"  \
---note "gt2d_False-20fps-1920x1200" \
+--wandb_project "MotionBert_train_mesh" \
+--wandb_name "Pose_RTM17kpts_PitchCorrect_V1" \
+--note "mesh compare, pitch correct, 17kpts, RTM2D" \
 --out_path "$out_path" \
 --test_set_keyword validate \
 --evaluate "$checkpoint_bin" \
 
+# --wandb_project "MotionBert_eval" \
+# --wandb_name "cpt_R3R4_MBV3-angleLoss_data_VEHS6D_validate-1920x1200-h36M17kpts"  \
+# --note "gt2d_False-20fps-1920x1200" \
     
 # 
 # --out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/FT_MB_release_MB_ft_h36m/VEHS7M-test-1920x1200" \
@@ -118,3 +129,5 @@ python -u train.py \
 #--evaluate "$checkpoint_bin" \
 
 #{'L': 'validate', 'R': 'test'}
+
+

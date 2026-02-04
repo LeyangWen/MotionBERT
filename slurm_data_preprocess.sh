@@ -143,11 +143,11 @@ module list
 
 
 # Industry_Jeff - 37v2: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/Industry_Jeff/
-python -u tools/convert_inference.py \
---dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Industry_Jeff' \
---dt_file 'rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl' \
---test_set_keyword 'validate' \
---root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Industry_Jeff' > output_slurm/preprocess_RTM6.out
+# python -u tools/convert_inference.py \
+# --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Industry_Jeff' \
+# --dt_file 'rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl' \
+# --test_set_keyword 'validate' \
+# --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Industry_Jeff' > output_slurm/preprocess_RTM6.out
 
 # Industry_Youtube_1 - 37v2: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/Youtube_1/
 # python -u tools/convert_inference.py \
@@ -155,3 +155,19 @@ python -u tools/convert_inference.py \
 # --dt_file 'rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl' \
 # --test_set_keyword 'validate' \
 # --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/Youtube_1' > output_slurm/preprocess_RTM6.out
+
+
+# Industry_3  - 37v2:
+# python -u tools/convert_inference.py \
+# --dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry_3' \
+# --dt_file 'rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl' \
+# --test_set_keyword 'validate' \
+# --root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry_3' > output_slurm/preprocess_RTM6.out
+
+
+# Mesh compare 17kpts + RTM2D
+python -u tools/convert_inference.py \
+--dt_root '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/mesh/RTM2D/mesh_compare_17kpts' \
+--dt_file 'VEHS_6D_downsample5_keep1_17_v2_pitch_correct_modified_RTM2D.pkl' \
+--test_set_keyword 'validate' \
+--root_path '/nfs/turbo/coe-shdpm/leyang/VEHS_MB/mesh/RTM2D/mesh_compare_17kpts' > output_slurm/preprocess_RTM6.out

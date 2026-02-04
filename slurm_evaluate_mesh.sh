@@ -1,14 +1,14 @@
 #!/bin/bash
 #SBATCH --job-name=MB_mesh_eval
-#SBATCH --output=output_slurm/eval_mesh_log.txt
-#SBATCH --error=output_slurm/eval_mesh_error.txt
+#SBATCH --output=output_slurm/eval_mesh_log_spgpu.txt
+#SBATCH --error=output_slurm/eval_mesh_error_spgpu.txt
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=4
 #SBATCH --mem=180g
 #SBATCH --gres=gpu:1
-#SBATCH --partition=gpu
+#SBATCH --partition=spgpu
 ##SBATCH --partition=debug
 #SBATCH --time=02:00:00
 #SBATCH --account=shdpm0
@@ -26,15 +26,25 @@ module list
 
 #conda activate motionbert
 
-# Dataset
-config_file="configs/mesh/MB_train_VEHS_3D.yaml"  # 3D kpts 17
+# Dataset -- GT2D
+# config_file="configs/mesh/MB_train_VEHS_3D.yaml"  # 3D kpts 17
 #config_file="configs/mesh/MB_train_VEHS_6D.yaml"  # 6D kpts 66 v2
-#config_file="configs/mesh/MB_ft_h36m.yaml"
+
+#config_file="configs/mesh/MB_ft_h36m.yaml"  # H36M inference 2D
+
+# Dataset -- RTM2D
+config_file="configs/mesh/RTM2D_train_17kpts_3D.yaml"  # 3D kpts 17
+#config_file="configs/mesh/MB_train_VEHS_6D.yaml"  # 6D kpts 66 v2
+
+
 
 # Checkpoint
-checkpoint_bin="checkpoint/mesh/MB_train_VEHSR3/latest_epoch.bin"  # 3D kpts 17
+# checkpoint_bin="checkpoint/mesh/MB_train_VEHSR3/latest_epoch.bin"  # 3D kpts 17
 #checkpoint_bin="checkpoint/mesh/MB_train_VEHS66kpts/latest_epoch.bin"  # 6D kpts 66 v2
 #checkpoint_bin="checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/best_epoch.bin"
+
+checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1/epoch_99.bin" # RTM2D 17kpts SMPL
+
 
 echo "config_file: $config_file"
 echo "checkpoint_bin: $checkpoint_bin"
@@ -45,10 +55,10 @@ python -u train_mesh.py \
 --evaluate "$checkpoint_bin" \
 --test_set_keyword validate \
 --wandb_project "MotionBert_mesh_eval" \
---note "try 2" \
+--wandb_name "SMPL_RTM17kpts_V1" \
+--note "RTM2D 17kpts, SMPL model" \
 --fps 20 \
---wandb_name "GT_input_MB_mesh_validate_17_VEHS7M" \
---out_path "/scratch/shdpm_root/shdpm0/wenleyan/17kpts" \
+--out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1/" \
 
 #--wandb_name "GT_input_MB_mesh_test_66_VEHS7M" \
 #--out_path "/scratch/shdpm_root/shdpm0/wenleyan/66kpts" \
