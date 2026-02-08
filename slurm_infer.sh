@@ -74,7 +74,7 @@ checkpoint_bin="/nfs/turbo/coe-shdpm/leyang/MB_checkpoints/pose3d/RTM37kpts_v2_2
 
 #################### Output folder
 # Custom folder name you want to append
-custom_name="Youtube_1"
+custom_name="Industry_both"
 base_dir="$(dirname "$checkpoint_bin")"
 out_path="${base_dir}/${custom_name}"
 

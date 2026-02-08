@@ -69,6 +69,9 @@ class SMPL(_SMPL):
 
         J_regressor_VEHS7M_66kpts = np.load(osp.join(args[0], 'J_regressor_VEHS7M_66kpt.npy'))
         self.register_buffer('J_regressor_VEHS7M_66kpts', torch.tensor(J_regressor_VEHS7M_66kpts, dtype=torch.float32))
+        
+        J_regressor_VEHS7M_37kpts = np.load(osp.join(args[0], 'J_regressor_VEHS7M_37kpt.npy'))
+        self.register_buffer('J_regressor_VEHS7M_37kpts', torch.tensor(J_regressor_VEHS7M_37kpts, dtype=torch.float32))
 
         self.joint_map = torch.tensor(joints, dtype=torch.long)
 

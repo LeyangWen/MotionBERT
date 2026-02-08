@@ -43,25 +43,26 @@ echo "test"
 # TODO: To train 37 kpt model (/nfs/turbo/coe-shdpm/leyang/VEHS_MB/mesh/RTM2D_37kpts_SMPL/), change file loc, change J_regressor in multiple places
 
 ## for 3D
-python train_mesh.py \
---config configs/mesh/RTM2D_train_17kpts_3D.yaml \
---pretrained checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/ \
---selection best_epoch.bin \
---checkpoint /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V2 \
---test_set_keyword validate \
---wandb_project "MotionBert_train_mesh" \
---wandb_name "SMPL_RTM17kpts_V2" \
---note "RTM2D 17kpts, SMPL model, 160 epochs" \
+# python train_mesh.py \
+# --config configs/mesh/RTM2D_train_17kpts_3D.yaml \
+# --pretrained checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/ \
+# --selection best_epoch.bin \
+# --checkpoint /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V3 \
+# --test_set_keyword validate \
+# --wandb_project "MotionBert_train_mesh" \
+# --wandb_name "SMPL_RTM17kpts_V3" \
+# --note "RTM2D 17kpts, SMPL model, 200 epochs" \
+
 # --resume /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1/latest_epoch.bin \
 
 
-# python train_mesh.py \
-# --config configs/mesh/RTM2D_train_17kpts_3D.yaml \
-# --pretrained /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1/ \
-# --selection epoch_99.bin \
-# --checkpoint /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1_100-160epoch \
-# --test_set_keyword validate \
-# --wandb_project "MotionBert_train_mesh" \
-# --wandb_name "SMPL_RTM17kpts_V1_100-160epoch" \
-# --note "RTM2D 17kpts, SMPL model" \
-# # --resume /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1/latest_epoch.bin \
+## for 6D
+python train_mesh.py \
+--config configs/mesh/RTM2D_train_37kpts_6D.yaml \
+--pretrained checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/ \
+--selection best_epoch.bin \
+--checkpoint /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM37kpts_V1 \
+--test_set_keyword validate \
+--wandb_project "MotionBert_train_mesh" \
+--wandb_name "SMPL_RTM37kpts_V1" \
+--note "RTM2D 37kpts, SMPL model, 200 epochs" \

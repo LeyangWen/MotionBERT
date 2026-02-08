@@ -23,17 +23,17 @@ num_heads: 8
 att_fuse: True
 
 # Data
-# data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry/
-# subset_list: [37kpts_v5-2b]
-# dt_file: RTM2D_industry/37kpts_v5-2b/rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl
+data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/RTM2D_industry/
+subset_list: [37kpts_v5-2b]
+dt_file: RTM2D_industry/37kpts_v5-2b/rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl
 
 # data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
 # subset_list: [Youtube_1]
 # dt_file: VEHS_MB/Youtube_1/rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl
 
-data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
-subset_list: [RTM2D_industry_3]
-dt_file: VEHS_MB/RTM2D_industry_3/rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl
+# data_root: /nfs/turbo/coe-shdpm/leyang/VEHS_MB/
+# subset_list: [RTM2D_industry_3]
+# dt_file: VEHS_MB/RTM2D_industry_3/rtmpose_v5-2b_20fps_industry_37kpts_v2.pkl
 clip_len: 243
 data_stride: 81
 rootrel: True
