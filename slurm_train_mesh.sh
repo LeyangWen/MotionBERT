@@ -5,14 +5,14 @@
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=4
+#SBATCH --cpus-per-task=8
 #SBATCH --mem=60g
 #SBATCH --gres=gpu:3
-#SBATCH --time=100:00:00
-#SBATCH --account=shdpm0
+#SBATCH --time=60:00:00
+#SBATCH --account=shdpm98
 #SBATCH --partition=spgpu
 ##### END preamble
-##### Run in MotionBert dir
+##### Run in MotionBert dir, can use 140 mem with 3 gpu for no extra cost
 
 ### gpu_mig40 -->1000GB, but can only use one
 my_job_header
@@ -47,13 +47,12 @@ echo "test"
 # --config configs/mesh/RTM2D_train_17kpts_3D.yaml \
 # --pretrained checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/ \
 # --selection best_epoch.bin \
-# --checkpoint /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V3 \
+# --checkpoint /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V4 \
 # --test_set_keyword validate \
 # --wandb_project "MotionBert_train_mesh" \
-# --wandb_name "SMPL_RTM17kpts_V3" \
+# --wandb_name "SMPL_RTM17kpts_V4" \
 # --note "RTM2D 17kpts, SMPL model, 200 epochs" \
-
-# --resume /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1/latest_epoch.bin \
+# --resume /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V2/epoch_99.bin \
 
 
 ## for 6D
@@ -66,3 +65,4 @@ python train_mesh.py \
 --wandb_project "MotionBert_train_mesh" \
 --wandb_name "SMPL_RTM37kpts_V1" \
 --note "RTM2D 37kpts, SMPL model, 200 epochs" \
+--resume /scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM37kpts_V1/epoch_124.bin \

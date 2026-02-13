@@ -34,6 +34,8 @@ class SMPLRegressor(nn.Module):
         self.register_buffer('init_shape', init_shape)
         if J_regressor_choice == 'VEHS7M':
             self.J_regressor = self.smpl.J_regressor_VEHS7M_66kpts
+        elif J_regressor_choice == 'VEHS7M37':
+            self.J_regressor = self.smpl.J_regressor_VEHS7M_37kpts
         else:  # original code, for H36M and more
             self.J_regressor = self.smpl.J_regressor_h36m
 

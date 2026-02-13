@@ -5,7 +5,7 @@
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=4
+#SBATCH --cpus-per-task=8
 #SBATCH --mem=180g
 #SBATCH --gres=gpu:1
 #SBATCH --partition=spgpu
@@ -33,7 +33,7 @@ module list
 #config_file="configs/mesh/MB_ft_h36m.yaml"  # H36M inference 2D
 
 # Dataset -- RTM2D
-config_file="configs/mesh/RTM2D_train_17kpts_3D.yaml"  # 3D kpts 17
+
 #config_file="configs/mesh/MB_train_VEHS_6D.yaml"  # 6D kpts 66 v2
 
 
@@ -43,7 +43,13 @@ config_file="configs/mesh/RTM2D_train_17kpts_3D.yaml"  # 3D kpts 17
 #checkpoint_bin="checkpoint/mesh/MB_train_VEHS66kpts/latest_epoch.bin"  # 6D kpts 66 v2
 #checkpoint_bin="checkpoint/mesh/FT_Mb_release_MB_ft_pw3d/best_epoch.bin"
 
-checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1/epoch_99.bin" # RTM2D 17kpts SMPL
+# config_file="configs/mesh/RTM2D_train_17kpts_3D.yaml"  # 3D kpts 17
+# checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1/epoch_99.bin" # RTM2D 17kpts SMPL
+
+
+config_file="configs/mesh/RTM2D_train_37kpts_6D.yaml"
+checkpoint_bin="/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM37kpts_temp/latest_epoch.bin" # RTM2D 37kpts SMPL
+
 
 
 echo "config_file: $config_file"
@@ -55,10 +61,10 @@ python -u train_mesh.py \
 --evaluate "$checkpoint_bin" \
 --test_set_keyword validate \
 --wandb_project "MotionBert_mesh_eval" \
---wandb_name "SMPL_RTM17kpts_V1" \
---note "RTM2D 17kpts, SMPL model" \
+--wandb_name "SMPL_RTM37kpts_V1" \
+--note "RTM2D 37kpts, SMPL model, temp" \
 --fps 20 \
---out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM17kpts_V1/" \
+--out_path "/scratch/shdpm_root/shdpm0/wenleyan/MB_checkpoints/mesh_compare/SMPL_RTM37kpts_temp/" \
 
 #--wandb_name "GT_input_MB_mesh_test_66_VEHS7M" \
 #--out_path "/scratch/shdpm_root/shdpm0/wenleyan/66kpts" \
@@ -67,3 +73,4 @@ python -u train_mesh.py \
 
 
 # if too big, save to scratch: /scratch/shdpm_root/shdpm0/wenleyan/
+

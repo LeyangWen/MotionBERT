@@ -26,6 +26,9 @@ class SMPLDataset(Dataset):
         if dataset=="VEHS7M":
             datareader = DataReaderVEHSR3(n_frames=self.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=self.clip_len, dt_root=args.data_root,
                                           dt_file=args.dt_file_VEHS7M, test_set_keyword=args.test_set_keyword, num_joints=args.num_joints)
+        elif dataset=="VEHS7M37":
+            datareader = DataReaderVEHSR3(n_frames=self.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride, data_stride_test=self.clip_len, dt_root=args.data_root,
+                                dt_file=args.dt_file_VEHS7M37, test_set_keyword=args.test_set_keyword, num_joints=args.num_joints)
         elif dataset=="h36m":  # old
             if "VEHS" in args.dt_file_h36m:  # 17 joints but using VEHS7M data
                 datareader = DataReaderVEHSR3(n_frames=self.clip_len, sample_stride=args.sample_stride, data_stride_train=args.data_stride,
@@ -95,6 +98,8 @@ class MotionSMPL(SMPLDataset):
         motion_verts = motion_smpl.vertices.detach()*1000.0
         if self.dataset == "VEHS7M":
             J_regressor = self.smpl.J_regressor_VEHS7M_66kpts
+        elif self.dataset == "VEHS7M37":
+            J_regressor = self.smpl.J_regressor_VEHS7M_37kpts
         else:  # original code, for H36M and more
             J_regressor = self.smpl.J_regressor_h36m
 

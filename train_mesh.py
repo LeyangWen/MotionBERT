@@ -41,7 +41,7 @@ def parse_args():
     parser.add_argument('-e', '--evaluate', default='', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
     parser.add_argument('-o', '--out_path', type=str, help='eval pose output path', default=False)
     parser.add_argument('--fps', default=20)
-    parser.add_argument('-freq', '--print_freq', default=100)
+    parser.add_argument('-freq', '--print_freq', default=25)
     parser.add_argument('-ms', '--selection', default='latest_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to finetune (file name)')
     parser.add_argument('-sd', '--seed', default=0, type=int, help='random seed')
     parser.add_argument('--test_set_keyword', default='validate', type=str, help='eval set name, either test or validate, only for VEHS')
@@ -77,9 +77,10 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
     results = defaultdict(list)
     smpl = SMPL(args.data_root, batch_size=1).cuda()
     if dataset_name == 'VEHS7M':
-        J_regressor = smpl.J_regressor_VEHS7M_66kpts
-    elif dataset_name == 'VEHS7M':
-        J_regressor = smpl.J_regressor_VEHS7M_37kpts
+        if args.num_joints == 37:
+            J_regressor = smpl.J_regressor_VEHS7M_37kpts
+        else:
+            J_regressor = smpl.J_regressor_VEHS7M_66kpts
     else:  # e.g., h36m
         J_regressor = smpl.J_regressor_h36m
 
@@ -154,16 +155,33 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
             # measure elapsed time
             batch_time.update(time.time() - end)
             end = time.time()
-
+            # if idx % 500 == 0:
+            #     break
             if idx % int(opts.print_freq) == 0:
-                print('Test: [{0}/{1}]\t'
-                      'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                      'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
-                      '{2}'
-                      'PVE {mpves.val:.3f} ({mpves.avg:.3f})\t'
-                      'JPE {mpjpes.val:.3f} ({mpjpes.avg:.3f})'.format(
-                       idx, len(test_loader), loss_str, batch_time=batch_time,
-                       loss=losses, mpves=mpves, mpjpes=mpjpes))
+                wandb.log({
+                    f'eval_loop/iter': idx,
+                    f'eval_loop/mpjpe': mpjpes.val,
+                    f'eval_loop/mpjpe_avg': mpjpes.avg})
+            #     print('Test: [{0}/{1}]\t'
+            #           'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
+            #           'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
+            #           '{2}'
+            #           'PVE {mpves.val:.3f} ({mpves.avg:.3f})\t'
+            #           'JPE {mpjpes.val:.3f} ({mpjpes.avg:.3f})'.format(
+            #            idx, len(test_loader), loss_str, batch_time=batch_time,
+            #            loss=losses, mpves=mpves, mpjpes=mpjpes))
+            #     eval_log = {
+            #         f'eval/loss': losses.val,
+            #         f'eval/loss_avg': losses.avg,
+            #         f'eval/mpjpe': mpjpes.val,
+            #         f'eval/mpjpe_avg': mpjpes.avg,
+            #         f'eval/mpve': mpves.val,
+            #         f'eval/mpve_avg': mpves.avg,
+            #     }
+            #     for k in loss_dict.keys():
+            #         eval_log[f'eval/{k}'] = losses_dict[k].val
+            #         eval_log[f'eval/{k}_avg'] = losses_dict[k].avg
+            #     wandb.log(eval_log)
 
     print(f'==> start concating results of {dataset_name}')
     for term in results.keys():
@@ -175,6 +193,15 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
         err_str += '{}: {:.2f}mm \t'.format(err_key, err_val)
     print(f'=======================> {dataset_name} validation done: ', loss_str)
     print(f'=======================> {dataset_name} validation done: ', err_str)
+    eval_epoch_log = {
+        f'eval/final_loss': losses.avg,
+        f'eval/final_mpjpe_17j': error_dict['mpjpe_17j'],
+        f'eval/final_pa_mpjpe_17j': error_dict['pa_mpjpe_17j'],
+        f'eval/final_mpve': error_dict['mpve'],
+    }
+    for err_key, err_val in error_dict.items():
+        eval_epoch_log[f'eval/{err_key}'] = err_val
+    wandb.log(eval_epoch_log)
     if opts.out_path:
         os.makedirs(opts.out_path, exist_ok=True)
         result_file = os.path.join(opts.out_path, f'{dataset_name}_results.pkl')
@@ -204,7 +231,7 @@ def validate(test_loader, model, criterion, dataset_name='h36m'):
 def train_epoch(args, opts, model, train_loader, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch):
     model.train()
     end = time.time()
-    for idx, (batch_input, batch_gt) in tqdm(enumerate(train_loader)):
+    for idx, (batch_input, batch_gt) in tqdm(enumerate(train_loader), disable=True):
         data_time.update(time.time() - end)
         batch_size = len(batch_input)
 
@@ -214,7 +241,7 @@ def train_epoch(args, opts, model, train_loader, losses_train, losses_dict, mpjp
             batch_gt['verts'] = batch_gt['verts'].cuda().float()
             batch_input = batch_input.cuda().float()
         output = model(batch_input)
-        optimizer.zero_grad()
+        optimizer.zero_grad(set_to_none=True)
         loss_dict = criterion(output, batch_gt)
         loss_train = args.lambda_3d      * loss_dict['loss_3d_pos']      + \
                      args.lambda_scale   * loss_dict['loss_3d_scale']    + \
@@ -251,18 +278,23 @@ def train_epoch(args, opts, model, train_loader, losses_train, losses_dict, mpjp
 
         batch_time.update(time.time() - end)
         end = time.time()
-        
+        # if idx % 500 == 0:
+        #     break
         if idx % int(opts.print_freq) == 0:
-            print('Train: [{0}][{1}/{2}]\t'
-                'BT {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                'DT {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                'loss {loss.val:.3f} ({loss.avg:.3f})\t'
-                '{3}'
-                'PVE {mpves.val:.3f} ({mpves.avg:.3f})\t'
-                'JPE {mpjpes.val:.3f} ({mpjpes.avg:.3f})'.format(
-                epoch, idx + 1, len(train_loader), loss_str, batch_time=batch_time,
-                data_time=data_time, loss=losses_train, mpves=mpves, mpjpes=mpjpes))
-            sys.stdout.flush()
+            wandb.log({
+                f'train_loop/iter': idx,
+                f'train_loop/mpjpe': mpjpes.val,
+                f'train_loop/mpjpe_avg': mpjpes.avg})
+        #     print('Train: [{0}][{1}/{2}]\t'
+        #         'BT {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
+        #         'DT {data_time.val:.3f} ({data_time.avg:.3f})\t'
+        #         'loss {loss.val:.3f} ({loss.avg:.3f})\t'
+        #         '{3}'
+        #         'PVE {mpves.val:.3f} ({mpves.avg:.3f})\t'
+        #         'JPE {mpjpes.val:.3f} ({mpjpes.avg:.3f})'.format(
+        #         epoch, idx + 1, len(train_loader), loss_str, batch_time=batch_time,
+        #         data_time=data_time, loss=losses_train, mpves=mpves, mpjpes=mpjpes))
+        #     sys.stdout.flush()
 
 def train_with_config(args, opts):
     print(args)
@@ -293,6 +325,8 @@ def train_with_config(args, opts):
 
     if hasattr(args, "dt_file_VEHS7M"):
         J_regressor_choice = "VEHS7M"
+    elif hasattr(args, "dt_file_VEHS7M37"):
+        J_regressor_choice = "VEHS7M37"
     else:
         J_regressor_choice = "h36m"
     print(f"Using SMPL J_regressor: {J_regressor_choice}")
@@ -314,8 +348,9 @@ def train_with_config(args, opts):
           'prefetch_factor': 4,
           'persistent_workers': True
     }
+    eval_batch_size = getattr(args, "eval_batch_size", args.batch_size)
     testloader_params = {
-          'batch_size': args.batch_size,
+          'batch_size': eval_batch_size,
           'shuffle': False,
           'num_workers': 8,
           'pin_memory': True,
@@ -335,6 +370,13 @@ def train_with_config(args, opts):
         train_loader_VEHS7M = DataLoader(mesh_train, **trainloader_params)
         test_loader_VEHS7M = DataLoader(mesh_val, **testloader_params)
         print('INFO: Training on {} batches (VEHS7M)'.format(len(train_loader_VEHS7M)))
+    elif hasattr(args, "dt_file_VEHS7M37"):
+        mesh_train = MotionSMPL(args, data_split='train', dataset="VEHS7M37")
+        mesh_val = MotionSMPL(args, data_split='test', dataset="VEHS7M37")
+        train_loader_VEHS7M = DataLoader(mesh_train, **trainloader_params)
+        test_loader_VEHS7M = DataLoader(mesh_val, **testloader_params)
+        print('INFO: Training on {} batches (VEHS7M37)'.format(len(train_loader_VEHS7M)))
+       
 
 
     if hasattr(args, "dt_file_pw3d"):
@@ -400,6 +442,7 @@ def train_with_config(args, opts):
                         weight_decay=args.weight_decay)
         scheduler = StepLR(optimizer, step_size=1, gamma=args.lr_decay)
         st = 0
+        best_epoch = -1
         if opts.resume:
             st = checkpoint['epoch']
             if 'optimizer' in checkpoint and checkpoint['optimizer'] is not None:
@@ -409,9 +452,14 @@ def train_with_config(args, opts):
             lr = checkpoint['lr']
             if 'best_jpe' in checkpoint and checkpoint['best_jpe'] is not None:
                 best_jpe = checkpoint['best_jpe']
+            if 'best_epoch' in checkpoint and checkpoint['best_epoch'] is not None:
+                best_epoch = checkpoint['best_epoch']
         
         # Training
         for epoch in range(st, args.epochs):
+            epoch_start_time = time.time()
+            epoch_train_time = 0.0
+            epoch_eval_time = 0.0
             print('Training epoch %d.' % epoch)
             losses_train = AverageMeter()
             losses_dict = {
@@ -431,29 +479,78 @@ def train_with_config(args, opts):
             batch_time = AverageMeter()
             data_time = AverageMeter()
             
-            if hasattr(args, "dt_file_VEHS7M") and epoch < args.warmup_h36m:
+            val_metrics = {}
+            if (hasattr(args, "dt_file_VEHS7M") or hasattr(args, "dt_file_VEHS7M37")) and epoch < args.warmup_h36m:
+                train_start_time = time.time()
                 train_epoch(args, opts, model, train_loader_VEHS7M, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch)
-                # test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, test_losses_dict = validate(test_loader_VEHS7M, model, criterion, 'VEHS7M')  # todo: fix OOM error here
+                epoch_train_time += time.time() - train_start_time
+                optimizer.zero_grad(set_to_none=True)
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                eval_start_time = time.time()
+                test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, test_losses_dict = validate(test_loader_VEHS7M, model, criterion, 'VEHS7M')  # todo: fix OOM error here
+                epoch_eval_time += time.time() - eval_start_time
+                val_metrics['VEHS7M'] = test_mpjpe
 
             if hasattr(args, "dt_file_h36m") and epoch < args.warmup_h36m:
+                train_start_time = time.time()
                 train_epoch(args, opts, model, train_loader, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch)
-                # test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, test_losses_dict = validate(test_loader, model, criterion, 'h36m')  # todo: fix OOM error here
+                epoch_train_time += time.time() - train_start_time
+                optimizer.zero_grad(set_to_none=True)
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                eval_start_time = time.time()
+                test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, test_losses_dict = validate(test_loader, model, criterion, 'h36m')  # todo: fix OOM error here
+                epoch_eval_time += time.time() - eval_start_time
+                val_metrics['h36m'] = test_mpjpe
 
             if hasattr(args, "dt_file_coco") and epoch < args.warmup_coco:
+                train_start_time = time.time()
                 train_epoch(args, opts, model, train_loader_coco, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch)
+                epoch_train_time += time.time() - train_start_time
 
             if hasattr(args, "dt_file_pw3d"):
                 if args.train_pw3d:
+                    train_start_time = time.time()
                     train_epoch(args, opts, model, train_loader_pw3d, losses_train, losses_dict, mpjpes, mpves, criterion, optimizer, batch_time, data_time, epoch)
+                    epoch_train_time += time.time() - train_start_time
+                eval_start_time = time.time()
                 test_loss_pw3d, test_mpjpe_pw3d, test_pa_mpjpe_pw3d, test_mpve_pw3d, test_losses_dict_pw3d = validate(test_loader_pw3d, model, criterion, 'pw3d')
+                epoch_eval_time += time.time() - eval_start_time
+                val_metrics['pw3d'] = test_mpjpe_pw3d
 
-            # wandb.log({
-            #     'losses_train.avg': losses_train.avg,
-            #     'mpjpes.avg': mpjpes.avg,
-            #     'mpves.avg': mpves.avg,
-            #
-            # }, step=epoch + 1)
             print(f"Epoch {epoch}: losses_train.avg: {losses_train.avg}, mpjpes.avg: {mpjpes.avg}, mpves.avg: {mpves.avg}")
+            wandb.log({
+                'train/epoch': epoch,
+                'train/epoch_loss_avg': losses_train.avg,
+                'train/epoch_mpjpe_avg': mpjpes.avg,
+                'train/epoch_mpve_avg': mpves.avg,
+                'time/epoch_train_sec': epoch_train_time,
+                'time/epoch_eval_sec': epoch_eval_time,
+                'time/epoch_total_sec': time.time() - epoch_start_time,
+            })
+
+            selected_metric_name = None
+            selected_metric = None
+            for dataset_name in ['h36m', 'VEHS7M', 'pw3d']:
+                if dataset_name in val_metrics:
+                    selected_metric_name = dataset_name
+                    selected_metric = val_metrics[dataset_name]
+                    break
+            if selected_metric is not None and selected_metric < best_jpe:
+                best_jpe = selected_metric
+                best_epoch = epoch
+                best_chk_path = os.path.join(opts.checkpoint, 'best_epoch.bin')
+                print(f'Saving best checkpoint to {best_chk_path} ({selected_metric_name} MPJPE {best_jpe:.3f})')
+                torch.save({
+                    'epoch': epoch + 1,
+                    'lr': scheduler.get_last_lr(),
+                    'optimizer': optimizer.state_dict(),
+                    'model': model.state_dict(),
+                    'best_jpe': best_jpe,
+                    'best_epoch': best_epoch,
+                    'best_metric_dataset': selected_metric_name
+                }, best_chk_path)
                 
             # Decay learning rate exponentially
             scheduler.step()
@@ -465,24 +562,26 @@ def train_with_config(args, opts):
                 'lr': scheduler.get_last_lr(),
                 'optimizer': optimizer.state_dict(),
                 'model': model.state_dict(),
-                'best_jpe' : best_jpe
+                'best_jpe' : best_jpe,
+                'best_epoch': best_epoch
             }, chk_path)
             
             # Save checkpoint if necessary.
             if (epoch+1) % args.checkpoint_frequency == 0:
                 chk_path = os.path.join(opts.checkpoint, 'epoch_{}.bin'.format(epoch))
                 print('Saving checkpoint to', chk_path)
-            torch.save({
-                'epoch': epoch+1,
-                'lr': scheduler.get_last_lr(),
-                'optimizer': optimizer.state_dict(),
-                'model': model.state_dict(),
-                'best_jpe' : best_jpe
-            }, chk_path)
+                torch.save({
+                    'epoch': epoch+1,
+                    'lr': scheduler.get_last_lr(),
+                    'optimizer': optimizer.state_dict(),
+                    'model': model.state_dict(),
+                    'best_jpe' : best_jpe,
+                    'best_epoch': best_epoch
+                }, chk_path)
 
 
     if opts.evaluate:
-        if hasattr(args, "dt_file_VEHS7M"):
+        if hasattr(args, "dt_file_VEHS7M") or hasattr(args, "dt_file_VEHS7M37"):
             test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, _ = validate(test_loader_VEHS7M, model, criterion, 'VEHS7M')
         if hasattr(args, "dt_file_h36m"):
             test_loss, test_mpjpe, test_pa_mpjpe, test_mpve, _ = validate(test_loader, model, criterion, 'h36m')

@@ -355,7 +355,7 @@ def rigid_align(A, B):
     return A2
 
 def get_root_idx(joint_num):
-    if joint_num == 17:
+    if joint_num == 17 or joint_num == 37:
         return 0
     elif joint_num == 66:
         return 57
